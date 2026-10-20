@@ -1,0 +1,56 @@
+# --- 密钥与环境 -------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+secrets/
+
+# --- 运行时数据卷 -----------------------------------------------------------
+deploy/volumes/*
+!deploy/volumes/*/
+!deploy/volumes/**/.gitkeep
+deploy/volumes/**/data/
+deploy/volumes/**/*.db
+deploy/volumes/**/*.sqlite
+deploy/volumes/backup_staging/
+
+# --- Python -----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# --- Node / 前端 ------------------------------------------------------------
+node_modules/
+.next/
+.cache/
+public/build/
+
+# --- 日志与临时文件 ---------------------------------------------------------
+*.log
+*.dump
+*.sql.gz
+*.tar.gz
+*.zip
+tmp/
+temp/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- 编辑器 -----------------------------------------------------------------
+.idea/
+.vscode/
+!.vscode/extensions.json
+
+# --- 本地恢复演练 -----------------------------------------------------------
+restore-staging/
+drill-output/

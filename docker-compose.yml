@@ -1,0 +1,278 @@
+# =============================================================================
+# 莫伯双站系统 · 单机六容器编排
+# 运行目录：/opt/mobo-stack（项目根目录）
+# 依赖：.env（chmod 600）、deploy/、services/
+# =============================================================================
+
+name: ${COMPOSE_PROJECT_NAME:-mobo-stack}
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  # ---------------------------------------------------------------------------
+  # 统一网关：HTTPS / BasicAuth / 反代
+  # ---------------------------------------------------------------------------
+  caddy:
+    image: caddy:2.9-alpine
+    container_name: mobo-caddy
+    restart: unless-stopped
+    mem_limit: 128m
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      TZ: ${TZ}
+      ACME_EMAIL: ${ACME_EMAIL}
+      DOMAIN_WWW: ${DOMAIN_WWW}
+      DOMAIN_KB: ${DOMAIN_KB}
+      DOMAIN_N8N: ${DOMAIN_N8N}
+      DOMAIN_ARCHIVE: ${DOMAIN_ARCHIVE}
+      DOMAIN_ADMIN: ${DOMAIN_ADMIN}
+      CADDY_ADMIN_USER: ${CADDY_ADMIN_USER}
+      CADDY_ADMIN_PASSWORD_HASH: ${CADDY_ADMIN_PASSWORD_HASH}
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./deploy/volumes/caddy_data:/data
+      - ./deploy/volumes/caddy_config:/config
+      - ./deploy/volumes/caddy_logs:/var/log/caddy
+      - ./site:/srv/site:ro
+      - ./services/console:/srv/console:ro
+    networks:
+      - edge_net
+      - internal_net
+    depends_on:
+      - mobobrain-pkm
+      - mobobrain-n8n
+      - archive-dashboard
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:80 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging: *default-logging
+
+  # ---------------------------------------------------------------------------
+  # 数据底座：PostgreSQL 16 + pgvector，单实例双库
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: mobo-postgres
+    restart: unless-stopped
+    mem_limit: 1024m
+    shm_size: 256mb
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      TZ: ${TZ}
+      POSTGRES_USER: ${POSTGRES_SUPER_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPER_PASSWORD}
+      POSTGRES_DB: postgres
+      # initdb/01-init-dual-db.sql 通过 \getenv 读取
+      MOBOBRAIN_DB_NAME: ${MOBOBRAIN_DB_NAME}
+      MOBOBRAIN_DB_USER: ${MOBOBRAIN_DB_USER}
+      MOBOBRAIN_DB_PASSWORD: ${MOBOBRAIN_DB_PASSWORD}
+      ARCHIVE_DB_NAME: ${ARCHIVE_DB_NAME}
+      ARCHIVE_DB_USER: ${ARCHIVE_DB_USER}
+      ARCHIVE_DB_PASSWORD: ${ARCHIVE_DB_PASSWORD}
+      N8N_DB_USER: ${N8N_DB_USER}
+      N8N_DB_PASSWORD: ${N8N_DB_PASSWORD}
+      DASHBOARD_DB_USER: ${DASHBOARD_DB_USER}
+      DASHBOARD_DB_PASSWORD: ${DASHBOARD_DB_PASSWORD}
+      BACKUP_DB_USER: ${BACKUP_DB_USER}
+      BACKUP_DB_PASSWORD: ${BACKUP_DB_PASSWORD}
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=256MB"
+      - "-c"
+      - "effective_cache_size=768MB"
+      - "-c"
+      - "work_mem=8MB"
+      - "-c"
+      - "maintenance_work_mem=64MB"
+      - "-c"
+      - "max_connections=40"
+      - "-c"
+      - "timezone=Asia/Shanghai"
+    volumes:
+      - ./deploy/volumes/pg_data:/var/lib/postgresql/data
+      - ./deploy/postgres/initdb:/docker-entrypoint-initdb.d:ro
+    networks:
+      - internal_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_SUPER_USER} -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    logging: *default-logging
+
+  # ---------------------------------------------------------------------------
+  # 网站 A：思源笔记
+  # ---------------------------------------------------------------------------
+  mobobrain-pkm:
+    image: b3log/siyuan:latest
+    container_name: mobobrain-pkm
+    restart: unless-stopped
+    mem_limit: 512m
+    command:
+      - "--workspace=/siyuan/workspace/"
+      - "--accessAuthCode=${SIYUAN_ACCESS_AUTH_CODE}"
+    volumes:
+      - ./deploy/volumes/mobobrain_data:/siyuan/workspace
+    networks:
+      - internal_net
+    logging: *default-logging
+
+  # ---------------------------------------------------------------------------
+  # 网站 A：n8n 自动化
+  # ---------------------------------------------------------------------------
+  mobobrain-n8n:
+    image: n8nio/n8n:latest
+    container_name: mobobrain-n8n
+    restart: unless-stopped
+    mem_limit: 640m
+    environment:
+      TZ: ${TZ}
+      GENERIC_TIMEZONE: ${TZ}
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: ${MOBOBRAIN_DB_NAME}
+      DB_POSTGRESDB_SCHEMA: n8n
+      DB_POSTGRESDB_USER: ${N8N_DB_USER}
+      DB_POSTGRESDB_PASSWORD: ${N8N_DB_PASSWORD}
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+      N8N_HOST: ${DOMAIN_N8N}
+      N8N_PROTOCOL: https
+      N8N_PORT: 5678
+      WEBHOOK_URL: https://${DOMAIN_N8N}/
+      N8N_PROXY_HOPS: 1
+      N8N_LOG_LEVEL: info
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
+      EXECUTIONS_DATA_PRUNE: "true"
+      EXECUTIONS_DATA_MAX_AGE: "168"
+      NODE_OPTIONS: "--max-old-space-size=450"
+      # Code 节点允许使用 crypto（url_hash/规范化）
+      NODE_FUNCTION_ALLOW_BUILTIN: "crypto"
+    volumes:
+      - ./deploy/volumes/n8n_data:/home/node/.n8n
+    networks:
+      - internal_net
+      - egress_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:5678/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    logging: *default-logging
+
+  # ---------------------------------------------------------------------------
+  # 网站 B：Streamlit 计算型个人档案
+  # ---------------------------------------------------------------------------
+  archive-dashboard:
+    build:
+      context: ./services/archive-dashboard
+      dockerfile: Dockerfile
+    container_name: archive-dashboard
+    restart: unless-stopped
+    mem_limit: 512m
+    environment:
+      TZ: ${TZ}
+      ARCHIVE_DB_HOST: postgres
+      ARCHIVE_DB_PORT: 5432
+      ARCHIVE_DB_NAME: ${ARCHIVE_DB_NAME}
+      ARCHIVE_DB_USER: ${DASHBOARD_DB_USER}
+      ARCHIVE_DB_PASSWORD: ${DASHBOARD_DB_PASSWORD}
+      OSS_ACCESS_KEY_ID: ${OSS_ACCESS_KEY_ID}
+      OSS_ACCESS_KEY_SECRET: ${OSS_ACCESS_KEY_SECRET}
+      OSS_BUCKET_NAME: ${OSS_BUCKET_ARCHIVE}
+      OSS_ENDPOINT: https://${OSS_INTERNAL_ENDPOINT}
+      OSS_REGION: ${OSS_REGION}
+      STREAMLIT_SERVER_PORT: "8501"
+      STREAMLIT_SERVER_ADDRESS: "0.0.0.0"
+      STREAMLIT_SERVER_HEADLESS: "true"
+      STREAMLIT_SERVER_FILE_WATCHER_TYPE: "none"
+      STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
+      STREAMLIT_SERVER_ENABLE_CORS: "true"
+      STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION: "true"
+    networks:
+      - internal_net
+      - egress_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8501/_stcore/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging: *default-logging
+
+  # ---------------------------------------------------------------------------
+  # 每日 03:00：pg_dump + 数据卷 + 配置 -> Restic -> OSS
+  # ---------------------------------------------------------------------------
+  restic-backup:
+    build:
+      context: ./deploy/backup
+      dockerfile: Dockerfile
+    container_name: mobo-restic-backup
+    restart: unless-stopped
+    mem_limit: 256m
+    environment:
+      TZ: ${TZ}
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGUSER: ${POSTGRES_SUPER_USER}
+      PGPASSWORD: ${POSTGRES_SUPER_PASSWORD}
+      MOBOBRAIN_DB_NAME: ${MOBOBRAIN_DB_NAME}
+      ARCHIVE_DB_NAME: ${ARCHIVE_DB_NAME}
+      AWS_ACCESS_KEY_ID: ${OSS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${OSS_ACCESS_KEY_SECRET}
+      AWS_DEFAULT_REGION: ${OSS_REGION}
+      RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}
+      RESTIC_PASSWORD: ${RESTIC_PASSWORD}
+      BACKUP_KEEP_DAILY: ${BACKUP_KEEP_DAILY}
+      BACKUP_KEEP_WEEKLY: ${BACKUP_KEEP_WEEKLY}
+      BACKUP_KEEP_MONTHLY: ${BACKUP_KEEP_MONTHLY}
+      BACKUP_RUN_ON_START: ${BACKUP_RUN_ON_START}
+      BACKUP_STAGING_DIR: /backup
+      SIYUAN_DATA_DIR: /data/mobobrain_data
+      N8N_DATA_DIR: /data/n8n_data
+      CONFIG_DIR: /data/config
+    volumes:
+      - ./deploy/volumes/backup_staging:/backup
+      - ./deploy/volumes/mobobrain_data:/data/mobobrain_data:ro
+      - ./deploy/volumes/n8n_data:/data/n8n_data:ro
+      - ./deploy/caddy:/data/config/caddy:ro
+      - ./deploy/backup:/data/config/backup:ro
+      - ./deploy/postgres/initdb:/data/config/initdb:ro
+      - ./docker-compose.yml:/data/config/docker-compose.yml:ro
+    networks:
+      - internal_net
+      - egress_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+    logging: *default-logging
+
+networks:
+  edge_net:
+    driver: bridge
+  internal_net:
+    driver: bridge
+    internal: true
+  egress_net:
+    driver: bridge

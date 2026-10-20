@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>莫伯的读书与技术札记</title>
+  <meta name="description" content="莫伯的公开读书笔记、技术札记与研究资料整理。">
+  <style>
+    :root { color-scheme: light; --bg:#fbfaf7; --text:#1f2937; --muted:#6b7280; --line:#e5e7eb; --accent:#2563eb; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family: ui-serif, Georgia, "Songti SC", "Noto Serif CJK SC", serif; line-height:1.75; }
+    main { max-width: 780px; margin: 0 auto; padding: 64px 22px 96px; }
+    .eyebrow { font-family: ui-sans-serif, system-ui, sans-serif; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+    h1 { font-size: clamp(30px, 5vw, 48px); line-height:1.15; margin: 10px 0 18px; letter-spacing:-.02em; }
+    .lead { font-size:18px; color:#374151; margin:0 0 36px; }
+    .rule { border:0; border-top:1px solid var(--line); margin:36px 0; }
+    h2 { font-size:20px; margin:0 0 12px; }
+    p { margin:0 0 14px; }
+    a { color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px; }
+    .cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin:22px 0 0; }
+    .card { border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px; background:#fff; }
+    .card h3 { margin:0 0 6px; font-size:16px; }
+    .card p { margin:0; color:var(--muted); font-size:14px; }
+    footer { margin-top:48px; color:var(--muted); font-size:13px; font-family: ui-sans-serif, system-ui, sans-serif; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.9em; background:#f3f4f6; padding:1px 5px; border-radius:4px; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">MoBoBrain · Public Notes</div>
+  <h1>莫伯的读书与技术札记</h1>
+  <p class="lead">公开的读书笔记、技术札记与研究资料整理。核心知识库与个人档案在受保护的后台，不对外公开。</p>
+
+  <hr class="rule">
+
+  <section>
+    <h2>这里会放什么</h2>
+    <p>经过整理、可以公开的读书笔记、产业研究摘要、技术实践记录，以及一些长期有效的思考框架。所有内容先进入私有知识库，经过筛选与脱敏后再发布到这里。</p>
+    <div class="cards">
+      <div class="card">
+        <h3>读书笔记</h3>
+        <p>书籍的核心命题、论据、反例与可迁移的原则。</p>
+      </div>
+      <div class="card">
+        <h3>技术札记</h3>
+        <p>部署、数据库、自动化与个人知识管理的实践记录。</p>
+      </div>
+      <div class="card">
+        <h3>研究摘要</h3>
+        <p>公开来源的产业/技术资料整理，保留出处与边界。</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <h2>站点结构</h2>
+    <p>本站是静态公开站，由 Caddy 直接托管；内容源在思源笔记中，经构建后发布。受保护入口包括 <code>kb</code>（知识库）、<code>n8n</code>（自动化后台）与 <code>archive</code>（个人数字档案），均需要认证。</p>
+    <p>当前为项目骨架页。接入 Astro/Hugo 构建后，这里会替换为文章列表与详情页。</p>
+  </section>
+
+  <footer>
+    <p>© 2026 莫伯 · 公开内容遵循相应来源的版权与引用规范。</p>
+  </footer>
+</main>
+</body>
+</html>

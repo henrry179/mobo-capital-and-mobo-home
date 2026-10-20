@@ -1,0 +1,110 @@
+# =============================================================================
+# 莫伯双站系统 · Caddy 2 网关
+# 变量来自 docker-compose.yml / .env
+# 设计：一个主域名 + 多子域；www 公开，其余全部 BasicAuth
+# =============================================================================
+
+{
+	email {$ACME_EMAIL}
+	admin off
+	servers {
+		protocols h1 h2 h3
+	}
+	# 统一访问日志：供 fail2ban 识别 401 暴破，也便于排障
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+		format json
+	}
+}
+
+# 通用安全头
+(security_headers) {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(), microphone=(), camera=()"
+		-Server
+	}
+}
+
+# 受保护后台：BasicAuth + 禁止搜索引擎索引
+(protected) {
+	basic_auth {
+		{$CADDY_ADMIN_USER} {$CADDY_ADMIN_PASSWORD_HASH}
+	}
+	import security_headers
+	header {
+		X-Robots-Tag "noindex, nofollow, noarchive"
+	}
+}
+
+# -----------------------------------------------------------------------------
+# 网站 A 公开静态站：无认证，只读，允许索引
+# -----------------------------------------------------------------------------
+{$DOMAIN_WWW} {
+	encode zstd gzip
+	root * /srv/site
+	file_server
+	import security_headers
+	header {
+		X-Robots-Tag "index, follow"
+		Cache-Control "public, max-age=3600"
+		Content-Security-Policy "default-src 'self'; img-src 'self' https://*.aliyuncs.com data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+	}
+}
+
+# -----------------------------------------------------------------------------
+# 网站 A 核心知识库：思源笔记，必须认证
+# -----------------------------------------------------------------------------
+{$DOMAIN_KB} {
+	encode zstd gzip
+	import protected
+	reverse_proxy mobobrain-pkm:6806
+}
+
+# -----------------------------------------------------------------------------
+# 网站 A 自动化后台：n8n 独立子域，必须认证
+# -----------------------------------------------------------------------------
+{$DOMAIN_N8N} {
+	encode zstd gzip
+	import protected
+	reverse_proxy mobobrain-n8n:5678
+}
+
+# -----------------------------------------------------------------------------
+# 网站 B 个人档案看板：强认证 + noindex + 不缓存
+# -----------------------------------------------------------------------------
+{$DOMAIN_ARCHIVE} {
+	encode zstd gzip
+	import protected
+	header {
+		Cache-Control "no-store"
+	}
+	reverse_proxy archive-dashboard:8501
+}
+
+# -----------------------------------------------------------------------------
+# 静态操作台：只展示入口/状态，不存密钥
+# -----------------------------------------------------------------------------
+{$DOMAIN_ADMIN} {
+	encode zstd gzip
+	import protected
+	header {
+		Cache-Control "no-store"
+	}
+	root * /srv/console
+	file_server
+}
+
+# -----------------------------------------------------------------------------
+# 说明
+# 1) 不使用 /n8n/ 或 /kb/ 子路径：子路径会破坏静态资源、WebSocket、Webhook。
+# 2) BasicAuth 必须配合 HTTPS；本 Caddy 自动签发证书。
+# 3) 若未来需要外部 Webhook，单独增加 hooks. 子域 + Header Token + IP 限制，
+#    不要把 n8n 的 /webhook/ 暴露在无认证的根路径。
+# 4) 证书/ACME 需要 80/443 可达；备案通过前不要切正式域名。

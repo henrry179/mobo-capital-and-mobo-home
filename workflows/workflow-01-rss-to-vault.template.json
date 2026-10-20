@@ -1,0 +1,118 @@
+{
+  "name": "01 RSS 采集入库",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "每 4 小时",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 320]
+    },
+    {
+      "parameters": {
+        "url": "https://example.com/feed.xml",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000002",
+      "name": "RSS 采集",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [460, 320]
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nreturn items\n  .map((item) => {\n    const j = item.json || {};\n    const url = j.link || j.url || j.guid;\n    if (!url) return null;\n    const hash = crypto.createHash('sha256').update(url).digest('hex');\n    return {\n      json: {\n        source_url: url,\n        url_hash: hash,\n        title: j.title || '(无标题)',\n        author: j.creator || j.author || null,\n        published_at: j.pubDate || j.isoDate || null,\n        raw_html: j['content:encoded'] || j.content || j.description || '',\n        language: 'zh-CN'\n      }\n    };\n  })\n  .filter(Boolean);"
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000003",
+      "name": "标准化",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 320]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO intel.articles_vault (\n  source_url, url_hash, title, author, published_at, raw_html, language, status\n) VALUES (\n  $1, $2, $3, $4, $5::timestamptz, $6, $7, 'NEW'\n)\nON CONFLICT (url_hash) DO NOTHING\nRETURNING article_id;",
+        "options": {
+          "queryReplacement": "={{ $json.source_url }},={{ $json.url_hash }},={{ $json.title }},={{ $json.author }},={{ $json.published_at }},={{ $json.raw_html }},={{ $json.language }}"
+        }
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000004",
+      "name": "写入文章金库",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [940, 320],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "MoBoBrain Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 01 RSS 采集入库（模板）\n\n- 把 RSS 节点 URL 换成真实源；建议一个源一个工作流，便于限速与排错。\n- Postgres 凭证：`db_mobobrain` + `user_mobobrain`（写入 `intel`），不要用 postgres 超级用户。\n- `url_hash` 由 Code 节点用 SHA-256 生成，配合唯一键实现去重。\n- 长文本字段含逗号时，`queryReplacement` 可能被错误拆分；生产建议在 n8n 中改用 Postgres Insert 模式，或先写临时表再规范化。\n- `source_id` 未绑定；可在 `intel.sources` 登记 feed 后，用后续节点按 `feed_url` 回填。",
+        "height": 300,
+        "width": 440
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000005",
+      "name": "说明",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [160, 40]
+    }
+  ],
+  "connections": {
+    "每 4 小时": {
+      "main": [
+        [
+          {
+            "node": "RSS 采集",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS 采集": {
+      "main": [
+        [
+          {
+            "node": "标准化",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "标准化": {
+      "main": [
+        [
+          {
+            "node": "写入文章金库",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

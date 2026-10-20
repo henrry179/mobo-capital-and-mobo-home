@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>莫伯双站 · 操作台</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b1020; --panel:#141b32; --line:#26304d; --text:#e8ecf8; --muted:#93a0c2; --accent:#7aa2ff; --ok:#4ade80; --warn:#fbbf24; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, #1a2a5a 0%, var(--bg) 55%); color:var(--text); min-height:100vh; }
+    main { max-width: 1080px; margin: 0 auto; padding: 48px 20px 80px; }
+    h1 { font-size: clamp(28px, 4vw, 44px); margin: 0 0 8px; letter-spacing: -0.02em; }
+    .sub { color: var(--muted); margin: 0 0 32px; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    a.card { display:block; text-decoration:none; color:inherit; background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)); border:1px solid var(--line); border-radius:16px; padding:18px 18px 16px; transition: transform .15s ease, border-color .15s ease; }
+    a.card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .tag { display:inline-block; font-size:12px; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-bottom:12px; }
+    .card h2 { font-size:17px; margin:0 0 6px; }
+    .card p { margin:0; color:var(--muted); font-size:13px; line-height:1.55; }
+    .note { margin-top:28px; border:1px solid var(--line); background:rgba(20,27,50,.7); border-radius:14px; padding:16px 18px; color:var(--muted); font-size:13px; line-height:1.7; }
+    .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ok); margin-right:6px; }
+    code { color:#cfe0ff; background:#0f1730; border:1px solid var(--line); padding:1px 6px; border-radius:6px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>莫伯双站 · 操作台</h1>
+  <p class="sub">MoBoBrain 知识库与内容自动化中枢 × Wolfram 式计算型个人数字档案</p>
+
+  <div class="grid">
+    <a class="card" data-sub="www" href="#">
+      <span class="tag">公开</span>
+      <h2>网站 A · 公开专栏</h2>
+      <p>静态文章与公开笔记。无需登录，允许搜索引擎索引。</p>
+    </a>
+    <a class="card" data-sub="kb" href="#">
+      <span class="tag">BasicAuth</span>
+      <h2>网站 A · 知识库</h2>
+      <p>思源笔记。核心研究库、双链、全文检索与附件。</p>
+    </a>
+    <a class="card" data-sub="n8n" href="#">
+      <span class="tag">BasicAuth</span>
+      <h2>网站 A · 自动化</h2>
+      <p>n8n 工作流：RSS 采集、LLM 提炼、思源推送、多平台草稿。</p>
+    </a>
+    <a class="card" data-sub="archive" href="#">
+      <span class="tag">BasicAuth · 私有</span>
+      <h2>网站 B · 数字档案</h2>
+      <p>时间线、阅读、运动、复盘、资产总账与周度计算看板。</p>
+    </a>
+  </div>
+
+  <div class="note">
+    <p><span class="dot"></span>本页是静态操作台，不包含任何密钥，也不直接访问数据库。</p>
+    <p>入口地址由当前域名自动推导：<code>admin.example.com</code> → <code>kb.example.com</code>、<code>n8n.example.com</code>、<code>archive.example.com</code>、<code>www.example.com</code>。</p>
+    <p>日常检查：<code>docker compose ps</code>、<code>docker stats --no-stream</code>、<code>deploy/scripts/smoke-test.sh</code>、<code>restic snapshots</code>。</p>
+  </div>
+</main>
+<script>
+  (function () {
+    var host = location.hostname;
+    var parts = host.split('.');
+    var base = parts.length > 2 ? parts.slice(1).join('.') : host;
+    document.querySelectorAll('a.card[data-sub]').forEach(function (a) {
+      var sub = a.getAttribute('data-sub');
+      a.href = location.protocol + '//' + sub + '.' + base + '/';
+    });
+  })();
+</script>
+</body>
+</html>
