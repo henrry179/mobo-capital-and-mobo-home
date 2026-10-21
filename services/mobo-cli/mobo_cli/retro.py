@@ -49,19 +49,35 @@ def parse_kv_lines(lines: list[str]) -> dict[str, Any]:
     return out
 
 
+# 行动项中可识别的键（只有这些键会切分文本，避免把正文里的中文冒号误判为键）
+_ACTION_KEY_RE = re.compile(
+    r"(owner|负责人|due|截止|deadline|日期|date)\s*[:：]\s*",
+    re.IGNORECASE,
+)
+
+
 def parse_action_items(lines: list[str]) -> list[dict[str, Any]]:
+    """解析 `- 文本 owner: 我 due: 周日` 形式的行动项。
+
+    值在遇到**下一个已知键**时截断（不是只到分号），否则
+    "owner: 我 due: 周日" 会把 due 一起吞进 owner。
+    """
     items: list[dict[str, Any]] = []
     for line in lines:
         item = re.sub(r"^\s*[-*+]\s*", "", line).strip()
         if not item:
             continue
-        entry: dict[str, Any] = {"text": item}
-        m = re.search(r"(?:owner|负责人)\s*[:：]\s*([^;；]+)", item)
-        if m:
-            entry["owner"] = m.group(1).strip()
-        m = re.search(r"(?:due|截止)\s*[:：]\s*([^;；]+)", item)
-        if m:
-            entry["due"] = m.group(1).strip()
+        parts = _ACTION_KEY_RE.split(item)
+        entry: dict[str, Any] = {"text": parts[0].strip() or item}
+        for i in range(1, len(parts) - 1, 2):
+            key = parts[i].strip().lower()
+            value = parts[i + 1].strip()
+            if key in {"owner", "负责人"}:
+                entry["owner"] = value
+            elif key in {"due", "截止", "deadline"}:
+                entry["due"] = value
+            elif key in {"日期", "date"}:
+                entry["date"] = value
         items.append(entry)
     return items
 

@@ -30,14 +30,11 @@ services:
       DOMAIN_LAB: lab.localhost
 
   postgres:
-    networks:
-      internal_net:
-        ipv4_address: 172.30.0.2
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./deploy/postgres/initdb:/docker-entrypoint-initdb.d:ro
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
 
   mobobrain-pkm:
     networks:
@@ -46,13 +43,13 @@ services:
     volumes:
       - mobobrain_data:/siyuan/workspace
     ports:
-      - "6806:6806"
+      - "127.0.0.1:6806:6806"
 
   mobobrain-n8n:
     volumes:
       - n8n_data:/home/node/.n8n
     ports:
-      - "5678:5678"
+      - "127.0.0.1:5678:5678"
 
   archive-dashboard:
     build:
@@ -62,7 +59,7 @@ services:
         PIP_INDEX_URL: https://pypi.tuna.tsinghua.edu.cn/simple
         APT_MIRROR: mirrors.aliyun.com
     ports:
-      - "8501:8501"
+      - "127.0.0.1:8501:8501"
 
   restic-backup:
     build:

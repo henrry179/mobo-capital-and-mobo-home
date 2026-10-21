@@ -79,6 +79,28 @@ docker stats --no-stream
 
 BasicAuth 默认 `mobo` / `mobo-local`（本地弱口令，见 `.env.local`）。
 
+## 3.1 质量门（正式投入开发部署前的硬闸门）
+
+```bash
+bash tools/wsl/quality-gate.sh
+```
+
+Q0–Q14 共 21 项，退出码 0 = 全绿：
+
+| 组 | 内容 |
+|---|---|
+| Q0–Q1 | 仓库可访问（safe.directory）、全部 `.sh` 语法 |
+| Q2–Q4 | 工作流 JSON 可解析、三套 compose 可解析、引用变量 ⊆ `.env.example` |
+| Q5 | 真实密钥零入库（排除占位符） |
+| Q6–Q7 | 六容器运行且无 unhealthy；`tests/sql/smoke.sql` 9 组全绿 |
+| Q8–Q9 | CLI 与看板单测 |
+| Q10 | 网关：公开站 200 / 受保护站 401→200 / `/internal/*` 401 |
+| Q11 | CLI `doctor` FAIL=0；`export-site` 产出；公域包 0 私有字段、0 INTERNAL |
+| Q12 | 六容器常驻合计 < 1550 MiB |
+| Q13–Q14 | 迁移/灾备脚本就绪；Markdown 相对链接 0 断链 |
+
+> 判定一律以「退出码 0 = 通过」为准，避免自写脚本把成功判成失败。
+
 ## 4. 本地专属编排差异（`docker-compose.wsl.yml`）
 
 | 项 | 基础编排 | WSL 覆盖 |

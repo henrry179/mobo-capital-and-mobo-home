@@ -121,7 +121,12 @@ services:
       - ./deploy/volumes/pg_data:/var/lib/postgresql/data
       - ./deploy/postgres/initdb:/docker-entrypoint-initdb.d:ro
     networks:
+      # 说明：postgres 需要同时挂 egress_net —— Docker 不为 internal 网络做端口 DNAT，
+      # 只挂 internal_net 时 `ports: 127.0.0.1:5432` 实际不通，宿主机侧 CLI 无法连库。
+      # egress_net 仅用于发布端口与宿主机直连；数据库自身无出网需求，
+      # 生产环境可用 iptables/安全组进一步限制其出网。
       - internal_net
+      - egress_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${PG_SUPER_USER} -d postgres"]
       interval: 10s
