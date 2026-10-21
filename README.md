@@ -113,32 +113,37 @@ flowchart TB
 > 当前处于**本地优先**模式：不买服务器、不申请域名也能把整套系统跑起来。
 > 完整步骤见 [`docs/05-运维与灾备/本地开发与部署.md`](docs/05-运维与灾备/本地开发与部署.md)；公网部署见 [`部署手册.md`](docs/05-运维与灾备/部署手册.md)。
 
+### 模式 A · 零依赖预览（只需 Node.js，当前即可用）
+
 ```bash
-# 1. 本地环境变量（不要用生产的 .env）
-cp .env.example .env.local
-#    按 .env.example 说明覆盖本地口令与 localhost 域名
+node tools/local-preview/start.js
+```
 
-# 2. 校验编排
-docker compose --env-file .env.local config >/dev/null
+| 入口 | 地址 |
+|---|---|
+| 架构与入口总览（拓扑 + 实时状态 + 差异对照） | http://127.0.0.1:8082/ |
+| 莫伯资本 MoBoCapital | http://127.0.0.1:8080/ |
+| 莫伯之家 MoBoHome | http://127.0.0.1:8081/ |
+| 内网驾驶舱（BasicAuth：mobo / mobo-local） | http://127.0.0.1:8080/internal/internal-data.json |
 
-# 3. 起数据库（首次执行 01~09 初始化）
-docker compose --env-file .env.local up -d postgres
+> 与生产**同一套前端文件、同一套路由/鉴权/缓存/脱敏口径**；差别只在数据来自样例脚本还是真实数据库。
 
-# 4. 冒烟（9 组检查：结构/触发器/视图/权限/capital 域/双库隔离）
-docker compose --env-file .env.local cp tests/sql/smoke.sql postgres:/tmp/smoke.sql
-docker compose --env-file .env.local exec -T postgres psql -U postgres -d db_archive -f /tmp/smoke.sql
+### 模式 B · Docker 全栈（目标形态）
 
-# 5. 起全栈
-docker compose --env-file .env.local up -d --build
-docker compose --env-file .env.local ps
+```bash
+cp .env.example .env.local      # 覆盖本地口令与 localhost 域名
+docker compose -f docker-compose.yml -f docker-compose.local.yml --env-file .env.local config >/dev/null
+docker compose -f docker-compose.yml -f docker-compose.local.yml --env-file .env.local up -d postgres
+# → 跑 tests/sql/smoke.sql（9 组：结构/触发器/视图/权限/capital 域/双库隔离）
+docker compose -f docker-compose.yml -f docker-compose.local.yml --env-file .env.local up -d --build
 docker stats --no-stream        # 常驻应约 1.46GB
 ```
 
 没有 OSS 时看板会自动切到"52 周合成沙盒"；灌沙盒数据：
 
 ```bash
-docker compose --env-file .env.local cp seeds/52-week-sandbox.sql postgres:/tmp/seed.sql
-docker compose --env-file .env.local exec -T postgres psql -U postgres -d db_archive -f /tmp/seed.sql
+dc cp seeds/52-week-sandbox.sql postgres:/tmp/seed.sql
+dc exec -T postgres psql -U postgres -d db_archive -f /tmp/seed.sql
 ```
 
 ### CLI 速查

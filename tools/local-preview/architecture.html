@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>莫伯双站 · 本地预览控制台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet" />
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          navy: { 950: '#050A14', 900: '#070E1C', 800: '#0D182E', 700: '#152544', 600: '#1E335C' },
+          gold: { 300: '#E5C98B', 400: '#D4B26F', 500: '#C5A059', 600: '#A3803E' },
+          warm: { 900: '#0C0E14', 800: '#141721', 700: '#1E2333' },
+          amber2: { 500: '#D4A373' },
+          sage: { 500: '#99A98F' },
+        },
+        fontFamily: {
+          serif: ['"Noto Serif SC"', 'Georgia', 'serif'],
+          sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  body { background: radial-gradient(1200px 600px at 15% -10%, #0D182E 0%, #050A14 55%); }
+  .grid-bg { background-image: linear-gradient(rgba(197,160,89,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(197,160,89,.06) 1px, transparent 1px); background-size: 32px 32px; }
+  .glow { box-shadow: 0 0 0 1px rgba(197,160,89,.25), 0 18px 50px -20px rgba(197,160,89,.45); }
+</style>
+</head>
+<body class="text-slate-200 font-sans min-h-screen">
+  <div class="max-w-6xl mx-auto px-6 py-10">
+
+    <!-- Header -->
+    <header class="glow rounded-2xl border border-gold-600/30 bg-navy-900/70 p-8">
+      <div class="text-[11px] tracking-[0.22em] uppercase text-gold-500 font-mono">MOBO DUAL STACK · LOCAL PREVIEW CONSOLE</div>
+      <h1 class="font-serif text-3xl md:text-4xl text-white mt-3">莫伯双站 · 本地预览控制台</h1>
+      <p class="text-slate-400 mt-3 max-w-3xl leading-relaxed">
+        当前以 <span class="text-gold-400">零依赖预览模式</span> 运行（无 Docker / 无 PostgreSQL）：两个静态门户按生产同构的路由、
+        鉴权与缓存策略分发静态文件与预生成 JSON 数据包。购买服务器后，将同一套 <code class="text-gold-400">sites/</code>、
+        <code class="text-gold-400">deploy/</code>、<code class="text-gold-400">docker-compose.yml</code> 迁到云端即可切换为全栈形态。
+      </p>
+      <div class="flex flex-wrap gap-2 mt-5 text-[11px] font-mono">
+        <span class="px-2 py-1 rounded bg-white/5 border border-white/10">API 模式：OpenAI-compatible</span>
+        <span class="px-2 py-1 rounded bg-white/5 border border-white/10">双库四 Schema：intel / capital / n8n / archive</span>
+        <span class="px-2 py-1 rounded bg-white/5 border border-white/10">红线：物理脱敏 + 人工终审</span>
+        <span class="px-2 py-1 rounded bg-white/5 border border-white/10">ADR-0010 本地优先</span>
+      </div>
+    </header>
+
+    <!-- 入口 -->
+    <section class="mt-8">
+      <h2 class="text-xs font-mono tracking-widest text-gold-500 uppercase">站点入口</h2>
+      <div class="grid md:grid-cols-2 gap-5 mt-4">
+        <a href="http://127.0.0.1:8080/" target="_blank" class="block rounded-2xl border border-white/10 bg-navy-900/50 p-6 hover:border-gold-500/50 transition">
+          <div class="font-mono text-[11px] text-gold-500">SITE A · :8080</div>
+          <div class="font-serif text-2xl text-white mt-1">莫伯资本 MoBoCapital</div>
+          <p class="text-slate-400 text-sm mt-2">五大栏目（memo / strategies / incubation / terminal / media-ops）+ 三级权限切换器 + 量化终端快照。</p>
+          <div class="text-[11px] font-mono text-slate-500 mt-3">/data/public-data.json · /data/terminal-snapshot.json · /internal/internal-data.json</div>
+        </a>
+        <a href="http://127.0.0.1:8081/" target="_blank" class="block rounded-2xl border border-white/10 bg-warm-800/40 p-6 hover:border-amber2-500/50 transition">
+          <div class="font-mono text-[11px] text-amber2-500">SITE B · :8081</div>
+          <div class="font-serif text-2xl text-white mt-1">莫伯之家 MoBoHome</div>
+          <p class="text-slate-400 text-sm mt-2">人生四篇章叙事流、800px 影像画廊、百本跨学科藏书馆、周度体征看板。</p>
+          <div class="text-[11px] font-mono text-slate-500 mt-3">/data/public-home-data.json · /internal/internal-home-data.json · /lab/</div>
+        </a>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mt-4">
+        <a href="http://127.0.0.1:8080/internal/internal-data.json" target="_blank" class="rounded-xl border border-white/10 bg-navy-900/40 p-4 hover:border-gold-500/40">
+          <div class="font-mono text-[11px] text-slate-400">AUTH TEST</div>
+          <div class="text-sm mt-1">内网驾驶舱（未认证应 401）</div>
+        </a>
+        <a href="http://127.0.0.1:8082/status.json" target="_blank" class="rounded-xl border border-white/10 bg-navy-900/40 p-4 hover:border-gold-500/40">
+          <div class="font-mono text-[11px] text-slate-400">STATUS</div>
+          <div class="text-sm mt-1">网关状态与数据文件清单</div>
+        </a>
+        <a href="http://127.0.0.1:8082/lab.html" target="_blank" class="rounded-xl border border-white/10 bg-navy-900/40 p-4 hover:border-gold-500/40">
+          <div class="font-mono text-[11px] text-slate-400">LAB</div>
+          <div class="text-sm mt-1">生命体征实验室（需 Docker 全栈）</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- 拓扑 -->
+    <section class="mt-10">
+      <h2 class="text-xs font-mono tracking-widest text-gold-500 uppercase">系统拓扑（生产等价）</h2>
+      <div class="grid-bg rounded-2xl border border-white/10 p-6 mt-4 overflow-x-auto">
+        <pre class="font-mono text-[12px] leading-relaxed text-slate-300">
+浏览器
+  │  HTTP(S)
+  ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  Caddy 网关（本次由 tools/local-preview/serve.js 等价实现）           │
+│  · 双主站独立入口        · /data/*.json 短缓存 60s                  │
+│  · /internal/* BasicAuth · SPA try_files 回退 · 安全响应头           │
+└───────────────┬───────────────────────────┬──────────────────────────┘
+                │                           │
+        ┌───────▼────────┐          ┌───────▼────────┐
+        │ 莫伯资本 :8080 │          │ 莫伯之家 :8081 │
+        │ sites/         │          │ sites/         │
+        │  ├ data/       │          │  ├ data/       │
+        │  └ internal/   │          │  └ internal/   │
+        └───────┬────────┘          └───────┬────────┘
+                │                           │
+     ┌──────────▼──────────┐     ┌──────────▼──────────┐
+     │ 公域包 public-*.json │     │ 公域包 public-*.json│
+     │ 物理脱敏（红线四）   │     │ 物理脱敏（红线四）  │
+     └─────────────────────┘     └─────────────────────┘
+
+数据面（Docker 全栈形态，本地预览用样例数据代替）：
+  db_mobobrain : intel(采集/发布) + capital(投研/基金/终端) + n8n(自动化)
+  db_archive   : archive(个人档案)
+  阿里云 OSS   : 公开图床 + 私有档案桶(冷热分层)  ·  Restic → 冷备
+        </pre>
+      </div>
+    </section>
+
+    <!-- 实时状态 -->
+    <section class="mt-10">
+      <h2 class="text-xs font-mono tracking-widest text-gold-500 uppercase">实时状态</h2>
+      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 mt-4">
+        <div class="flex items-center gap-3 mb-3">
+          <span id="dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+          <span id="statusText" class="font-mono text-xs text-slate-400">正在读取 /status.json …</span>
+        </div>
+        <table class="w-full text-xs font-mono">
+          <thead class="text-slate-500 text-left">
+            <tr><th class="py-1">数据文件</th><th class="py-1">状态</th><th class="py-1">大小</th><th class="py-1">更新时间</th></tr>
+          </thead>
+          <tbody id="files"></tbody>
+        </table>
+        <div class="mt-4 pt-4 border-t border-white/10">
+          <div class="text-[11px] text-slate-500 font-mono mb-2">最近请求</div>
+          <pre id="reqs" class="font-mono text-[11px] text-slate-400 max-h-40 overflow-auto"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- 差异 -->
+    <section class="mt-10">
+      <h2 class="text-xs font-mono tracking-widest text-gold-500 uppercase">预览模式 vs 生产全栈</h2>
+      <div class="overflow-x-auto mt-4">
+        <table class="w-full text-xs">
+          <thead class="text-slate-400 text-left border-b border-white/10">
+            <tr><th class="py-2 pr-4">能力</th><th class="py-2 pr-4">本地预览（当前）</th><th class="py-2">生产全栈（Docker）</th></tr>
+          </thead>
+          <tbody class="align-top">
+            <tr class="border-b border-white/5"><td class="py-2 pr-4 text-slate-300">双站门户</td><td class="py-2 pr-4 text-sage-400">✅ 真实 HTML + 真实路由</td><td class="py-2 text-slate-400">同上（Caddy file_server）</td></tr>
+            <tr class="border-b border-white/5"><td class="py-2 pr-4 text-slate-300">公私域鉴权</td><td class="py-2 pr-4 text-sage-400">✅ BasicAuth + no-store</td><td class="py-2 text-slate-400">同上（Caddy protected 片段）</td></tr>
+            <tr class="border-b border-white/5"><td class="py-2 pr-4 text-slate-300">JSON 数据包</td><td class="py-2 pr-4 text-amber-400">样例数据（脚本生成）</td><td class="py-2 text-slate-400">CLI 从 PostgreSQL 实时导出 + 脱敏审计</td></tr>
+            <tr class="border-b border-white/5"><td class="py-2 pr-4 text-slate-300">PostgreSQL 16 / pgvector</td><td class="py-2 pr-4 text-rose-400">❌ 未启动</td><td class="py-2 text-slate-400">双库四 Schema + 触发器 + HNSW</td></tr>
+            <tr class="border-b border-white/5"><td class="py-2 pr-4 text-slate-300">Streamlit 实验室</td><td class="py-2 pr-4 text-rose-400">占位页</td><td class="py-2 text-slate-400">Z-Score / Lead-Lag 实时看板</td></tr>
+            <tr class="border-b border-white/5"><td class="py-2 pr-4 text-slate-300">思源 / n8n</td><td class="py-2 pr-4 text-rose-400">未启动</td><td class="py-2 text-slate-400">容器内 6806 / 5678</td></tr>
+            <tr class="border-b border-white/5"><td class="py-2 pr-4 text-slate-300">OSS / Restic 备份</td><td class="py-2 pr-4 text-rose-400">未接入</td><td class="py-2 text-slate-400">内网免流 + 每日加密冷备</td></tr>
+            <tr><td class="py-2 pr-4 text-slate-300">HTTPS / 域名</td><td class="py-2 pr-4 text-amber-400">纯 HTTP + 127.0.0.1</td><td class="py-2 text-slate-400">双主域 + ACME 自动签发</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 rounded-xl border border-gold-600/30 bg-gold-500/5 p-4 text-sm text-slate-300">
+        <span class="text-gold-400 font-mono text-xs">下一步 →</span> 安装 Docker Desktop 后按
+        <code class="text-gold-400">docs/05-运维与灾备/本地开发与部署.md</code> 的 L0–L6 流程切到全栈形态；
+        静态门户与数据包的路径、口径、鉴权规则完全一致，切换时无需改前端代码。
+      </div>
+    </section>
+
+    <footer class="mt-12 pt-6 border-t border-white/10 text-[11px] font-mono text-slate-500 flex flex-wrap gap-4 justify-between">
+      <span>莫伯双站系统 v2.1.1 · Local-First · ADR-0010</span>
+      <span id="started"></span>
+    </footer>
+  </div>
+
+  <script>
+    async function refresh() {
+      try {
+        const r = await fetch('/status.json', { cache: 'no-store' });
+        const d = await r.json();
+        document.getElementById('dot').className = 'w-2 h-2 rounded-full bg-emerald-400';
+        document.getElementById('statusText').textContent =
+          '网关运行中 · 启动于 ' + new Date(d.started_at).toLocaleString('zh-CN');
+        document.getElementById('files').innerHTML = d.data_files.map(f => `
+          <tr class="border-b border-white/5">
+            <td class="py-1 pr-3 text-slate-400">${f.file}</td>
+            <td class="py-1 pr-3 ${f.present ? 'text-emerald-400' : 'text-rose-400'}">${f.present ? 'present' : 'missing'}</td>
+            <td class="py-1 pr-3">${f.present ? (f.size / 1024).toFixed(1) + ' KB' : '-'}</td>
+            <td class="py-1 text-slate-500">${f.mtime ? new Date(f.mtime).toLocaleString('zh-CN') : '-'}</td>
+          </tr>`).join('');
+        document.getElementById('reqs').textContent =
+          (d.recent_requests || []).map(e => `${e.ts}  ${e.site}  ${e.method} ${e.path} -> ${e.status}`).join('\n') || '(暂无)';
+        document.getElementById('started').textContent = 'preview started ' + new Date(d.started_at).toLocaleString('zh-CN');
+      } catch (e) {
+        document.getElementById('dot').className = 'w-2 h-2 rounded-full bg-rose-400';
+        document.getElementById('statusText').textContent = '无法连接预览网关：' + e.message;
+      }
+    }
+    refresh();
+    setInterval(refresh, 5000);
+  </script>
+</body>
+</html>

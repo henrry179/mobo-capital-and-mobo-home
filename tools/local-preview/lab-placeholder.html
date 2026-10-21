@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>生命体征实验室 · 本地预览占位</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  body { background: radial-gradient(900px 500px at 20% -10%, #141721 0%, #0C0E14 60%); }
+</style>
+</head>
+<body class="text-slate-200 font-sans min-h-screen">
+  <div class="max-w-3xl mx-auto px-6 py-14">
+    <div class="font-mono text-[11px] tracking-[0.2em] uppercase text-amber-400">MoBo Home · Life Analytics Lab</div>
+    <h1 class="font-serif text-3xl text-white mt-3">生命体征实验室（本地预览占位）</h1>
+    <p class="text-slate-400 mt-4 leading-relaxed">
+      真实的 Streamlit 实验室（Z-Score 标准化 + Lead-Lag 滞后回归）需要 PostgreSQL 中的
+      <code class="text-amber-400">archive.v_weekly_life_analytics</code> 视图与
+      <code class="text-amber-400">numpy / pandas / psycopg2</code> 运行时，因此只在 <b>Docker 全栈</b> 形态下可用。
+    </p>
+
+    <div class="mt-8 rounded-2xl border border-white/10 bg-warm-800/40 p-6">
+      <div class="text-xs font-mono text-slate-400">四个模块（上线后即为实时数据）</div>
+      <ul class="mt-3 space-y-2 text-sm text-slate-300">
+        <li>① 多维自律与状态指标 Z-Score 标准化趋势叠加</li>
+        <li>② Lead-Lag 跨周滞后交叉相关检验（运动 → 精力传导）</li>
+        <li>③ 52 周读数热力图（阅读 / 训练 / 睡眠 / 体重）</li>
+        <li>④ 资产容量与冷热分层统计</li>
+      </ul>
+    </div>
+
+    <div class="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/5 p-6 text-sm text-slate-300">
+      <div class="font-mono text-xs text-amber-400">如何启用真实实验室</div>
+      <ol class="mt-3 list-decimal list-inside space-y-1.5">
+        <li>安装 Docker Desktop（或 Linux + Docker Engine 24+）</li>
+        <li>按 <code>docs/05-运维与灾备/本地开发与部署.md</code> 执行 L0–L2</li>
+        <li>访问 <code>http://lab.localhost/</code>（本地覆盖）或 <code>http://127.0.0.1:8501/</code>（直连）</li>
+      </ol>
+    </div>
+
+    <a href="/" class="inline-block mt-8 text-sm text-amber-400 hover:underline">← 返回莫伯之家</a>
+  </div>
+</body>
+</html>
