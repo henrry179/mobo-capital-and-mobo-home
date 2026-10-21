@@ -1,0 +1,106 @@
+{
+    email admin@mobocapital.com
+    servers {
+        protocols h1 h2 h3
+    }
+}
+
+# ============================================================================
+# 网站 A 主站：莫伯资本 (MoBoCapital.com) — 华尔街机构级门户与投研智库
+# ============================================================================
+mobocapital.com, www.mobocapital.com {
+    root * /srv/sites/mobocapital
+    encode zstd gzip
+
+    # 1. 内网全量数据包与私有交割单签名链接保护（强制 BasicAuth 认证）
+    @internal_zone {
+        path /internal/*
+    }
+    handle @internal_zone {
+        basicauth {
+            mobo {$CADDY_INTERNAL_PASS_HASH}
+        }
+        header Cache-Control "no-store, no-cache, must-revalidate"
+        file_server
+    }
+
+    # 2. 公域脱敏 JSON 数据包（短缓存 60 秒，确保 CLI 同步后立刻生效）
+    @public_json {
+        path /data/*.json
+    }
+    handle @public_json {
+        header Cache-Control "public, max-age=60, must-revalidate"
+        file_server
+    }
+
+    # 3. 静态资产与单页应用主入口
+    handle {
+        try_files {path} /index.html
+        file_server
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}
+
+# ============================================================================
+# 网站 B 主站：莫伯之家 (MoBoHome.com) — 个人数字档案馆与温润生命叙事
+# ============================================================================
+mobohome.com, www.mobohome.com {
+    root * /srv/sites/mobohome
+    encode zstd gzip
+
+    # 1. 莫伯之家内网全量私密档案保护（含家庭影像与私有 OSS 临时签名链接）
+    @home_internal {
+        path /internal/*
+    }
+    handle @home_internal {
+        basicauth {
+            mobo {$CADDY_INTERNAL_PASS_HASH}
+        }
+        header Cache-Control "no-store, no-cache, must-revalidate"
+        file_server
+    }
+
+    # 2. 嵌入式 Streamlit 量化与相关性实验室路由 (/lab/* 反代至 archive-dashboard)
+    handle_path /lab/* {
+        basicauth {
+            mobo {$CADDY_INTERNAL_PASS_HASH}
+        }
+        reverse_proxy archive-dashboard:8501 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
+    # 3. 公域脱敏数据与莫伯之家主门户
+    handle {
+        try_files {path} /index.html
+        file_server
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+    }
+}
+
+# ============================================================================
+# 内部生产力中台子域名：思源笔记 (pkm) 与 n8n 自动化引擎 (n8n)
+# ============================================================================
+pkm.mobocapital.com {
+    encode zstd gzip
+    reverse_proxy mobobrain-pkm:6806
+}
+
+n8n.mobocapital.com {
+    encode zstd gzip
+    reverse_proxy mobobrain-n8n:5678 {
+        flush_interval -1
+    }
+}

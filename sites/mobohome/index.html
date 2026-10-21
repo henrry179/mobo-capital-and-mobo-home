@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MO BO HOME | 莫伯之家 — 个人数字档案馆与生命叙事空间</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            warm: {
+              950: '#090A0F',
+              900: '#0C0E14',
+              800: '#141721',
+              700: '#1E2333',
+              600: '#2A3147'
+            },
+            amber: {
+              300: '#F5D061',
+              400: '#E6B450',
+              500: '#D4A373',
+              600: '#B08351'
+            },
+            sage: {
+              400: '#CCD5AE',
+              500: '#99A98F'
+            },
+            sand: '#FAEDCD'
+          },
+          fontFamily: {
+            serif: ['"Noto Serif SC"', 'Georgia', 'serif'],
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0C0E14;
+      color: #E2E8F0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-image: 
+        radial-gradient(circle at 10% 5%, rgba(212, 163, 115, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 25%, rgba(204, 213, 174, 0.04) 0%, transparent 45%);
+    }
+    .warm-card {
+      background: rgba(20, 23, 33, 0.78);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(212, 163, 115, 0.15);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .warm-card:hover {
+      border-color: rgba(212, 163, 115, 0.4);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 12px -3px rgba(212, 163, 115, 0.1);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0C0E14;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #1E2333;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #D4A373;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FAE1DD 0%, #D4A373 50%, #99A98F 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-amber-500 selection:text-warm-950">
+
+  <!-- ======================= 1. 顶部状态与姊妹站导航 ======================= -->
+  <div class="bg-warm-950/95 border-b border-warm-700/60 text-xs font-mono py-2 px-4 lg:px-8 flex items-center justify-between z-50">
+    <div class="flex items-center space-x-4">
+      <span class="text-amber-400 font-semibold flex items-center">
+        <span class="w-2 h-2 rounded-full bg-sage-400 mr-2 animate-pulse"></span>
+        MOBO HOME · 个人主权生命档案馆
+      </span>
+      <span class="text-slate-400 hidden sm:inline">LOCAL-FIRST & E2EE ARCHITECTURE</span>
+    </div>
+    <div class="flex items-center space-x-3">
+      <a href="https://mobocapital.com" target="_blank" class="text-xs font-mono text-slate-400 hover:text-amber-400 border border-warm-700 px-3 py-1 rounded transition-all">
+        ⇄ MoBoCapital.com (莫伯资本)
+      </a>
+    </div>
+  </div>
+
+  <!-- ======================= 2. 主导航栏 (四大数据模块) ======================= -->
+  <header class="sticky top-0 z-40 bg-warm-950/85 backdrop-blur-md border-b border-amber-500/20">
+    <div class="max-w-7xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
+      <!-- 品牌标识 -->
+      <div class="flex items-center space-x-3.5 cursor-pointer" onclick="switchSection('timeline')">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-400 to-sage-500 p-[1px] shadow-md">
+          <div class="w-full h-full bg-warm-950 rounded-lg flex items-center justify-center">
+            <span class="font-serif font-bold text-lg text-amber-400">家</span>
+          </div>
+        </div>
+        <div>
+          <h1 class="font-serif font-bold text-lg text-white tracking-wider">莫伯之家 · MoBoHome</h1>
+          <p class="text-[11px] text-slate-400 font-mono">Slow is Fast · 记录成长、影像、藏书与自律</p>
+        </div>
+      </div>
+
+      <!-- 导航标签 -->
+      <nav class="hidden md:flex items-center space-x-1.5 font-sans text-sm">
+        <button onclick="switchSection('timeline')" id="nav-timeline" class="nav-tab px-4 py-2 rounded-lg text-amber-400 bg-amber-500/10 font-medium transition-all">
+          1. 成长篇章与故事
+        </button>
+        <button onclick="switchSection('gallery')" id="nav-gallery" class="nav-tab px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-warm-800 transition-all">
+          2. 影像流画廊
+        </button>
+        <button onclick="switchSection('library')" id="nav-library" class="nav-tab px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-warm-800 transition-all">
+          3. 百本藏书馆
+        </button>
+        <button onclick="switchSection('dashboard')" id="nav-dashboard" class="nav-tab px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-warm-800 transition-all">
+          4. 体能自律看板
+        </button>
+      </nav>
+    </div>
+
+    <!-- 移动端滚动导航 -->
+    <div class="flex md:hidden overflow-x-auto custom-scrollbar border-t border-warm-700 px-4 py-2 space-x-2 bg-warm-900 text-xs">
+      <button onclick="switchSection('timeline')" class="mobile-tab shrink-0 px-3 py-1.5 rounded bg-amber-500/20 text-amber-300 font-medium">成长故事</button>
+      <button onclick="switchSection('gallery')" class="mobile-tab shrink-0 px-3 py-1.5 rounded text-slate-300">影像流画廊</button>
+      <button onclick="switchSection('library')" class="mobile-tab shrink-0 px-3 py-1.5 rounded text-slate-300">百本藏书馆</button>
+      <button onclick="switchSection('dashboard')" class="mobile-tab shrink-0 px-3 py-1.5 rounded text-slate-300">体能自律看板</button>
+    </div>
+  </header>
+
+  <!-- ======================= 3. 主体内容区域 ======================= -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 lg:px-8 py-8 space-y-12">
+
+    <!-- ======================================================================= -->
+    <!-- SECTION 1: 成长篇章与故事 (TIMELINE & STORIES) -->
+    <!-- ======================================================================= -->
+    <section id="sec-timeline" class="space-y-8">
+      
+      <!-- 顶部人生导语与篇章筛选 -->
+      <div class="warm-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-mono text-amber-400 uppercase tracking-widest">Life Chapters & Narrative Archives</span>
+            <h2 class="font-serif text-3xl font-bold text-white mt-1">
+              慢就是快：<span class="gold-gradient-text">穿梭在深圳、北京、上海与归航武汉的岁月长河</span>
+            </h2>
+            <p class="text-sm text-slate-300 mt-2 max-w-3xl leading-relaxed">
+              这里沉淀着自 2014 年大学毕业以来的职业历练、供应链与数据分析实战、传统中医健康养生体悟，以及坚定回归湖北定居、筹备婚姻与建立独立资产管理事业的温润记忆。
+            </p>
+          </div>
+          <!-- 筛选按钮 -->
+          <div class="flex flex-wrap gap-1.5 text-xs font-mono shrink-0">
+            <button onclick="filterTimeline('ALL')" class="px-3 py-1.5 rounded bg-amber-500 text-warm-950 font-semibold">全部纪事</button>
+            <button onclick="filterTimeline('湖北·归航与长期筑基')" class="px-3 py-1.5 rounded bg-warm-800 text-slate-300 hover:bg-warm-700">湖北归航</button>
+            <button onclick="filterTimeline('上海·供应链深耕')" class="px-3 py-1.5 rounded bg-warm-800 text-slate-300 hover:bg-warm-700">上海深耕</button>
+            <button onclick="filterTimeline('北上深·历练期')" class="px-3 py-1.5 rounded bg-warm-800 text-slate-300 hover:bg-warm-700">北上深历练</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 时间线故事卡片流 -->
+      <div id="timeline-stories-container" class="space-y-6">
+        <!-- JS 动态渲染 -->
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- SECTION 2: 影像流画廊 (GALLERY STREAM) -->
+    <!-- ======================================================================= -->
+    <section id="sec-gallery" class="hidden space-y-8">
+      <div class="border-b border-warm-700 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-mono text-amber-400 uppercase tracking-widest">Archive Assets & Visual Stream</span>
+          <h2 class="font-serif text-3xl font-bold text-white mt-1">影像流画廊 · 光影与记忆的永久存储</h2>
+          <p class="text-sm text-slate-400 mt-1">所有照片与视频均由私有 OSS 长期冷热分层归档，前端智能加载 800px WebP 高清缩略图。</p>
+        </div>
+        <div class="flex space-x-2 text-xs font-mono">
+          <button onclick="filterGallery('ALL')" class="px-3 py-1.5 rounded bg-amber-500 text-warm-950 font-semibold">全部影像</button>
+          <button onclick="filterGallery('photo')" class="px-3 py-1.5 rounded bg-warm-800 text-slate-300 hover:bg-warm-700">摄影瞬间</button>
+          <button onclick="filterGallery('video')" class="px-3 py-1.5 rounded bg-warm-800 text-slate-300 hover:bg-warm-700">动态视频</button>
+        </div>
+      </div>
+
+      <!-- 照片网格画廊 -->
+      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- JS 动态渲染 -->
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- SECTION 3: 百本藏书馆 (READING LIBRARY) -->
+    <!-- ======================================================================= -->
+    <section id="sec-library" class="hidden space-y-8">
+      <div class="border-b border-warm-700 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-mono text-amber-400 uppercase tracking-widest">Personal Knowledge Vault & Bookshelf</span>
+          <h2 class="font-serif text-3xl font-bold text-white mt-1">百本藏书馆 · 金融、物理、编程与商业战略</h2>
+          <p class="text-sm text-slate-400 mt-1">精选近百本跨学科藏书，融合吴军、冯唐、查理·芒格智慧与 ITPM 交易理论体系。</p>
+        </div>
+        <div class="flex space-x-2 text-xs font-mono">
+          <button onclick="filterBooks('ALL')" class="px-3 py-1.5 rounded bg-amber-500 text-warm-950 font-semibold">全部藏书</button>
+          <button onclick="filterBooks('FINANCE')" class="px-3 py-1.5 rounded bg-warm-800 text-slate-300">量化与金融</button>
+          <button onclick="filterBooks('PHYSICS')" class="px-3 py-1.5 rounded bg-warm-800 text-slate-300">物理与思维</button>
+          <button onclick="filterBooks('STRATEGY')" class="px-3 py-1.5 rounded bg-warm-800 text-slate-300">商业与战略</button>
+        </div>
+      </div>
+
+      <!-- 书单网格 -->
+      <div id="books-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- JS 动态渲染 -->
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- SECTION 4: 体能自律看板 (FITNESS & DISCIPLINE DASHBOARD) -->
+    <!-- ======================================================================= -->
+    <section id="sec-dashboard" class="hidden space-y-8">
+      <div class="border-b border-warm-700 pb-4">
+        <span class="text-xs font-mono text-amber-400 uppercase tracking-widest">Weekly Analytics & Self-Discipline Metrics</span>
+        <h2 class="font-serif text-3xl font-bold text-white mt-1">体能自律与生命体征看板 (v_weekly_life_analytics)</h2>
+        <p class="text-sm text-slate-400 mt-1">每日 1-2 小时力量训练与跑步打卡，结合中医养生哲学与“慢就是快”的精力管理闭环。</p>
+      </div>
+
+      <!-- 顶部核心指标卡片 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="warm-card p-5 rounded-xl">
+          <div class="text-xs font-mono text-slate-400 flex justify-between">
+            <span>WEEKLY RUNNING</span>
+            <span class="text-amber-400">周度跑步里程</span>
+          </div>
+          <div class="font-mono text-3xl font-bold text-white mt-2">32.5 <span class="text-sm text-slate-400">km</span></div>
+          <div class="text-xs text-sage-400 mt-1">保持规律有氧耐力训练</div>
+        </div>
+        <div class="warm-card p-5 rounded-xl">
+          <div class="text-xs font-mono text-slate-400 flex justify-between">
+            <span>STRENGTH WORKOUTS</span>
+            <span class="text-amber-400">力量训练打卡</span>
+          </div>
+          <div class="font-mono text-3xl font-bold text-white mt-2">5 <span class="text-sm text-slate-400">次 / 周</span></div>
+          <div class="text-xs text-sage-400 mt-1">核心与大肌群抗阻训练</div>
+        </div>
+        <div class="warm-card p-5 rounded-xl">
+          <div class="text-xs font-mono text-slate-400 flex justify-between">
+            <span>AVG MOOD SCORE</span>
+            <span class="text-amber-400">平均心情指数</span>
+          </div>
+          <div class="font-mono text-3xl font-bold text-amber-400 mt-2">9.2 <span class="text-sm text-slate-400">/ 10</span></div>
+          <div class="text-xs text-slate-400 mt-1">传统中医养生与心态平和</div>
+        </div>
+        <div class="warm-card p-5 rounded-xl">
+          <div class="text-xs font-mono text-slate-400 flex justify-between">
+            <span>DISCIPLINE STREAK</span>
+            <span class="text-amber-400">自律连贯天数</span>
+          </div>
+          <div class="font-mono text-3xl font-bold text-sage-400 mt-2">142 <span class="text-sm text-slate-400">天</span></div>
+          <div class="text-xs text-slate-400 mt-1">无间断体能与学习打卡</div>
+        </div>
+      </div>
+
+      <!-- 周度体征聚合表格 -->
+      <div class="warm-card rounded-xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-warm-700 bg-warm-900/60">
+          <h3 class="font-serif text-lg font-bold text-white">近期周度生命体征与自律流水 (v_weekly_life_analytics)</h3>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse text-xs font-mono">
+            <thead>
+              <tr class="border-b border-warm-700 text-slate-400 bg-warm-950/50">
+                <th class="py-3.5 px-6">统计周标识</th>
+                <th class="py-3.5 px-6">跑步总里程 (km)</th>
+                <th class="py-3.5 px-6">力量训练次数</th>
+                <th class="py-3.5 px-6">平均心情指数</th>
+                <th class="py-3.5 px-6">平均能量状态</th>
+                <th class="py-3.5 px-6 text-right">状态评估</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-warm-700/60">
+              <tr>
+                <td class="py-3.5 px-6 text-white font-semibold">2026-W42</td>
+                <td class="py-3.5 px-6 text-sage-400 font-bold">32.5 km</td>
+                <td class="py-3.5 px-6">5 次</td>
+                <td class="py-3.5 px-6 text-amber-400">9.2 / 10</td>
+                <td class="py-3.5 px-6 text-amber-400">8.8 / 10</td>
+                <td class="py-3.5 px-6 text-right text-sage-400">卓越自律巅峰</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-6 text-white font-semibold">2026-W41</td>
+                <td class="py-3.5 px-6 text-sage-400 font-bold">28.0 km</td>
+                <td class="py-3.5 px-6">4 次</td>
+                <td class="py-3.5 px-6 text-amber-400">9.0 / 10</td>
+                <td class="py-3.5 px-6 text-amber-400">8.5 / 10</td>
+                <td class="py-3.5 px-6 text-right text-sage-400">平稳高效</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-6 text-white font-semibold">2026-W40</td>
+                <td class="py-3.5 px-6 text-sage-400 font-bold">30.0 km</td>
+                <td class="py-3.5 px-6">5 次</td>
+                <td class="py-3.5 px-6 text-amber-400">9.1 / 10</td>
+                <td class="py-3.5 px-6 text-amber-400">8.6 / 10</td>
+                <td class="py-3.5 px-6 text-right text-sage-400">节奏完美</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= 4. 页脚 ======================= -->
+  <footer class="border-t border-warm-700/60 bg-warm-950 py-8 px-4 lg:px-8 mt-16 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-6">
+      <div class="space-y-2 max-w-2xl">
+        <div class="font-serif text-slate-300 font-semibold tracking-wider">MO BO HOME · 莫伯之家 (MoBoHome.com)</div>
+        <p class="leading-relaxed">
+          个人数字档案馆与生命叙事空间。采用本地优先与 E2EE 加密架构，所有人生历程、影像档案与藏书感悟均永久主权归属于莫伯本人。
+        </p>
+      </div>
+      <div class="font-mono text-right space-y-1 shrink-0">
+        <div class="text-slate-400">STORAGE: <span class="text-amber-400">OSS Lifecycle Guard (Cold Archive)</span></div>
+        <div>DATABASE: <span class="text-sage-400">PostgreSQL 16 (db_archive)</span></div>
+        <div>SISTER SITE: <a href="https://mobocapital.com" class="text-amber-400 hover:underline">MoBoCapital.com (莫伯资本)</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================= 5. 交互脚本逻辑 ======================= -->
+  <script>
+    // 默认内置演示数据 (对应 public-home-data.json 结构)
+    const mockHomeData = {
+      timeline_stories: [
+        {
+          id: "1",
+          event_date: "2026-02-15",
+          category: "milestone",
+          title: "从北上深一线数据战场到归航武汉：慢就是快的人生仓位重构",
+          summary: "历经深圳、北京、上海十余年零售与生鲜供应链数据深耕，选择回到湖北建立长期稳固的家庭与投研根据地。",
+          location_name: "武汉",
+          importance: 5,
+          mood_score: 9,
+          energy_score: 9,
+          tags: ["人生复盘", "慢就是快", "武汉定居", "段永平哲学"],
+          metadata: {
+            life_chapter: "湖北·归航与长期筑基",
+            content_markdown: "## 一、 一线城市的十年基本面沉淀\n从 2014 年大学毕业南下深圳，到北京美菜、上海钱大妈与肉类供应链，十余年的零售与供应链数据分析和战略咨询生涯，让我看清了商业的底层现金流本质。\n\n## 二、 为什么选择归航武汉？\n用交易员的风险隔离模型审视人生，真正的复利需要稳定的底仓与和谐的家庭基础。选择在武汉定居、推进婚姻并创立莫伯资本与莫伯之家，正是将‘慢就是快’落实在生命长河中的最佳抉择。"
+          },
+          attached_media: [
+            { asset_type: "photo", title: "武汉长江大桥落日纪事", public_thumb_url: "https://images.unsplash.com/photo-1508804039937-31d91f5322d5?auto=format&fit=crop&w=800&q=80" }
+          ]
+        },
+        {
+          id: "2",
+          event_date: "2024-10-10",
+          category: "career",
+          title: "上海深耕期：生鲜供应链周转率优化与多仓协同战役",
+          summary: "在上海钱大妈与康信肉类供应链期间，主导全国多温区仓储网络数字化重构与呆滞库存损耗压降。",
+          location_name: "上海",
+          importance: 4,
+          mood_score: 8,
+          energy_score: 8,
+          tags: ["供应链", "数据分析", "上海深耕"],
+          metadata: {
+            life_chapter: "上海·供应链深耕",
+            content_markdown: "生鲜供应链的核心在于‘鲜’与‘转’。通过建立精细化的 SKU 周转预测模型与动态补货算法，成功将核心生鲜品类的呆滞率降低了 18%，为后续的宏观期权与商业思考积累了扎实的微观数据手感。"
+          },
+          attached_media: []
+        },
+        {
+          id: "3",
+          event_date: "2018-05-20",
+          category: "career",
+          title: "北上深历练期：从深圳跨越速运到北京美菜网的物流数据基建",
+          summary: "深度参与公路干线物流网络调度与生鲜 B2B 电商大仓运营，完成从传统 BI 分析师向业务战略操盘手的蜕变。",
+          location_name: "北京 / 深圳",
+          importance: 4,
+          mood_score: 8,
+          energy_score: 9,
+          tags: ["跨越速运", "美菜网", "物流与数仓"],
+          metadata: {
+            life_chapter: "北上深·历练期",
+            content_markdown: "在跨越速运与美菜网的高强度作战中，深刻理解了规模效应与边际成本的残酷规律。这段经历奠定了后来对全球宏观周期与企业基本面深度复盘的思维底座。"
+          },
+          attached_media: []
+        }
+      ],
+      gallery_assets: [
+        { id: "g1", asset_type: "photo", title: "武汉东湖晨跑与体能训练", captured_at: "2026-10-12", public_thumb_url: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80" },
+        { id: "g2", asset_type: "photo", title: "莫伯之家书房与投研资料库", captured_at: "2026-09-28", public_thumb_url: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80" },
+        { id: "g3", asset_type: "photo", title: "长江岸线宏观思考散步时刻", captured_at: "2026-08-15", public_thumb_url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" },
+        { id: "g4", asset_type: "video", title: "2026秋季力量训练突破日", captured_at: "2026-10-01", public_thumb_url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80" }
+      ],
+      reading_library: [
+        { id: "b1", title: "The Road to Reality (现实的道路)", author: "Roger Penrose", category: "PHYSICS", status: "COMPLETED", rating: 5, core_takeaway: "宇宙底层物理定律与数学几何结构的深刻统一，对理解复杂系统与金融非线性波动率有极高启发。" },
+        { id: "b2", title: "孙子兵法与战略思维", author: "孙武", category: "STRATEGY", status: "COMPLETED", rating: 5, core_takeaway: "“先胜而后求战”、“立于不败之地而后求胜”——这正是风险隔离与资本管理的核心铁律。" },
+        { id: "b3", title: "穷查理宝典 (Poor Charlie's Almanack)", author: "Charlie Munger", category: "FINANCE", status: "COMPLETED", rating: 5, core_takeaway: "多元思维模型、逆向思考与长期复利，慢就是快。" },
+        { id: "b4", title: "Python Machine Learning & Quantitative Systems", author: "吴军 / 综合技术", category: "FINANCE", status: "IN_PROGRESS", rating: 4, core_takeaway: "将自动化流水线、pgvector 与本地 AI 智能体框架打通，构建高效的个人数字大脑。" }
+      ]
+    };
+
+    let homeData = mockHomeData;
+
+    // 异步尝试加载服务器脱敏 JSON
+    async function loadHomeData() {
+      try {
+        const res = await fetch('/data/public-home-data.json', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.timeline_stories) {
+            homeData = data;
+          }
+        }
+      } catch (e) {
+        console.log('[MoBoHome] 使用本地内置演示数据渲染。');
+      }
+      renderTimeline('ALL');
+      renderGallery('ALL');
+      renderBooks('ALL');
+    }
+
+    // 1. 渲染成长故事与时间线
+    function renderTimeline(filterChapter) {
+      const container = document.getElementById('timeline-stories-container');
+      const stories = filterChapter === 'ALL' 
+        ? homeData.timeline_stories 
+        : homeData.timeline_stories.filter(s => (s.metadata?.life_chapter || '') === filterChapter);
+
+      container.innerHTML = stories.map(s => {
+        const chapter = s.metadata?.life_chapter || '人生纪事';
+        const markdown = s.metadata?.content_markdown || s.summary;
+        const mediaHtml = (s.attached_media || []).map(m => `
+          <div class="mt-3 rounded-lg overflow-hidden border border-warm-700 max-h-64">
+            <img src="${m.public_thumb_url}" alt="${m.title}" class="w-full h-full object-cover" />
+          </div>
+        `).join('');
+
+        const tagsHtml = (s.tags || []).map(t => `<span class="px-2 py-0.5 rounded bg-warm-900 text-amber-400 font-mono text-[11px]">#${t}</span>`).join('');
+
+        return `
+          <div class="warm-card rounded-2xl p-6 sm:p-8 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400 border-b border-warm-700 pb-3">
+              <div class="flex items-center space-x-2">
+                <span class="px-2.5 py-0.5 rounded bg-amber-500/15 text-amber-400 font-semibold">${chapter}</span>
+                <span>📍 ${s.location_name || '中国'}</span>
+              </div>
+              <span class="text-amber-400">${s.event_date} · 心情指数: ${s.mood_score}/10</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-white">${s.title}</h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed bg-warm-950/50 p-4 rounded-xl border border-warm-700/60 whitespace-pre-line">
+              ${markdown}
+            </p>
+            ${mediaHtml}
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+              <div class="flex flex-wrap gap-1.5">${tagsHtml}</div>
+              <span class="text-xs font-mono text-slate-500">重要度: ${'★'.repeat(s.importance)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 2. 渲染画廊
+    function renderGallery(typeFilter) {
+      const grid = document.getElementById('gallery-grid');
+      const assets = typeFilter === 'ALL'
+        ? homeData.gallery_assets
+        : homeData.gallery_assets.filter(a => a.asset_type === typeFilter);
+
+      grid.innerHTML = assets.map(a => `
+        <div class="warm-card rounded-xl overflow-hidden group flex flex-col justify-between">
+          <div class="aspect-video overflow-hidden bg-warm-900 relative">
+            <img src="${a.public_thumb_url}" alt="${a.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-warm-950/80 text-[10px] font-mono text-amber-400 uppercase">
+              ${a.asset_type}
+            </span>
+          </div>
+          <div class="p-4 space-y-1.5">
+            <h4 class="font-serif font-bold text-white text-base">${a.title}</h4>
+            <div class="flex justify-between text-xs font-mono text-slate-400">
+              <span>拍摄于: ${a.captured_at}</span>
+              <span class="text-sage-400">✓ OSS 冷热分层归档</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 3. 渲染藏书馆
+    function renderBooks(catFilter) {
+      const grid = document.getElementById('books-grid');
+      const books = catFilter === 'ALL'
+        ? homeData.reading_library
+        : homeData.reading_library.filter(b => b.category === catFilter);
+
+      grid.innerHTML = books.map(b => `
+        <div class="warm-card rounded-xl p-5 space-y-3 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400">${b.category}</span>
+              <span class="text-slate-400">${b.status === 'COMPLETED' ? '✓ 已读完' : '📖 阅读中'}</span>
+            </div>
+            <h4 class="font-serif font-bold text-white text-lg">${b.title}</h4>
+            <p class="text-xs text-slate-400 font-mono">作者: ${b.author}</p>
+          </div>
+          <div class="bg-warm-950/70 p-3.5 rounded-lg border border-warm-700/80 text-xs text-slate-300 leading-relaxed">
+            <strong class="text-amber-400 block mb-1 font-mono">💡 核心洞察与跨学科感悟 (Core Takeaway):</strong>
+            ${b.core_takeaway}
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-warm-700 text-xs font-mono text-amber-400">
+            <span>推荐评分</span>
+            <span>${'★'.repeat(b.rating)}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 切换栏目
+    function switchSection(sec) {
+      ['timeline', 'gallery', 'library', 'dashboard'].forEach(s => {
+        const el = document.getElementById('sec-' + s);
+        const nav = document.getElementById('nav-' + s);
+        if (s === sec) {
+          el.classList.remove('hidden');
+          nav.className = 'nav-tab px-4 py-2 rounded-lg text-amber-400 bg-amber-500/15 border border-amber-500/30 font-medium transition-all';
+        } else {
+          el.classList.add('hidden');
+          nav.className = 'nav-tab px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-warm-800 transition-all';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function filterTimeline(chapter) {
+      renderTimeline(chapter);
+    }
+
+    function filterGallery(type) {
+      renderGallery(type);
+    }
+
+    function filterBooks(cat) {
+      renderBooks(cat);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadHomeData();
+    });
+  </script>
+</body>
+</html>

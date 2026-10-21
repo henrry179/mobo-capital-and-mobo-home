@@ -1,0 +1,126 @@
+version: "3.9"
+
+services:
+  mobo-caddy:
+    image: caddy:2.8-alpine
+    container_name: mobo-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      - CADDY_INTERNAL_PASS_HASH=${CADDY_INTERNAL_PASS_HASH}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./sites/mobocapital:/srv/sites/mobocapital:ro
+      - ./sites/mobohome:/srv/sites/mobohome:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    mem_limit: 80m
+    memswap_limit: 120m
+    networks:
+      - mobo_net
+
+  mobo-postgres:
+    image: pgvector/pgvector:pg16
+    container_name: mobo-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${PG_SUPER_PASSWORD}
+      - TZ=Asia/Shanghai
+    command: >
+      postgres
+      -c shared_buffers=128MB
+      -c work_mem=8MB
+      -c maintenance_work_mem=64MB
+      -c effective_cache_size=384MB
+      -c max_connections=40
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d:ro
+    mem_limit: 600m
+    memswap_limit: 800m
+    networks:
+      - mobo_net
+
+  mobobrain-pkm:
+    image: b3log/siyuan:latest
+    container_name: mobobrain-pkm
+    restart: unless-stopped
+    command: ["--workspace=/siyuan/workspace/", "--accessAuthCode=${SIYUAN_AUTH_CODE}"]
+    volumes:
+      - siyuan_data:/siyuan/workspace
+    mem_limit: 300m
+    memswap_limit: 450m
+    networks:
+      - mobo_net
+
+  mobobrain-n8n:
+    image: n8nio/n8n:latest
+    container_name: mobobrain-n8n
+    restart: unless-stopped
+    environment:
+      - N8N_HOST=n8n.mobocapital.com
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://n8n.mobocapital.com/
+      - EXECUTIONS_PROCESS=main
+      - GENERIC_TIMEZONE=Asia/Shanghai
+      - WECHAT_APPID=${WECHAT_APPID}
+      - WECHAT_SECRET=${WECHAT_SECRET}
+      - WECHAT_DEFAULT_THUMB_MEDIA_ID=${WECHAT_DEFAULT_THUMB_MEDIA_ID}
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./sites/mobocapital:/data/mobocapital
+    mem_limit: 350m
+    memswap_limit: 500m
+    networks:
+      - mobo_net
+
+  archive-dashboard:
+    build: ./dashboard
+    container_name: archive-dashboard
+    restart: unless-stopped
+    environment:
+      - PG_HOST=mobo-postgres
+      - PG_PORT=5432
+      - PG_DB_ARCHIVE=${PG_DB_ARCHIVE}
+      - PG_USER_ARCHIVE=${PG_USER_ARCHIVE}
+      - PG_PASS_ARCHIVE=${PG_PASS_ARCHIVE}
+    mem_limit: 200m
+    memswap_limit: 300m
+    networks:
+      - mobo_net
+
+  mobo-restic-backup:
+    image: restic/restic:latest
+    container_name: mobo-restic-backup
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "-c", "crond -f -d 8"]
+    environment:
+      - RESTIC_REPOSITORY=${RESTIC_REPOSITORY}
+      - RESTIC_PASSWORD=${RESTIC_PASSWORD}
+      - AWS_ACCESS_KEY_ID=${ALIYUN_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${ALIYUN_ACCESS_KEY_SECRET}
+    volumes:
+      - ./scripts/backup-cron.sh:/etc/periodic/daily/backup-cron.sh:ro
+      - siyuan_data:/backup/siyuan:ro
+      - n8n_data:/backup/n8n:ro
+    mem_limit: 150m
+    memswap_limit: 250m
+    networks:
+      - mobo_net
+
+volumes:
+  caddy_data:
+  caddy_config:
+  pg_data:
+  siyuan_data:
+  n8n_data:
+
+networks:
+  mobo_net:
+    driver: bridge

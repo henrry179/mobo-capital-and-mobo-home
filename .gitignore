@@ -2,10 +2,15 @@
 .env
 .env.*
 !.env.example
+mobo-stack.env
 *.pem
 *.key
 *.crt
 secrets/
+
+# --- 静态站点生成产物（由 CLI 导出，勿入库）--------------------------------
+sites/*/data/*.json
+sites/*/internal/*.json
 
 # --- 运行时数据卷 -----------------------------------------------------------
 deploy/volumes/*

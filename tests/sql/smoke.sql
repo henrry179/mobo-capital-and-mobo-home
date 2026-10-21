@@ -8,7 +8,7 @@
 -- =============================================================================
 \set ON_ERROR_STOP on
 
-\echo '[1/7] db_archive 表与视图'
+\echo '[1/9] db_archive 表与视图'
 \c db_archive
 
 DO $$
@@ -37,7 +37,7 @@ BEGIN
     RAISE NOTICE 'OK: archive 8 表 + 3 视图齐全';
 END $$;
 
-\echo '[2/7] 时间线触发器存在性'
+\echo '[2/9] 时间线触发器存在性'
 
 DO $$
 DECLARE
@@ -61,7 +61,7 @@ BEGIN
     RAISE NOTICE 'OK: 4 个时间线触发器存在';
 END $$;
 
-\echo '[3/7] 运动 → 时间线'
+\echo '[3/9] 运动 → 时间线'
 
 BEGIN;
 INSERT INTO archive.fitness_workouts (
@@ -83,7 +83,7 @@ WHERE source_table = 'fitness_workouts' AND source_id = :'smoke_workout_id' \gse
 ROLLBACK;
 \echo 'OK: 运动 → 时间线触发器（已回滚）'
 
-\echo '[4/7] 阅读完读 → 时间线'
+\echo '[4/9] 阅读完读 → 时间线'
 
 BEGIN;
 INSERT INTO archive.reading_items (
@@ -105,7 +105,7 @@ WHERE source_table = 'reading_items' AND source_id = :'smoke_item_id' \gset
 ROLLBACK;
 \echo 'OK: 阅读 → 时间线触发器（已回滚）'
 
-\echo '[5/7] 复盘 → 时间线'
+\echo '[5/9] 复盘 → 时间线'
 
 BEGIN;
 INSERT INTO archive.project_retrospectives (
@@ -127,7 +127,7 @@ WHERE source_table = 'project_retrospectives' AND source_id = :'smoke_retro_id' 
 ROLLBACK;
 \echo 'OK: 复盘 → 时间线触发器（已回滚）'
 
-\echo '[6/7] 周视图与只读权限'
+\echo '[6/9] 周视图与只读权限'
 
 SELECT (count(*) BETWEEN 52 AND 54) AS smoke_ok
 FROM archive.v_weekly_life_analytics \gset
@@ -155,7 +155,7 @@ SELECT has_table_privilege('user_backup', 'archive.archive_assets', 'SELECT') AS
 \endif
 \echo 'OK: 周视图 + 只读账号'
 
-\echo '[7/7] db_mobobrain 结构与 n8n Schema'
+\echo '[7/9] db_mobobrain 结构与 n8n Schema'
 \c db_mobobrain
 
 DO $$
@@ -185,6 +185,62 @@ BEGIN
         RAISE EXCEPTION '缺少 n8n Schema';
     END IF;
     RAISE NOTICE 'OK: n8n Schema 存在';
+END $$;
+
+\echo '[8/9] capital 投研域（莫伯资本）'
+
+DO $$
+DECLARE
+    v_missing text[];
+BEGIN
+    SELECT array_agg(name) INTO v_missing
+    FROM (VALUES
+        ('capital.macro_theses'),
+        ('capital.strategy_playbooks'),
+        ('capital.trade_reviews'),
+        ('capital.fund_incubation_milestones'),
+        ('capital.fund_governance_docs'),
+        ('capital.capital_publications'),
+        ('capital.media_channel_metrics'),
+        ('capital.portfolio_nav_ledger'),
+        ('capital.macro_indicator_series'),
+        ('capital.options_vol_surface_daily'),
+        ('capital.v_strategy_performance_summary'),
+        ('capital.v_media_conversion_funnel'),
+        ('capital.v_latest_macro_indicators'),
+        ('capital.v_latest_options_vol_surface')
+    ) AS t(name)
+    WHERE to_regclass(name) IS NULL;
+
+    IF v_missing IS NOT NULL THEN
+        RAISE EXCEPTION '缺少对象: %', array_to_string(v_missing, ', ');
+    END IF;
+    RAISE NOTICE 'OK: capital 10 表 + 4 视图齐全';
+END $$;
+
+-- NAV 回撤熔断触发器存在
+SELECT EXISTS (
+    SELECT 1 FROM pg_trigger
+    WHERE tgname = 'trg_auto_calc_nav_on_trade' AND NOT tgisinternal
+) AS smoke_ok \gset
+\if :smoke_ok
+\else
+    \echo 'FAIL: 缺少 trg_auto_calc_nav_on_trade（NAV 回撤熔断触发器）'
+    \quit 1
+\endif
+\echo 'OK: NAV 触发器存在'
+
+\echo '[9/9] 双库物理隔离'
+
+DO $$
+BEGIN
+    IF has_database_privilege('user_mobobrain', 'db_archive', 'CONNECT') THEN
+        RAISE EXCEPTION 'user_mobobrain 不应能连接 db_archive';
+    END IF;
+    IF NOT has_database_privilege('user_archive', 'db_archive', 'CONNECT') THEN
+        RAISE EXCEPTION 'user_archive 缺少 db_archive 连接权限';
+    END IF;
+    RAISE NOTICE 'OK: 跨库访问已拒绝';
 END $$;
 
 \echo 'SMOKE TEST PASSED'

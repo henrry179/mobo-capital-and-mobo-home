@@ -1,15 +1,19 @@
 -- =============================================================================
 -- 01-init-dual-db.sql
--- 单 PostgreSQL 16 实例：双数据库 + 三 Schema + 最小权限账号
+-- 单 PostgreSQL 16 实例：双数据库 + 四 Schema + 最小权限账号（v2.1）
 -- 仅由 docker-entrypoint-initdb.d 在空数据卷首次启动时执行
--- 依赖环境变量：MOBOBRAIN_DB_PASSWORD / ARCHIVE_DB_PASSWORD /
+-- 依赖环境变量：PG_PASS_MOBOBRAIN / PG_PASS_ARCHIVE /
 --              N8N_DB_PASSWORD / DASHBOARD_DB_PASSWORD / BACKUP_DB_PASSWORD
+-- 数据库名固定为 db_mobobrain / db_archive（后续 SQL 脚本按字面量引用）
+-- Schema 划分：
+--   db_mobobrain : intel(采集与发布流水) / capital(投研·基金·终端) / n8n
+--   db_archive   : archive(个人数字档案)
 -- =============================================================================
 
 \set ON_ERROR_STOP on
 
-\getenv mobobrain_pw MOBOBRAIN_DB_PASSWORD
-\getenv archive_pw   ARCHIVE_DB_PASSWORD
+\getenv mobobrain_pw PG_PASS_MOBOBRAIN
+\getenv archive_pw   PG_PASS_ARCHIVE
 \getenv n8n_pw       N8N_DB_PASSWORD
 \getenv dashboard_pw DASHBOARD_DB_PASSWORD
 \getenv backup_pw    BACKUP_DB_PASSWORD
@@ -69,7 +73,7 @@ GRANT CONNECT           ON DATABASE db_archive TO user_dashboard_ro;
 GRANT CONNECT           ON DATABASE db_archive TO user_backup;
 
 -- -----------------------------------------------------------------------------
--- 3. db_mobobrain：intel 业务 Schema + n8n 自动化 Schema
+-- 3. db_mobobrain：intel 采集 Schema + capital 投研 Schema + n8n 自动化 Schema
 -- -----------------------------------------------------------------------------
 \c db_mobobrain
 
@@ -77,14 +81,21 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE EXTENSION IF NOT EXISTS vector;
 
-CREATE SCHEMA IF NOT EXISTS intel AUTHORIZATION user_mobobrain;
-CREATE SCHEMA IF NOT EXISTS n8n   AUTHORIZATION user_n8n;
+CREATE SCHEMA IF NOT EXISTS intel   AUTHORIZATION user_mobobrain;
+CREATE SCHEMA IF NOT EXISTS capital AUTHORIZATION user_mobobrain;
+CREATE SCHEMA IF NOT EXISTS n8n     AUTHORIZATION user_n8n;
 
-GRANT USAGE, CREATE ON SCHEMA intel TO user_mobobrain;
-GRANT USAGE, CREATE ON SCHEMA n8n   TO user_n8n;
+GRANT USAGE, CREATE ON SCHEMA intel   TO user_mobobrain;
+GRANT USAGE, CREATE ON SCHEMA capital TO user_mobobrain;
+GRANT USAGE, CREATE ON SCHEMA n8n     TO user_n8n;
 
 -- n8n 需要读写自己的 Schema；业务账号不在 n8n Schema 建表
 GRANT USAGE ON SCHEMA n8n TO user_mobobrain;
+
+-- 备份账号对三张业务 Schema 只读
+GRANT USAGE ON SCHEMA intel   TO user_backup;
+GRANT USAGE ON SCHEMA capital TO user_backup;
+GRANT USAGE ON SCHEMA n8n     TO user_backup;
 
 -- -----------------------------------------------------------------------------
 -- 4. db_archive：archive Schema

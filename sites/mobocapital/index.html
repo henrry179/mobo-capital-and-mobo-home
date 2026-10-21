@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MO BO CAPITAL | 莫伯资本 — 全球宏观与期权波动率策略智库</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: { 950: '#050A14', 900: '#070E1C', 800: '#0D182E', 700: '#152544', 600: '#1E335C' },
+            gold: { 300: '#E5C98B', 400: '#D4B26F', 500: '#C5A059', 600: '#A3803E', 700: '#7D6029' },
+            bull: '#10B981',
+            bear: '#F43F5E'
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', '"Noto Serif SC"', 'Georgia', 'serif'],
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #050A14;
+      color: #E2E8F0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-image: 
+        radial-gradient(circle at 15% 0%, rgba(197, 160, 89, 0.07) 0%, transparent 45%),
+        radial-gradient(circle at 85% 20%, rgba(30, 51, 92, 0.25) 0%, transparent 50%);
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #F3E5AB 0%, #C5A059 50%, #9E7B3B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .inst-card {
+      background: rgba(13, 24, 46, 0.72);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(197, 160, 89, 0.16);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .inst-card:hover {
+      border-color: rgba(197, 160, 89, 0.42);
+      box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.65), 0 0 15px -3px rgba(197, 160, 89, 0.12);
+    }
+    .grid-bg {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #070E1C; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E335C; border-radius: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C5A059; }
+    @keyframes pulse-subtle { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+    .live-dot { animation: pulse-subtle 2.2s infinite ease-in-out; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-gold-500 selection:text-navy-950 grid-bg">
+
+  <!-- 1. 顶部宏观行情与三级访问权限切换条 -->
+  <div class="bg-navy-950/95 border-b border-slate-800/80 text-xs font-mono py-2 px-4 lg:px-8 flex flex-wrap items-center justify-between gap-3 z-50">
+    <div class="flex items-center space-x-5 overflow-x-auto custom-scrollbar py-0.5">
+      <span class="flex items-center text-gold-400 font-semibold shrink-0">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2 live-dot"></span>
+        REGIME: GLOBAL MACRO VOL-EXPANSION
+      </span>
+      <span class="text-slate-400 shrink-0">US10Y <strong class="text-slate-200">4.18%</strong> <span class="text-bull">+3.2bp</span></span>
+      <span class="text-slate-400 shrink-0">VIX <strong class="text-slate-200">19.45</strong> <span class="text-bear">-4.1%</span></span>
+      <span class="text-slate-400 shrink-0">CN PMI (New Orders) <strong class="text-slate-200">51.4</strong> <span class="text-bull">+0.6</span></span>
+      <span class="text-slate-400 shrink-0">USD/CNH <strong class="text-slate-200">7.1240</strong> <span class="text-bull">-0.15%</span></span>
+    </div>
+
+    <div class="flex items-center space-x-2 shrink-0 ml-auto">
+      <span class="text-slate-500 hidden sm:inline">CLEARANCE:</span>
+      <div class="inline-flex rounded bg-navy-900 p-0.5 border border-slate-800">
+        <button onclick="setAccessLevel('PUBLIC')" id="btn-lvl-PUBLIC" class="px-2.5 py-1 rounded text-[11px] font-mono transition-all bg-gold-500 text-navy-950 font-semibold">PUBLIC 公域</button>
+        <button onclick="setAccessLevel('LP_PROSPECT')" id="btn-lvl-LP_PROSPECT" class="px-2.5 py-1 rounded text-[11px] font-mono transition-all text-slate-400 hover:text-slate-200">LP_PROSPECT 准合伙人</button>
+        <button onclick="setAccessLevel('INTERNAL')" id="btn-lvl-INTERNAL" class="px-2.5 py-1 rounded text-[11px] font-mono transition-all text-slate-400 hover:text-slate-200">INTERNAL 莫伯内网</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 主导航栏 -->
+  <header class="sticky top-0 z-40 bg-navy-950/85 backdrop-blur-md border-b border-gold-500/20">
+    <div class="max-w-7xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center space-x-4 cursor-pointer" onclick="switchSection('overview')">
+        <div class="w-11 h-11 rounded bg-gradient-to-br from-gold-400 via-gold-500 to-gold-700 p-[1px]">
+          <div class="w-full h-full bg-navy-950 flex items-center justify-center">
+            <span class="font-serif font-bold text-xl gold-gradient-text">MB</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-serif font-bold text-lg tracking-wider text-white">MO BO CAPITAL</span>
+            <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-gold-500/15 text-gold-400 border border-gold-500/30">Prop-to-Fund</span>
+          </div>
+          <p class="text-xs text-slate-400">莫伯资本 · 全球宏观驱动与期权波动率策略智库</p>
+        </div>
+      </div>
+
+      <nav class="hidden lg:flex items-center space-x-1 font-sans text-sm">
+        <button onclick="switchSection('overview')" id="nav-overview" class="nav-tab px-3.5 py-2 rounded-md text-gold-400 bg-gold-500/10 font-medium">总览 Overview</button>
+        <button onclick="switchSection('memo')" id="nav-memo" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">1. 宏观智库 <span class="font-mono text-xs text-slate-500">/memo</span></button>
+        <button onclick="switchSection('strategies')" id="nav-strategies" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">2. 策略与复盘 <span class="font-mono text-xs text-slate-500">/strategies</span></button>
+        <button onclick="switchSection('incubation')" id="nav-incubation" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">3. 基金孵化蓝图 <span class="font-mono text-xs text-slate-500">/incubation</span></button>
+        <button onclick="switchSection('terminal')" id="nav-terminal" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">4. 量化终端 <span class="font-mono text-xs text-slate-500">/terminal</span></button>
+        <button onclick="switchSection('media')" id="nav-media" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">5. 自媒体引擎 <span class="font-mono text-xs text-slate-500">/media-ops</span></button>
+      </nav>
+
+      <div class="hidden sm:flex items-center space-x-3">
+        <a href="https://mobohome.com" target="_blank" class="text-xs font-mono text-slate-400 hover:text-gold-400 border border-slate-800 px-3 py-1.5 rounded">⇄ MoBoHome.com (莫伯之家)</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. 主内容区 -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 lg:px-8 py-8 space-y-10">
+    <div id="clearance-banner" class="rounded-lg bg-navy-800/90 border border-gold-500/30 px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+      <div class="flex items-center space-x-2.5">
+        <span id="clearance-badge" class="px-2 py-0.5 rounded font-mono font-bold bg-gold-500 text-navy-950">PUBLIC VIEW</span>
+        <span id="clearance-desc" class="text-slate-300">当前处于<strong>公域合规视图</strong>：展示宏观推演逻辑、策略体系框架与脱敏交易纪律复盘。</span>
+      </div>
+      <span class="font-mono text-slate-400 shrink-0">DB: <strong class="text-gold-400">db_mobobrain</strong></span>
+    </div>
+
+    <!-- SECTION 0: OVERVIEW -->
+    <section id="sec-overview" class="space-y-12">
+      <div class="relative rounded-2xl overflow-hidden border border-gold-500/25 bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 p-6 sm:p-10 shadow-2xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7 space-y-5">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-mono">
+              <span>SYSTEMATIC FUNDAMENTAL MACRO & OPTIONS VOLATILITY</span>
+            </div>
+            <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
+              慢就是快：<br/><span class="gold-gradient-text">以风险隔离筑底，以认知复利穿越周期</span>
+            </h1>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              莫伯资本（MoBo Capital）融合<strong>自上而下全球宏观先行指标（ITPM 框架）</strong>、<strong>零售与供应链基本面微观印证</strong>与<strong>期权非线性波动率结构</strong>，从严谨的自营实盘归因账本迈向独立对冲基金运作。
+            </p>
+            <div class="flex flex-wrap gap-3 pt-2">
+              <button onclick="switchSection('strategies')" class="px-5 py-2.5 rounded bg-gold-500 hover:bg-gold-400 text-navy-950 font-semibold text-sm">查阅 Alpha Lab 策略与复盘 →</button>
+              <button onclick="switchSection('incubation')" class="px-5 py-2.5 rounded bg-navy-800 hover:bg-navy-700 text-slate-200 border border-gold-500/30 text-sm">对冲基金三阶段孵化蓝图</button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 grid grid-cols-2 gap-3.5">
+            <div class="inst-card p-4 rounded-xl">
+              <div class="text-xs font-mono text-slate-400 flex justify-between"><span>TARGET SHARPE</span><span class="text-gold-400">目标夏普</span></div>
+              <div class="font-mono text-2xl sm:text-3xl font-bold text-white mt-2">1.85</div>
+              <div class="text-[11px] text-slate-400 mt-1">Phase 1 滚动实盘: <strong class="text-emerald-400 font-mono">1.92</strong></div>
+            </div>
+            <div class="inst-card p-4 rounded-xl">
+              <div class="text-xs font-mono text-slate-400 flex justify-between"><span>MAX DRAWDOWN CAP</span><span class="text-gold-400">硬止损红线</span></div>
+              <div class="font-mono text-2xl sm:text-3xl font-bold text-white mt-2">-10.0%</div>
+              <div class="text-[11px] text-slate-400 mt-1">历史最大回撤: <strong class="text-emerald-400 font-mono">-4.85%</strong></div>
+            </div>
+            <div class="inst-card p-4 rounded-xl">
+              <div class="text-xs font-mono text-slate-400 flex justify-between"><span>CUMULATIVE R</span><span class="text-gold-400">累计实现 R</span></div>
+              <div class="font-mono text-2xl sm:text-3xl font-bold text-emerald-400 mt-2">+42.6R</div>
+              <div class="text-[11px] text-slate-400 mt-1">单笔风险上限: <strong class="text-slate-200 font-mono">1.50% NAV</strong></div>
+            </div>
+            <div class="inst-card p-4 rounded-xl">
+              <div class="text-xs font-mono text-slate-400 flex justify-between"><span>DISCIPLINE SCORE</span><span class="text-gold-400">纪律得分</span></div>
+              <div class="font-mono text-2xl sm:text-3xl font-bold text-gold-400 mt-2">9.1<span class="text-sm text-slate-400">/10</span></div>
+              <div class="text-[11px] text-slate-400 mt-1">严守证伪止损铁律</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="font-serif text-2xl font-bold text-white border-b border-slate-800 pb-3">核心策略矩阵与实盘归因表现 (v_strategy_performance_summary)</h2>
+        <div id="overview-strategy-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: /memo -->
+    <section id="sec-memo" class="hidden space-y-8">
+      <div class="border-b border-slate-800 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-mono text-gold-400">COLUMN 01 · /memo · Table: db_mobobrain.macro_theses</span>
+          <h2 class="font-serif text-3xl font-bold text-white mt-1">MoBo's Memo · 全球宏观与产业投研智库</h2>
+        </div>
+        <div class="flex space-x-2 text-xs font-mono">
+          <button onclick="renderMacroTheses('ALL')" class="px-3 py-1.5 rounded bg-gold-500 text-navy-950 font-semibold">全部主线</button>
+          <button onclick="renderMacroTheses('CN')" class="px-3 py-1.5 rounded bg-navy-800 text-slate-300">中国宏观与供应链</button>
+          <button onclick="renderMacroTheses('US')" class="px-3 py-1.5 rounded bg-navy-800 text-slate-300">美联储与全球流动性</button>
+        </div>
+      </div>
+      <div id="macro-theses-list" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+    </section>
+
+    <!-- SECTION 2: /strategies -->
+    <section id="sec-strategies" class="hidden space-y-8">
+      <div class="border-b border-slate-800 pb-4">
+        <span class="text-xs font-mono text-gold-400">COLUMN 02 · /strategies · Tables: strategy_playbooks & trade_reviews</span>
+        <h2 class="font-serif text-3xl font-bold text-white mt-1">Alpha Lab · 交易策略手册与实战战役复盘账本</h2>
+      </div>
+      <div id="full-strategy-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+      <div class="inst-card rounded-xl overflow-hidden">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 font-mono bg-navy-950/50">
+                <th class="py-3.5 px-4">战役编号 / 日期</th>
+                <th class="py-3.5 px-4">标的与期权结构</th>
+                <th class="py-3.5 px-4">所属策略</th>
+                <th class="py-3.5 px-4">方向</th>
+                <th class="py-3.5 px-4">初始风险</th>
+                <th class="py-3.5 px-4">实现 R 乘数</th>
+                <th class="py-3.5 px-4">组合贡献 (bps)</th>
+                <th class="py-3.5 px-4">纪律打分</th>
+                <th class="py-3.5 px-4 text-right">详情</th>
+              </tr>
+            </thead>
+            <tbody id="trade-reviews-tbody" class="divide-y divide-slate-800/70 font-mono"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: /incubation -->
+    <section id="sec-incubation" class="hidden space-y-8">
+      <div class="border-b border-slate-800 pb-4">
+        <span class="text-xs font-mono text-gold-400">COLUMN 03 · /incubation · Tables: fund_incubation_milestones & fund_governance_docs</span>
+        <h2 class="font-serif text-3xl font-bold text-white mt-1">Fund Blueprint · 莫伯资本对冲基金孵化蓝图与合规治理</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-7 space-y-4" id="milestones-detail-list"></div>
+        <div class="lg:col-span-5 space-y-4" id="governance-docs-list"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: /terminal -->
+    <section id="sec-terminal" class="hidden space-y-8">
+      <div class="border-b border-slate-800 pb-4">
+        <span class="text-xs font-mono text-gold-400">COLUMN 04 · /terminal · Daily Cron Driven by macro_iv_collector.py</span>
+        <h2 class="font-serif text-3xl font-bold text-white mt-1">Quant Terminal · 宏观先行指标与期权波动率监控室</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="inst-card rounded-xl p-5 space-y-4">
+          <h3 class="font-serif font-bold text-white border-b border-slate-800 pb-2">全球宏观先行指标 Z-Score</h3>
+          <div class="space-y-3 font-mono text-xs">
+            <div class="flex justify-between"><span>中国制造业 PMI (新订单-库存差)</span><strong class="text-emerald-400">+1.42 σ (EXPANSION)</strong></div>
+            <div class="flex justify-between"><span>社融脉冲与 M1-M2 剪刀差修复度</span><strong class="text-emerald-400">+0.85 σ (IMPROVING)</strong></div>
+            <div class="flex justify-between"><span>美国 ISM 制造业新订单指数</span><strong class="text-amber-400">-0.38 σ (BOTTOMING)</strong></div>
+          </div>
+        </div>
+        <div class="inst-card rounded-xl p-5 space-y-4">
+          <h3 class="font-serif font-bold text-white border-b border-slate-800 pb-2">期权波动率曲面监控 (IV Rank & Skew)</h3>
+          <table class="w-full text-xs font-mono text-left">
+            <thead>
+              <tr class="text-slate-400 border-b border-slate-800">
+                <th class="pb-2">标的</th><th class="pb-2">30D IV</th><th class="pb-2">1Y分位</th><th class="pb-2">25D Skew</th><th class="pb-2 text-right">策略建议</th>
+              </tr>
+            </thead>
+            <tbody id="terminal-vol-tbody" class="divide-y divide-slate-800/60">
+              <tr><td class="py-2 text-white">沪深300 (510300)</td><td>21.4%</td><td class="text-emerald-400">28%</td><td>-2.1%</td><td class="text-right text-gold-400">Long Call Spread</td></tr>
+              <tr><td class="py-2 text-white">标普500 (SPY)</td><td>18.2%</td><td class="text-amber-400">61%</td><td>+5.4%</td><td class="text-right text-emerald-400">1x2 Put Ratio</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="inst-card rounded-xl p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="font-serif font-bold text-white">组合敞口与高水位风控</h3>
+            <span id="terminal-clearance-tag" class="text-[11px] font-mono text-gold-400">PUBLIC</span>
+          </div>
+          <div id="terminal-exposure-box" class="space-y-2.5 font-mono text-xs"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: /media-ops -->
+    <section id="sec-media" class="hidden space-y-8">
+      <div class="border-b border-slate-800 pb-4">
+        <span class="text-xs font-mono text-gold-400">COLUMN 05 · /media-ops · n8n Workflow #2 + capital_publications</span>
+        <h2 class="font-serif text-3xl font-bold text-white mt-1">Media Engine · 《MoBo's Memo》四端同源合成中台</h2>
+      </div>
+      <div class="inst-card rounded-xl p-5 space-y-4">
+        <div class="flex flex-wrap gap-2 text-xs font-mono">
+          <button onclick="switchMediaPreview('web')" id="mp-web" class="px-3 py-1.5 rounded bg-gold-500 text-navy-950 font-semibold">1. 官网主权母本</button>
+          <button onclick="switchMediaPreview('wechat')" id="mp-wechat" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">2. 微信公众号内联 HTML</button>
+          <button onclick="switchMediaPreview('xueqiu')" id="mp-xueqiu" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">3. 雪球 $代码$ 投研帖</button>
+          <button onclick="switchMediaPreview('x')" id="mp-x" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">4. X (Twitter) 英文串推</button>
+        </div>
+        <pre id="media-preview-content" class="bg-navy-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-200 whitespace-pre-wrap overflow-x-auto"></pre>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let currentClearance = 'PUBLIC';
+
+    const strategiesData = [
+      { code: 'OPT-VOL-SKEW-01', name: '期权波动率偏度与跨式策略', holding: '2–6 Weeks', targetSharpe: 1.95, winRate: 68.4, cumR: '+21.4R', discipline: 9.3, desc: '利用宏观事件前后隐含波动率与历史波动率的定价偏差，通过垂直价差、比例价差捕捉非线性收益。' },
+      { code: 'ITPM-LS-EQUITY', name: '基本面多空股票策略 (L/S)', holding: '1–3 Months', targetSharpe: 1.75, winRate: 62.5, cumR: '+14.8R', discipline: 9.0, desc: '结合 ITPM 先行指标与零售/供应链周转率印证，做多自由现金流拐点龙头并配对做空剥离 Beta。' },
+      { code: 'MACRO-CROSS-ASSET', name: '全球宏观跨资产利差对冲', holding: '1–6 Months', targetSharpe: 1.60, winRate: 58.3, cumR: '+6.4R', discipline: 8.9, desc: '围绕中美欧货币政策周期错位与 M1-M2 剪刀差，构建股指、美债与黄金期权低相关性头寸。' },
+      { code: 'TAIL-RISK-SHIELD', name: '尾部风险保护与熔断对冲网', holding: 'Continuous', targetSharpe: 1.40, winRate: 45.0, cumR: '+3.2R', discipline: 9.6, desc: '遵循风险隔离铁律，在波动率极低分位定投虚值 Put 保护伞。' }
+    ];
+
+    const macroThesesData = [
+      { code: 'THESIS-2026Q4-CN-RETAIL', region: 'CN', title: '中国必选消费与生鲜冷链供应链：高周转率企业的自由现金流重估', conviction: 8, bias: 'BULLISH', logic: '高频渠道与供应链数据显示，具备数字化仓配能力的零售企业库存周转天数缩短 14%，而期权 IV 仅处于 28% 低分位。', invalidation: '若社零餐饮分项连续两个月环比回落超 1.5%，无条件平仓全部多头期权头寸。' },
+      { code: 'THESIS-2026Q4-US-VOL-SKEW', region: 'US', title: '美债期限溢价回升背景下的美股科技股波动率偏度（Skew）均值回归', conviction: 9, bias: 'VOL_LONG', logic: '机构尾部保护需求推高 25-Delta Put-Call Skew 至 92% 分位，适合构建认沽比例价差博弈波动率中枢上移。', invalidation: '若 VIX 跌破 13.5 且 ISM 新订单跃升至 53 以上，立即止损平仓。' }
+    ];
+
+    const tradeReviewsData = [
+      { code: 'TRD-202610-300ETF-CALL', date: '2026-09-18 → 2026-10-14', ticker: '510300.SH (沪深300 ETF)', structure: 'Bull Call Spread', strategy: 'OPT-VOL-SKEW-01', direction: 'LONG', initRisk: '1.20%', realizedR: '+3.15R', impactBps: '+378 bps', discipline: 9 },
+      { code: 'TRD-202609-SPY-PUT-RATIO', date: '2026-08-25 → 2026-09-22', ticker: 'SPY (标普500 ETF)', structure: '1x2 Put Ratio Spread', strategy: 'OPT-VOL-SKEW-01', direction: 'DELTA_NEUTRAL', initRisk: '1.00%', realizedR: '+2.40R', impactBps: '+240 bps', discipline: 10 },
+      { code: 'TRD-202607-RATES-STOP', date: '2026-07-02 → 2026-07-11', ticker: 'TLT (20Y美债 ETF)', structure: 'Long Call Calendar', strategy: 'MACRO-CROSS-ASSET', direction: 'LONG', initRisk: '0.80%', realizedR: '-0.85R', impactBps: '-68 bps', discipline: 9 }
+    ];
+
+    const milestonesData = [
+      { phase: 'Phase 1', cat: 'TRACK_RECORD', title: '建立 ITPM 全球宏观与期权实盘归因账本 (≥30笔)', pct: 65, date: '2027-06-30' },
+      { phase: 'Phase 1', cat: 'LEGAL_COMPLIANCE', title: '通过国家统一法律职业资格考试（法考）与证券从业资格', pct: 60, date: '2027-10-31' },
+      { phase: 'Phase 1', cat: 'FINANCE_VALUATION', title: '通过中级会计师并落地高水位法（HWM）基金估值核算引擎', pct: 55, date: '2027-09-30' },
+      { phase: 'Phase 2', cat: 'TRACK_RECORD', title: '完成连续 18–24 个月可审计低回撤实盘业绩鉴证', pct: 20, date: '2028-12-31' }
+    ];
+
+    const govDocsData = [
+      { type: 'INVESTOR_LETTER', title: '《致莫伯资本未来合伙人备忘录：为什么把“不亏大钱”置于首位》', ver: 'v2.1', vis: 'PUBLIC' },
+      { type: 'RISK_SOP', title: '《莫伯资本投委会风控章程：单笔止损与净值预警清盘制度》', ver: 'v1.4', vis: 'LP_PROSPECT' },
+      { type: 'NAV_ACCOUNTING', title: '《基金份额净值（NAV）会计核算与高水位法业绩报酬计提规范》', ver: 'v1.2', vis: 'LP_PROSPECT' }
+    ];
+
+    const mediaPreviews = {
+      web: '# 从生鲜供应链周转率与 PMI 分项，看消费龙头期权波动率曲面定价偏差\n\n1. PMI 新订单减产成品库存差值升至 +1.42σ；\n2. 构建 45DTE 牛市认购价差，单笔最大风险敞口严格锁定在 1.20% NAV。',
+      wechat: '<section style="font-size:15px;line-height:1.8;color:#2c3e50;"><p>财务报表是后视镜，库存周转率与采购先行指标才是挡风玻璃。（已自动执行境内合规脱敏并注入免责声明）</p></section>',
+      xueqiu: '【核心结论】从生鲜冷链周转率改善看，$沪深300(SH000300)$ 与 $恒生科技指数(HKHSTECH)$ 的隐含波动率（IV Rank 28%）低估了基本面修复弹性。',
+      x: '1/4 Macro & Vol Thesis: Why China retail supply chain turnaround is mispriced by the options surface right now...\n4/4 Full memo: https://mobocapital.com/memo/2026-10-cn-retail-supply-chain-vol'
+    };
+
+    function renderAll() {
+      const showPerf = currentClearance !== 'PUBLIC';
+      const sHtml = strategiesData.map(s => `
+        <div class="inst-card rounded-xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between text-[11px] font-mono text-gold-400 mb-2"><span>${s.code}</span><span>${s.holding}</span></div>
+            <h3 class="font-serif text-base font-bold text-white">${s.name}</h3>
+            <p class="text-xs text-slate-400 mt-2">${s.desc}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 grid grid-cols-2 gap-2 font-mono text-xs">
+            <div><span class="text-slate-500 block text-[10px]">SHARPE</span><strong class="text-white">${s.targetSharpe}</strong></div>
+            <div><span class="text-slate-500 block text-[10px]">WIN RATE</span><strong class="text-emerald-400">${s.winRate}%</strong></div>
+            <div><span class="text-slate-500 block text-[10px]">CUMULATIVE R</span><strong class="text-gold-400">${showPerf ? s.cumR : 'LP 解锁'}</strong></div>
+            <div><span class="text-slate-500 block text-[10px]">DISCIPLINE</span><strong class="text-gold-400">${s.discipline}/10</strong></div>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('overview-strategy-cards').innerHTML = sHtml;
+      document.getElementById('full-strategy-cards').innerHTML = sHtml;
+
+      renderMacroTheses('ALL');
+
+      document.getElementById('trade-reviews-tbody').innerHTML = tradeReviewsData.map(t => `
+        <tr class="hover:bg-navy-800/60">
+          <td class="py-3 px-4"><div class="text-white font-semibold">${t.code}</div><div class="text-[10px] text-slate-500">${t.date}</div></td>
+          <td class="py-3 px-4"><div class="text-slate-200">${t.ticker}</div><div class="text-[10px] text-gold-400">${t.structure}</div></td>
+          <td class="py-3 px-4">${t.strategy}</td>
+          <td class="py-3 px-4">${t.direction}</td>
+          <td class="py-3 px-4">${t.initRisk}</td>
+          <td class="py-3 px-4 font-bold ${t.realizedR.startsWith('+') ? 'text-emerald-400' : 'text-rose-400'}">${t.realizedR}</td>
+          <td class="py-3 px-4">${showPerf ? t.impactBps : '🔒 LP_PROSPECT'}</td>
+          <td class="py-3 px-4 text-gold-400">${t.discipline}/10</td>
+          <td class="py-3 px-4 text-right text-gold-400">已归档</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('milestones-detail-list').innerHTML = milestonesData.map(m => `
+        <div class="inst-card rounded-xl p-4 space-y-2">
+          <div class="flex justify-between text-xs font-mono text-gold-400"><span>${m.phase} · ${m.cat}</span><span>Target: ${m.date}</span></div>
+          <div class="font-serif font-bold text-white">${m.title}</div>
+          <div class="w-full bg-navy-950 h-2 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full" style="width:${m.pct}%"></div></div>
+        </div>
+      `).join('');
+
+      document.getElementById('governance-docs-list').innerHTML = govDocsData.map(d => `
+        <div class="inst-card rounded-xl p-4 space-y-1">
+          <div class="text-[11px] font-mono text-gold-400">${d.type} · ${d.ver} (${d.vis})</div>
+          <div class="font-serif font-bold text-white text-sm">${d.title}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('terminal-exposure-box').innerHTML = showPerf
+        ? `<div class="flex justify-between"><span>组合净敞口 (Net)</span><strong class="text-emerald-400">+32.2% NAV</strong></div>
+           <div class="flex justify-between"><span>组合总敞口 (Gross)</span><strong class="text-gold-400">84.6% NAV</strong></div>
+           <div class="flex justify-between"><span>风控状态机</span><strong class="text-emerald-400">NORMAL (HWM=1.0842)</strong></div>`
+        : `<div class="text-amber-400">🔒 实时敞口与高水位净值在 PUBLIC 模式下执行合规脱敏，请切换至 LP_PROSPECT 查看。</div>`;
+    }
+
+    function renderMacroTheses(region) {
+      const list = region === 'ALL' ? macroThesesData : macroThesesData.filter(m => m.region === region);
+      document.getElementById('macro-theses-list').innerHTML = list.map(m => `
+        <div class="inst-card rounded-xl p-6 space-y-3">
+          <div class="flex justify-between text-xs font-mono text-gold-400"><span>${m.code}</span><span>CONVICTION: ${m.conviction}/10 · ${m.bias}</span></div>
+          <h3 class="font-serif text-xl font-bold text-white">${m.title}</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">${m.logic}</p>
+          <div class="text-xs text-rose-300 bg-rose-950/30 border border-rose-500/30 p-3 rounded font-mono">🛑 证伪红线: ${m.invalidation}</div>
+        </div>
+      `).join('');
+    }
+
+    function switchSection(sec) {
+      ['overview', 'memo', 'strategies', 'incubation', 'terminal', 'media'].forEach(s => {
+        document.getElementById('sec-' + s).classList.toggle('hidden', s !== sec);
+      });
+    }
+
+    function setAccessLevel(lvl) {
+      currentClearance = lvl;
+      document.getElementById('clearance-badge').textContent = lvl + ' VIEW';
+      document.getElementById('terminal-clearance-tag').textContent = lvl;
+      renderAll();
+      loadLiveCapitalData(lvl);
+    }
+
+    function switchMediaPreview(ch) {
+      document.getElementById('media-preview-content').textContent = mediaPreviews[ch];
+    }
+
+    async function loadLiveCapitalData(mode = 'PUBLIC') {
+      try {
+        const url = mode === 'INTERNAL' ? '/internal/internal-data.json' : '/data/public-data.json';
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) return;
+        const payload = await res.json();
+        if (payload.trade_reviews && payload.trade_reviews.length) {
+          tradeReviewsData.length = 0;
+          payload.trade_reviews.forEach(tr => {
+            tradeReviewsData.push({
+              code: tr.trade_code,
+              date: `${tr.entry_date} → ${tr.exit_date || 'OPEN'}`,
+              ticker: `${tr.underlying_ticker} (${tr.asset_name})`,
+              structure: tr.instrument_structure,
+              strategy: tr.strategy_code,
+              direction: tr.direction,
+              initRisk: `${Number(tr.initial_risk_pct).toFixed(2)}%`,
+              realizedR: tr.realized_r_multiple >= 0 ? `+${tr.realized_r_multiple}R` : `${tr.realized_r_multiple}R`,
+              impactBps: `${tr.portfolio_impact_bps} bps`,
+              discipline: tr.discipline_score
+            });
+          });
+          renderAll();
+        }
+      } catch (e) {}
+    }
+
+    async function loadTerminalSnapshot() {
+      try {
+        const res = await fetch('/data/terminal-snapshot.json', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.options_vol_surface && data.options_vol_surface.length) {
+          document.getElementById('terminal-vol-tbody').innerHTML = data.options_vol_surface.map(v => `
+            <tr>
+              <td class="py-2 text-white">${v.asset_name}</td>
+              <td>${v.iv_30d}%</td>
+              <td class="text-emerald-400">${v.iv_percentile_1y}%</td>
+              <td>${v.skew_25d}%</td>
+              <td class="text-right text-gold-400">${v.recommended_structure}</td>
+            </tr>
+          `).join('');
+        }
+      } catch (e) {}
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAll();
+      switchMediaPreview('web');
+      loadLiveCapitalData('PUBLIC');
+      loadTerminalSnapshot();
+    });
+  </script>
+</body>
+</html>

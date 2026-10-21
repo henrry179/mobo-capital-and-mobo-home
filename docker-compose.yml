@@ -1,7 +1,12 @@
 # =============================================================================
-# 莫伯双站系统 · 单机六容器编排
+# 莫伯双站系统（MoBoCapital.com / MoBoHome.com）· 单机六容器编排 v2.1
 # 运行目录：/opt/mobo-stack（项目根目录）
-# 依赖：.env（chmod 600）、deploy/、services/
+# 依赖：.env（chmod 600）、deploy/、services/、sites/
+#
+# 红线一：2C4G 内存硬限流 —— 六个容器 mem_limit 合计 1.64GB，常驻约 1.46GB
+#         （caddy 80 + postgres 600 + siyuan 300 + n8n 350 + dashboard 200 + restic 150）
+#         宿主机另配 4GB Swap（vm.swappiness=10）
+# 网络分层：edge_net(Caddy 公网) / internal_net(internal:true) / egress_net(仅出网)
 # =============================================================================
 
 name: ${COMPOSE_PROJECT_NAME:-mobo-stack}
@@ -14,13 +19,14 @@ x-logging: &default-logging
 
 services:
   # ---------------------------------------------------------------------------
-  # 统一网关：HTTPS / BasicAuth / 反代
+  # 统一网关：双主站 HTTPS / BasicAuth / 静态分发 / 反代
   # ---------------------------------------------------------------------------
   caddy:
     image: caddy:2.9-alpine
     container_name: mobo-caddy
     restart: unless-stopped
-    mem_limit: 128m
+    mem_limit: 80m
+    memswap_limit: 120m
     ports:
       - "80:80"
       - "443:443"
@@ -28,11 +34,12 @@ services:
     environment:
       TZ: ${TZ}
       ACME_EMAIL: ${ACME_EMAIL}
-      DOMAIN_WWW: ${DOMAIN_WWW}
-      DOMAIN_KB: ${DOMAIN_KB}
+      DOMAIN_CAPITAL: ${DOMAIN_CAPITAL}
+      DOMAIN_HOME: ${DOMAIN_HOME}
+      DOMAIN_PKM: ${DOMAIN_PKM}
       DOMAIN_N8N: ${DOMAIN_N8N}
-      DOMAIN_ARCHIVE: ${DOMAIN_ARCHIVE}
       DOMAIN_ADMIN: ${DOMAIN_ADMIN}
+      DOMAIN_LAB: ${DOMAIN_LAB}
       CADDY_ADMIN_USER: ${CADDY_ADMIN_USER}
       CADDY_ADMIN_PASSWORD_HASH: ${CADDY_ADMIN_PASSWORD_HASH}
     volumes:
@@ -40,7 +47,10 @@ services:
       - ./deploy/volumes/caddy_data:/data
       - ./deploy/volumes/caddy_config:/config
       - ./deploy/volumes/caddy_logs:/var/log/caddy
-      - ./site:/srv/site:ro
+      # 双站静态门户（只读分发，服务端 0 额外内存）
+      - ./sites/mobocapital:/srv/sites/mobocapital:ro
+      - ./sites/mobohome:/srv/sites/mobohome:ro
+      # 静态操作台
       - ./services/console:/srv/console:ro
     networks:
       - edge_net
@@ -58,28 +68,31 @@ services:
     logging: *default-logging
 
   # ---------------------------------------------------------------------------
-  # 数据底座：PostgreSQL 16 + pgvector，单实例双库
+  # 数据底座：PostgreSQL 16 + pgvector，单实例双库三 Schema
+  #   db_mobobrain : intel(采集/发布) + capital(投研/基金/终端) + n8n
+  #   db_archive   : archive(个人档案)
   # ---------------------------------------------------------------------------
   postgres:
     image: pgvector/pgvector:pg16
     container_name: mobo-postgres
     restart: unless-stopped
-    mem_limit: 1024m
-    shm_size: 256mb
+    mem_limit: 600m
+    memswap_limit: 800m
+    shm_size: 128mb
     ports:
       - "127.0.0.1:5432:5432"
     environment:
       TZ: ${TZ}
-      POSTGRES_USER: ${POSTGRES_SUPER_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_SUPER_PASSWORD}
+      POSTGRES_USER: ${PG_SUPER_USER}
+      POSTGRES_PASSWORD: ${PG_SUPER_PASSWORD}
       POSTGRES_DB: postgres
-      # initdb/01-init-dual-db.sql 通过 \getenv 读取
-      MOBOBRAIN_DB_NAME: ${MOBOBRAIN_DB_NAME}
-      MOBOBRAIN_DB_USER: ${MOBOBRAIN_DB_USER}
-      MOBOBRAIN_DB_PASSWORD: ${MOBOBRAIN_DB_PASSWORD}
-      ARCHIVE_DB_NAME: ${ARCHIVE_DB_NAME}
-      ARCHIVE_DB_USER: ${ARCHIVE_DB_USER}
-      ARCHIVE_DB_PASSWORD: ${ARCHIVE_DB_PASSWORD}
+      # initdb/01-init-dual-db.sql 通过 \getenv 读取（角色与库名）
+      PG_DB_MOBOBRAIN: ${PG_DB_MOBOBRAIN}
+      PG_USER_MOBOBRAIN: ${PG_USER_MOBOBRAIN}
+      PG_PASS_MOBOBRAIN: ${PG_PASS_MOBOBRAIN}
+      PG_DB_ARCHIVE: ${PG_DB_ARCHIVE}
+      PG_USER_ARCHIVE: ${PG_USER_ARCHIVE}
+      PG_PASS_ARCHIVE: ${PG_PASS_ARCHIVE}
       N8N_DB_USER: ${N8N_DB_USER}
       N8N_DB_PASSWORD: ${N8N_DB_PASSWORD}
       DASHBOARD_DB_USER: ${DASHBOARD_DB_USER}
@@ -89,9 +102,9 @@ services:
     command:
       - "postgres"
       - "-c"
-      - "shared_buffers=256MB"
+      - "shared_buffers=128MB"
       - "-c"
-      - "effective_cache_size=768MB"
+      - "effective_cache_size=384MB"
       - "-c"
       - "work_mem=8MB"
       - "-c"
@@ -106,7 +119,7 @@ services:
     networks:
       - internal_net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_SUPER_USER} -d postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${PG_SUPER_USER} -d postgres"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -114,13 +127,14 @@ services:
     logging: *default-logging
 
   # ---------------------------------------------------------------------------
-  # 网站 A：思源笔记
+  # 网站 A：思源笔记（《MoBo's Memo》投研母本与创作源头）
   # ---------------------------------------------------------------------------
   mobobrain-pkm:
     image: b3log/siyuan:latest
     container_name: mobobrain-pkm
     restart: unless-stopped
-    mem_limit: 512m
+    mem_limit: 300m
+    memswap_limit: 450m
     command:
       - "--workspace=/siyuan/workspace/"
       - "--accessAuthCode=${SIYUAN_ACCESS_AUTH_CODE}"
@@ -131,20 +145,21 @@ services:
     logging: *default-logging
 
   # ---------------------------------------------------------------------------
-  # 网站 A：n8n 自动化
+  # 网站 A：n8n 自动化（工作流 #1 RSS 提纯 / 工作流 #2 1+3 四端发布）
   # ---------------------------------------------------------------------------
   mobobrain-n8n:
     image: n8nio/n8n:latest
     container_name: mobobrain-n8n
     restart: unless-stopped
-    mem_limit: 640m
+    mem_limit: 350m
+    memswap_limit: 500m
     environment:
       TZ: ${TZ}
       GENERIC_TIMEZONE: ${TZ}
       DB_TYPE: postgresdb
       DB_POSTGRESDB_HOST: postgres
       DB_POSTGRESDB_PORT: 5432
-      DB_POSTGRESDB_DATABASE: ${MOBOBRAIN_DB_NAME}
+      DB_POSTGRESDB_DATABASE: ${PG_DB_MOBOBRAIN}
       DB_POSTGRESDB_SCHEMA: n8n
       DB_POSTGRESDB_USER: ${N8N_DB_USER}
       DB_POSTGRESDB_PASSWORD: ${N8N_DB_PASSWORD}
@@ -157,13 +172,21 @@ services:
       N8N_LOG_LEVEL: info
       N8N_DIAGNOSTICS_ENABLED: "false"
       N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
+      # 350MB 红线：强制主进程执行，禁用 queue/worker
+      EXECUTIONS_PROCESS: main
       EXECUTIONS_DATA_PRUNE: "true"
       EXECUTIONS_DATA_MAX_AGE: "168"
-      NODE_OPTIONS: "--max-old-space-size=450"
+      NODE_OPTIONS: "--max-old-space-size=300"
       # Code 节点允许使用 crypto（url_hash/规范化）
       NODE_FUNCTION_ALLOW_BUILTIN: "crypto"
+      # 微信草稿箱直推（工作流 #2）
+      WECHAT_APPID: ${WECHAT_APPID}
+      WECHAT_SECRET: ${WECHAT_SECRET}
+      WECHAT_DEFAULT_THUMB_MEDIA_ID: ${WECHAT_DEFAULT_THUMB_MEDIA_ID}
     volumes:
       - ./deploy/volumes/n8n_data:/home/node/.n8n
+      # 发布流落盘母本与静态目录（可写）
+      - ./sites/mobocapital:/data/mobocapital
     networks:
       - internal_net
       - egress_net
@@ -179,7 +202,7 @@ services:
     logging: *default-logging
 
   # ---------------------------------------------------------------------------
-  # 网站 B：Streamlit 计算型个人档案
+  # 网站 B：Streamlit 生命体征 Z-Score / Lead-Lag 实验室
   # ---------------------------------------------------------------------------
   archive-dashboard:
     build:
@@ -187,18 +210,19 @@ services:
       dockerfile: Dockerfile
     container_name: archive-dashboard
     restart: unless-stopped
-    mem_limit: 512m
+    mem_limit: 200m
+    memswap_limit: 300m
     environment:
       TZ: ${TZ}
-      ARCHIVE_DB_HOST: postgres
-      ARCHIVE_DB_PORT: 5432
-      ARCHIVE_DB_NAME: ${ARCHIVE_DB_NAME}
-      ARCHIVE_DB_USER: ${DASHBOARD_DB_USER}
-      ARCHIVE_DB_PASSWORD: ${DASHBOARD_DB_PASSWORD}
-      OSS_ACCESS_KEY_ID: ${OSS_ACCESS_KEY_ID}
-      OSS_ACCESS_KEY_SECRET: ${OSS_ACCESS_KEY_SECRET}
-      OSS_BUCKET_NAME: ${OSS_BUCKET_ARCHIVE}
-      OSS_ENDPOINT: https://${OSS_INTERNAL_ENDPOINT}
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_DB_ARCHIVE: ${PG_DB_ARCHIVE}
+      PG_USER_ARCHIVE: ${DASHBOARD_DB_USER}
+      PG_PASS_ARCHIVE: ${DASHBOARD_DB_PASSWORD}
+      ALIYUN_ACCESS_KEY_ID: ${ALIYUN_ACCESS_KEY_ID}
+      ALIYUN_ACCESS_KEY_SECRET: ${ALIYUN_ACCESS_KEY_SECRET}
+      OSS_BUCKET_NAME: ${OSS_BUCKET_PRIVATE}
+      OSS_ENDPOINT: ${OSS_ENDPOINT}
       OSS_REGION: ${OSS_REGION}
       STREAMLIT_SERVER_PORT: "8501"
       STREAMLIT_SERVER_ADDRESS: "0.0.0.0"
@@ -222,7 +246,7 @@ services:
     logging: *default-logging
 
   # ---------------------------------------------------------------------------
-  # 每日 03:00：pg_dump + 数据卷 + 配置 -> Restic -> OSS
+  # 每日 03:00：pg_dump 双库 + 数据卷 + 配置 -> Restic -> OSS
   # ---------------------------------------------------------------------------
   restic-backup:
     build:
@@ -230,17 +254,18 @@ services:
       dockerfile: Dockerfile
     container_name: mobo-restic-backup
     restart: unless-stopped
-    mem_limit: 256m
+    mem_limit: 150m
+    memswap_limit: 250m
     environment:
       TZ: ${TZ}
       PGHOST: postgres
       PGPORT: "5432"
-      PGUSER: ${POSTGRES_SUPER_USER}
-      PGPASSWORD: ${POSTGRES_SUPER_PASSWORD}
-      MOBOBRAIN_DB_NAME: ${MOBOBRAIN_DB_NAME}
-      ARCHIVE_DB_NAME: ${ARCHIVE_DB_NAME}
-      AWS_ACCESS_KEY_ID: ${OSS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${OSS_ACCESS_KEY_SECRET}
+      PGUSER: ${PG_SUPER_USER}
+      PGPASSWORD: ${PG_SUPER_PASSWORD}
+      PG_DB_MOBOBRAIN: ${PG_DB_MOBOBRAIN}
+      PG_DB_ARCHIVE: ${PG_DB_ARCHIVE}
+      AWS_ACCESS_KEY_ID: ${ALIYUN_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${ALIYUN_ACCESS_KEY_SECRET}
       AWS_DEFAULT_REGION: ${OSS_REGION}
       RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}
       RESTIC_PASSWORD: ${RESTIC_PASSWORD}

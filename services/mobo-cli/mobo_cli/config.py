@@ -1,4 +1,4 @@
-"""CLI 配置：优先环境变量，其次当前目录 .env。"""
+"""CLI 配置：v2.1 统一变量口径（PG_* / ALIYUN_*），兼容 v1.1 旧变量名。"""
 from __future__ import annotations
 
 import os
@@ -26,6 +26,15 @@ def _get(name: str, default: str | None = None, required: bool = False) -> str:
     return value or ""
 
 
+def _first(*names: str, default: str | None = None) -> str:
+    """按优先级取第一个存在的环境变量（v2.1 口径优先，旧名兜底）。"""
+    for name in names:
+        value = os.getenv(name)
+        if value:
+            return value
+    return default or ""
+
+
 @dataclass(frozen=True)
 class Settings:
     db_host: str
@@ -38,6 +47,7 @@ class Settings:
     mobobrain_password: str
     oss_endpoint: str
     oss_bucket: str
+    oss_public_bucket: str
     oss_access_key_id: str
     oss_access_key_secret: str
     llm_api_base: str
@@ -47,23 +57,27 @@ class Settings:
     embedding_api_key: str
     embedding_model: str
     embedding_dim: int
+    capital_web_dir: str
+    home_web_dir: str
 
     @classmethod
     def from_env(cls) -> "Settings":
         return cls(
-            db_host=_get("CLI_DATABASE_HOST", "127.0.0.1"),
-            db_port=int(_get("CLI_DATABASE_PORT", "5432")),
-            archive_db=_get("CLI_ARCHIVE_DB_NAME", "db_archive"),
-            archive_user=_get("CLI_ARCHIVE_DB_USER", "user_archive"),
-            archive_password=_get("CLI_ARCHIVE_DB_PASSWORD", ""),
-            mobobrain_db=_get("CLI_MOBOBRAIN_DB_NAME", "db_mobobrain"),
-            mobobrain_user=_get("CLI_MOBOBRAIN_DB_USER", "user_mobobrain"),
-            mobobrain_password=_get("CLI_MOBOBRAIN_DB_PASSWORD", ""),
-            # CLI 在宿主机运行，默认用公网 Endpoint；在服务器上可覆盖为内网
-            oss_endpoint=_get("OSS_CLI_ENDPOINT") or _get("OSS_PUBLIC_ENDPOINT", ""),
-            oss_bucket=_get("OSS_BUCKET_ARCHIVE", ""),
-            oss_access_key_id=_get("OSS_ACCESS_KEY_ID", ""),
-            oss_access_key_secret=_get("OSS_ACCESS_KEY_SECRET", ""),
+            # CLI 在宿主机运行：优先 CLI_PG_HOST，其次 PG_HOST，最后 127.0.0.1
+            db_host=_first("CLI_PG_HOST", "PG_HOST", default="127.0.0.1"),
+            db_port=int(_first("CLI_PG_PORT", "PG_PORT", default="5432")),
+            archive_db=_first("PG_DB_ARCHIVE", "CLI_ARCHIVE_DB_NAME", default="db_archive"),
+            archive_user=_first("PG_USER_ARCHIVE", "CLI_ARCHIVE_DB_USER", default="user_archive"),
+            archive_password=_first("PG_PASS_ARCHIVE", "CLI_ARCHIVE_DB_PASSWORD"),
+            mobobrain_db=_first("PG_DB_MOBOBRAIN", "CLI_MOBOBRAIN_DB_NAME", default="db_mobobrain"),
+            mobobrain_user=_first("PG_USER_MOBOBRAIN", "CLI_MOBOBRAIN_DB_USER", default="user_mobobrain"),
+            mobobrain_password=_first("PG_PASS_MOBOBRAIN", "CLI_MOBOBRAIN_DB_PASSWORD"),
+            # CLI 在宿主机运行，默认走公网 Endpoint；服务器内可用 OSS_CLI_ENDPOINT 覆盖为内网
+            oss_endpoint=_first("OSS_CLI_ENDPOINT", "OSS_PUBLIC_ENDPOINT", "OSS_ENDPOINT"),
+            oss_bucket=_first("OSS_BUCKET_PRIVATE", "OSS_BUCKET_ARCHIVE"),
+            oss_public_bucket=_first("OSS_BUCKET_PUBLIC", default="mobobrain-assets-pub"),
+            oss_access_key_id=_first("ALIYUN_ACCESS_KEY_ID", "OSS_ACCESS_KEY_ID"),
+            oss_access_key_secret=_first("ALIYUN_ACCESS_KEY_SECRET", "OSS_ACCESS_KEY_SECRET"),
             llm_api_base=_get("LLM_API_BASE", ""),
             llm_api_key=_get("LLM_API_KEY", ""),
             llm_model=_get("LLM_MODEL", ""),
@@ -71,6 +85,8 @@ class Settings:
             embedding_api_key=_get("EMBEDDING_API_KEY", ""),
             embedding_model=_get("EMBEDDING_MODEL", ""),
             embedding_dim=int(_get("EMBEDDING_DIM", "1536")),
+            capital_web_dir=_get("MOBOCAPITAL_WEB_DIR", "./sites/mobocapital"),
+            home_web_dir=_get("MOBOHOME_WEB_DIR", "./sites/mobohome"),
         )
 
     def archive_dsn(self) -> str:

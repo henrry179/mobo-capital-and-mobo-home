@@ -23,8 +23,8 @@ require() {
 require PGHOST
 require PGUSER
 require PGPASSWORD
-require MOBOBRAIN_DB_NAME
-require ARCHIVE_DB_NAME
+require PG_DB_MOBOBRAIN
+require PG_DB_ARCHIVE
 require RESTIC_REPOSITORY
 require RESTIC_PASSWORD
 
@@ -52,12 +52,12 @@ log "开始备份 $TS；仓库=$RESTIC_REPOSITORY"
 # -----------------------------------------------------------------------------
 log "pg_dump db_mobobrain"
 pg_dump -h "$PGHOST" -p "${PGPORT:-5432}" -U "$PGUSER" \
-    -d "$MOBOBRAIN_DB_NAME" -Fc \
+    -d "$PG_DB_MOBOBRAIN" -Fc \
     -f "$DUMP_DIR/db_mobobrain-${TS}.dump"
 
 log "pg_dump db_archive"
 pg_dump -h "$PGHOST" -p "${PGPORT:-5432}" -U "$PGUSER" \
-    -d "$ARCHIVE_DB_NAME" -Fc \
+    -d "$PG_DB_ARCHIVE" -Fc \
     -f "$DUMP_DIR/db_archive-${TS}.dump"
 
 log "pg_dumpall --globals-only"

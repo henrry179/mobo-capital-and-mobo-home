@@ -1,7 +1,13 @@
 # =============================================================================
-# 莫伯双站系统 · Caddy 2 网关
+# 莫伯双站系统（MoBoCapital.com / MoBoHome.com）· Caddy 2 网关 v2.1
 # 变量来自 docker-compose.yml / .env
-# 设计：一个主域名 + 多子域；www 公开，其余全部 BasicAuth
+# 拓扑：双主站 + 生产中台子域
+#   {$DOMAIN_CAPITAL} 莫伯资本主站（公开栏目 + /internal 内网驾驶舱）
+#   {$DOMAIN_HOME}     莫伯之家主站（个人档案 + /lab 实验室入口）
+#   {$DOMAIN_PKM}      思源笔记（生产母本）
+#   {$DOMAIN_N8N}      n8n 自动化（工作流 #1/#2）
+#   {$DOMAIN_LAB}      Streamlit 生命体征实验室
+#   {$DOMAIN_ADMIN}    静态操作台
 # =============================================================================
 
 {
@@ -20,19 +26,23 @@
 	}
 }
 
-# 通用安全头
+# ---------------------------------------------------------------------------
+# 通用安全头（公开站与后台共用）
+# ---------------------------------------------------------------------------
 (security_headers) {
 	header {
 		Strict-Transport-Security "max-age=31536000; includeSubDomains"
 		X-Content-Type-Options "nosniff"
-		X-Frame-Options "DENY"
+		X-Frame-Options "SAMEORIGIN"
 		Referrer-Policy "strict-origin-when-cross-origin"
 		Permissions-Policy "geolocation=(), microphone=(), camera=()"
 		-Server
 	}
 }
 
-# 受保护后台：BasicAuth + 禁止搜索引擎索引
+# ---------------------------------------------------------------------------
+# 受保护资源：BasicAuth + 禁止搜索引擎索引
+# ---------------------------------------------------------------------------
 (protected) {
 	basic_auth {
 		{$CADDY_ADMIN_USER} {$CADDY_ADMIN_PASSWORD_HASH}
@@ -40,71 +50,135 @@
 	import security_headers
 	header {
 		X-Robots-Tag "noindex, nofollow, noarchive"
+		Cache-Control "no-store, no-cache, must-revalidate"
 	}
 }
 
-# -----------------------------------------------------------------------------
-# 网站 A 公开静态站：无认证，只读，允许索引
-# -----------------------------------------------------------------------------
-{$DOMAIN_WWW} {
-	encode zstd gzip
-	root * /srv/site
+# ---------------------------------------------------------------------------
+# 公域数据 JSON：短缓存 60 秒（CLI 预生成，物理脱敏后可公开）
+# ---------------------------------------------------------------------------
+(public_json) {
+	header {
+		Cache-Control "public, max-age=60, must-revalidate"
+	}
 	file_server
+}
+
+# ---------------------------------------------------------------------------
+# 网站 A：莫伯资本 MoBoCapital（华尔街机构级投研门户）
+# ---------------------------------------------------------------------------
+{$DOMAIN_CAPITAL}, www.{$DOMAIN_CAPITAL} {
+	encode zstd gzip
+	root * /srv/sites/mobocapital
 	import security_headers
 	header {
 		X-Robots-Tag "index, follow"
-		Cache-Control "public, max-age=3600"
-		Content-Security-Policy "default-src 'self'; img-src 'self' https://*.aliyuncs.com data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+		Content-Security-Policy "default-src 'self'; img-src 'self' data: https://*.aliyuncs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+	}
+
+	# 1. 内网驾驶舱：全量数据包 + 私有交割单签名链接，强制 BasicAuth
+	@internal_zone path /internal/*
+	handle @internal_zone {
+		import protected
+		file_server
+	}
+
+	# 2. 公域脱敏数据包
+	@public_data path /data/*.json
+	handle @public_data {
+		import public_json
+	}
+
+	# 3. 单页应用入口
+	handle {
+		try_files {path} /index.html
+		file_server
 	}
 }
 
-# -----------------------------------------------------------------------------
-# 网站 A 核心知识库：思源笔记，必须认证
-# -----------------------------------------------------------------------------
-{$DOMAIN_KB} {
+# ---------------------------------------------------------------------------
+# 网站 B：莫伯之家 MoBoHome（个人数字档案馆）
+# ---------------------------------------------------------------------------
+{$DOMAIN_HOME}, www.{$DOMAIN_HOME} {
+	encode zstd gzip
+	root * /srv/sites/mobohome
+	import security_headers
+	header {
+		X-Robots-Tag "index, follow"
+		Content-Security-Policy "default-src 'self'; img-src 'self' data: https://*.aliyuncs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+	}
+
+	# 1. 内网私密档案（含家庭影像签名链接）
+	@home_internal path /internal/*
+	handle @home_internal {
+		import protected
+		file_server
+	}
+
+	# 2. 公域脱敏数据包
+	@public_data path /data/*.json
+	handle @public_data {
+		import public_json
+	}
+
+	# 3. 实验室入口：跳转独立子域（避免 Streamlit base_path 冲突）
+	@lab path /lab /lab/*
+	handle @lab {
+		redir https://{$DOMAIN_LAB}{uri} 302
+	}
+
+	# 4. 单页应用入口
+	handle {
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+# ---------------------------------------------------------------------------
+# 生命体征实验室：Streamlit 强认证
+# ---------------------------------------------------------------------------
+{$DOMAIN_LAB} {
+	encode zstd gzip
+	import protected
+	reverse_proxy archive-dashboard:8501
+}
+
+# ---------------------------------------------------------------------------
+# 思源笔记：投研母本与创作源头
+# ---------------------------------------------------------------------------
+{$DOMAIN_PKM} {
 	encode zstd gzip
 	import protected
 	reverse_proxy mobobrain-pkm:6806
 }
 
-# -----------------------------------------------------------------------------
-# 网站 A 自动化后台：n8n 独立子域，必须认证
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# n8n 自动化引擎
+# ---------------------------------------------------------------------------
 {$DOMAIN_N8N} {
 	encode zstd gzip
 	import protected
-	reverse_proxy mobobrain-n8n:5678
-}
-
-# -----------------------------------------------------------------------------
-# 网站 B 个人档案看板：强认证 + noindex + 不缓存
-# -----------------------------------------------------------------------------
-{$DOMAIN_ARCHIVE} {
-	encode zstd gzip
-	import protected
-	header {
-		Cache-Control "no-store"
+	reverse_proxy mobobrain-n8n:5678 {
+		flush_interval -1
 	}
-	reverse_proxy archive-dashboard:8501
 }
 
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 # 静态操作台：只展示入口/状态，不存密钥
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 {$DOMAIN_ADMIN} {
 	encode zstd gzip
 	import protected
-	header {
-		Cache-Control "no-store"
-	}
 	root * /srv/console
 	file_server
 }
 
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 # 说明
-# 1) 不使用 /n8n/ 或 /kb/ 子路径：子路径会破坏静态资源、WebSocket、Webhook。
-# 2) BasicAuth 必须配合 HTTPS；本 Caddy 自动签发证书。
-# 3) 若未来需要外部 Webhook，单独增加 hooks. 子域 + Header Token + IP 限制，
+# 1) 不使用 /n8n/ 或 /kb/ 子路径承载应用：子路径会破坏静态资源、WebSocket 与 Webhook。
+# 2) BasicAuth 必须配合 HTTPS；Caddy 自动签发证书。
+# 3) /internal/* 是唯一存放全量数据与 OSS 临时签名链接的路径，必须强制认证；
+#    公域 JSON 必须在导出阶段物理脱敏（见 services/mobo-cli/mobo_cli/exporters.py）。
+# 4) 若未来需要外部 Webhook，单独增加 hooks. 子域 + Header Token + IP 白名单，
 #    不要把 n8n 的 /webhook/ 暴露在无认证的根路径。
-# 4) 证书/ACME 需要 80/443 可达；备案通过前不要切正式域名。
+# 5) 证书/ACME 需要 80/443 可达；备案通过前不要切正式域名。

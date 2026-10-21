@@ -1,0 +1,306 @@
+{
+  "name": "03 莫伯资本 1+3 四端合成发布",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mobocapital-synthesize",
+        "options": {}
+      },
+      "id": "c3d4e5f6-0003-4000-8000-000000000001",
+      "name": "Webhook_合成",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "webhookId": "REPLACE_WITH_WEBHOOK_ID"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://mobobrain-pkm:6806/api/export/exportMdContent",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $json.body.siyuan_doc_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c3d4e5f6-0003-4000-8000-000000000002",
+      "name": "拉取思源母本",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 注入系统提示词（workflows/prompts/mobo-capital-synthesis-prompt.md）\n// 输出：{ system, user }\nconst body = $input.first().json;\nconst source = body.data || body.content || '';\nconst system = $('Webhook_合成').first().json.system_prompt\n  || '你是莫伯资本的首席投研总编与合规风控官。只返回合法 JSON，字段：slug, web_markdown, wechat_html, xueqiu_markdown, x_thread_json。境内版本必须脱敏具体买卖点位并附免责声明。';\nconst user = `标题：${body.title || ''}\\n类别：${body.category || 'MACRO'}\\n\\n母本：\\n${String(source).slice(0, 12000)}`;\nreturn [{ json: { system, user, title: body.title || '未命名', category: body.category || 'MACRO' } }];"
+      },
+      "id": "c3d4e5f6-0003-4000-8000-000000000003",
+      "name": "构建Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer REPLACE_WITH_LLM_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'your-chat-model', temperature: 0.3, messages: [ { role: 'system', content: $json.system }, { role: 'user', content: $json.user } ] }) }}",
+        "options": {}
+      },
+      "id": "c3d4e5f6-0003-4000-8000-000000000004",
+      "name": "单次LLM合成",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [860, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 严格解析四端 JSON；解析失败 -> NEEDS_MANUAL\nconst raw = $json?.choices?.[0]?.message?.content ?? '';\nlet parsed = {};\ntry {\n  const s = raw.indexOf('{');\n  const e = raw.lastIndexOf('}');\n  parsed = JSON.parse(s >= 0 && e > s ? raw.slice(s, e + 1) : raw);\n} catch (err) {\n  return [{ json: { parse_error: String(err), raw: raw.slice(0, 500) } }];\n}\nconst slug = (parsed.slug || 'memo-' + Date.now()).toString();\nreturn [{\n  json: {\n    slug,\n    web_markdown: parsed.web_markdown || '',\n    wechat_html: parsed.wechat_html || '',\n    xueqiu_markdown: parsed.xueqiu_markdown || '',\n    x_thread_json: Array.isArray(parsed.x_thread_json) ? parsed.x_thread_json : []\n  }\n}];"
+      },
+      "id": "c3d4e5f6-0003-4000-8000-000000000005",
+      "name": "解析四端JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1080, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO capital.capital_publications (\n  slug, category, title, summary, web_markdown, wechat_html,\n  xueqiu_markdown, x_thread_json, publish_status, visibility\n) VALUES ($1, $2, $3, $4, $5, $6, $7, $8::jsonb, 'PENDING_REVIEW', 'PUBLIC')\nON CONFLICT (slug) DO UPDATE SET\n  web_markdown = EXCLUDED.web_markdown,\n  wechat_html = EXCLUDED.wechat_html,\n  xueqiu_markdown = EXCLUDED.xueqiu_markdown,\n  x_thread_json = EXCLUDED.x_thread_json,\n  publish_status = 'PENDING_REVIEW',\n  updated_at = NOW()\nRETURNING id, slug, publish_status;",
+        "options": {
+          "queryReplacement": "={{ $json.slug }},={{ $('构建Prompt').first().json.category }},={{ $('构建Prompt').first().json.title }},={{ $json.web_markdown.slice(0, 300) }},={{ $json.web_markdown }},={{ $json.wechat_html }},={{ $json.xueqiu_markdown }},={{ JSON.stringify($json.x_thread_json) }}"
+        }
+      },
+      "id": "c3d4e5f6-0003-4000-8000-000000000006",
+      "name": "写入待审队列",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [1300, 300],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "MoBoBrain Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mobocapital-publish",
+        "options": {}
+      },
+      "id": "c3d4e5f6-0003-4000-8000-000000000007",
+      "name": "Webhook_发布",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 560],
+      "webhookId": "REPLACE_WITH_WEBHOOK_ID"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// 人工批准后：准备四端 payload（内容来自已入库的 capital_publications）\nconst body = $input.first().json;\nconst rec = body.body || body;\nreturn {\n  json: {\n    slug: rec.slug,\n    title: rec.title,\n    wechat_html: rec.wechat_html || '',\n    x_thread_json: rec.x_thread_json || []\n  }\n};"
+      },
+      "id": "c3d4e5f6-0003-4000-8000-000000000008",
+      "name": "准备发布载荷",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [420, 560]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.weixin.qq.com/cgi-bin/draft/add?access_token={{ $env.WECHAT_ACCESS_TOKEN }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ articles: [ { title: $json.title, author: '莫伯 | MoBoCapital', digest: $json.title, content: $json.wechat_html, content_source_url: 'https://mobocapital.com/memo/' + $json.slug, thumb_media_id: $env.WECHAT_DEFAULT_THUMB_MEDIA_ID, need_open_comment: 1, only_fans_can_comment: 0 } ] }) }}",
+        "options": {}
+      },
+      "id": "c3d4e5f6-0003-4000-8000-000000000009",
+      "name": "推送微信草稿箱",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [640, 560]
+    },
+    {
+      "parameters": {
+        "jsCode": "// X 链式串推：逻辑见 workflows/nodes/x-thread-publish.code.js\n// 需在 n8n 中配置 twitterOAuth2Api 凭证；未配置时保持本节点禁用\nconst threadArray = $input.first().json.x_thread_json || [];\nif (!threadArray.length) {\n  return [{ json: { skipped: true, reason: 'no thread payload' } }];\n}\nlet previousTweetId = null;\nconst publishedTweetIds = [];\nfor (let i = 0; i < threadArray.length; i++) {\n  const payload = { text: String(threadArray[i]).slice(0, 260) };\n  if (previousTweetId) {\n    payload.reply = { in_reply_to_tweet_id: previousTweetId };\n  }\n  const response = await this.helpers.httpRequestWithAuthentication.call(\n    this,\n    'twitterOAuth2Api',\n    { method: 'POST', url: 'https://api.twitter.com/2/tweets', body: payload, json: true }\n  );\n  previousTweetId = response.data.id;\n  publishedTweetIds.push(previousTweetId);\n  await new Promise(resolve => setTimeout(resolve, 1500));\n}\nreturn [{ json: { x_root_tweet_id: publishedTweetIds[0], x_thread_count: publishedTweetIds.length, x_thread_url: 'https://x.com/i/web/status/' + publishedTweetIds[0] } }];"
+      },
+      "id": "c3d4e5f6-0003-4000-8000-00000000000a",
+      "name": "X链式串推",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [860, 560]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE capital.capital_publications\nSET publish_status = 'PUBLISHED',\n    wechat_draft_media_id = $2,\n    x_root_tweet_id = $3,\n    published_at = NOW(),\n    updated_at = NOW()\nWHERE slug = $1\nRETURNING slug, publish_status;",
+        "options": {
+          "queryReplacement": "={{ $('准备发布载荷').first().json.slug }},={{ $json.media_id || '' }},={{ $json.x_root_tweet_id || '' }}"
+        }
+      },
+      "id": "c3d4e5f6-0003-4000-8000-00000000000b",
+      "name": "回写发布状态",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [1080, 560],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "MoBoBrain Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 03 1+3 四端合成发布（模板）\n\n- 阶段一：Webhook 合成 → 拉思源母本 → 单次 LLM 合成 → 解析 JSON → 写库 `PENDING_REVIEW`（**绝不直接 PUBLISHED**）。\n- 阶段二：Webhook 发布 → 准备载荷 → 微信草稿箱 → X 链式串推 → 回写 `PUBLISHED`。\n- 提示词资产：`workflows/prompts/mobo-capital-synthesis-prompt.md`（境内版本强制脱敏 + 免责声明）。\n- 微信：需 `WECHAT_ACCESS_TOKEN` 与封面 `thumb_media_id`；只推**草稿箱**，最终群发由人工在公众号后台确认。\n- X：需配置 `twitterOAuth2Api` 凭证；未配置时保持「X链式串推」节点禁用。\n- 备案与合规：见 `docs/06-合规与成本/证券与自媒体合规.md`。",
+        "height": 320,
+        "width": 460
+      },
+      "id": "c3d4e5f6-0003-4000-8000-00000000000c",
+      "name": "说明",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [140, 60]
+    }
+  ],
+  "connections": {
+    "Webhook_合成": {
+      "main": [
+        [
+          {
+            "node": "拉取思源母本",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "拉取思源母本": {
+      "main": [
+        [
+          {
+            "node": "构建Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "构建Prompt": {
+      "main": [
+        [
+          {
+            "node": "单次LLM合成",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "单次LLM合成": {
+      "main": [
+        [
+          {
+            "node": "解析四端JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析四端JSON": {
+      "main": [
+        [
+          {
+            "node": "写入待审队列",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook_发布": {
+      "main": [
+        [
+          {
+            "node": "准备发布载荷",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "准备发布载荷": {
+      "main": [
+        [
+          {
+            "node": "推送微信草稿箱",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "推送微信草稿箱": {
+      "main": [
+        [
+          {
+            "node": "X链式串推",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "X链式串推": {
+      "main": [
+        [
+          {
+            "node": "回写发布状态",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

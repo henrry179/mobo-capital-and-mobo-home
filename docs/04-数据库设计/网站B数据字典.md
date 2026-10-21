@@ -1,6 +1,6 @@
 # 网站 B 数据字典（`db_archive.archive`）
 
-> 对应 SQL：[`02-archive-schema.sql`](../../deploy/postgres/initdb/02-archive-schema.sql)、[`03-archive-triggers.sql`](../../deploy/postgres/initdb/03-archive-triggers.sql)、[`05-indexes-grants.sql`](../../deploy/postgres/initdb/05-indexes-grants.sql)。
+> 对应 SQL：[`02-archive-schema.sql`](../../deploy/postgres/initdb/02-archive-schema.sql)、[`03-archive-triggers.sql`](../../deploy/postgres/initdb/03-archive-triggers.sql)、[`08-indexes-grants.sql`](../../deploy/postgres/initdb/08-indexes-grants.sql)。
 
 ## 1. 枚举
 

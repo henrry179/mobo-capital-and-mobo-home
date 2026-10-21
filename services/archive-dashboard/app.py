@@ -84,15 +84,15 @@ def db_connect():
     """返回 (connection, error)。只读、超时 20s。"""
     if psycopg2 is None:
         return None, "未安装 psycopg2"
-    if not os.getenv("ARCHIVE_DB_PASSWORD"):
+    if not (os.getenv("PG_PASS_ARCHIVE") or os.getenv("ARCHIVE_DB_PASSWORD")):
         return None, "未配置 ARCHIVE_DB_PASSWORD"
     try:
         conn = psycopg2.connect(
-            host=os.getenv("ARCHIVE_DB_HOST", "postgres"),
-            port=int(os.getenv("ARCHIVE_DB_PORT", "5432")),
-            dbname=os.getenv("ARCHIVE_DB_NAME", "db_archive"),
-            user=os.getenv("ARCHIVE_DB_USER", "user_dashboard_ro"),
-            password=os.getenv("ARCHIVE_DB_PASSWORD"),
+            host=os.getenv("PG_HOST") or os.getenv("ARCHIVE_DB_HOST", "postgres"),
+            port=int(os.getenv("PG_PORT") or os.getenv("ARCHIVE_DB_PORT", "5432")),
+            dbname=os.getenv("PG_DB_ARCHIVE") or os.getenv("ARCHIVE_DB_NAME", "db_archive"),
+            user=os.getenv("PG_USER_ARCHIVE") or os.getenv("ARCHIVE_DB_USER", "user_dashboard_ro"),
+            password=os.getenv("PG_PASS_ARCHIVE") or os.getenv("ARCHIVE_DB_PASSWORD"),
             connect_timeout=3,
             options="-c statement_timeout=20000",
         )

@@ -1,7 +1,7 @@
 -- =============================================================================
--- 05-indexes-grants.sql
+-- 08-indexes-grants.sql
 -- 网站 B / 网站 A：HNSW、trgm、全文索引、只读/备份权限
--- 目标：db_archive + db_mobobrain
+-- 目标：db_archive + db_mobobrain（intel 采集域 + capital 投研域 + n8n 自动化域）
 -- =============================================================================
 
 \set ON_ERROR_STOP on
@@ -108,6 +108,43 @@ ALTER DEFAULT PRIVILEGES FOR ROLE user_mobobrain IN SCHEMA intel
 GRANT USAGE, CREATE ON SCHEMA n8n TO user_n8n;
 ALTER DEFAULT PRIVILEGES FOR ROLE user_n8n IN SCHEMA n8n
     GRANT SELECT ON TABLES TO user_backup;
+
+-- =============================================================================
+-- B2. db_mobobrain · capital 投研域（莫伯资本）
+-- =============================================================================
+SET search_path TO capital, public;
+
+-- 中文标题降级检索：trgm（trgm 用于短标题，不用于长正文）
+CREATE INDEX IF NOT EXISTS idx_capital_theses_title_trgm
+    ON capital.macro_theses USING GIN (title gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_capital_playbooks_name_trgm
+    ON capital.strategy_playbooks USING GIN (name gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_capital_publications_title_trgm
+    ON capital.capital_publications USING GIN (title gin_trgm_ops);
+
+-- 发布流水按可见性过滤（公私域导出的高频查询）
+CREATE INDEX IF NOT EXISTS idx_capital_publications_visibility
+    ON capital.capital_publications(visibility, publish_status, created_at DESC);
+
+-- 工作流 #2 需要把四端合成结果写入 capital_publications
+GRANT USAGE ON SCHEMA capital TO user_n8n;
+GRANT SELECT, INSERT, UPDATE ON capital.capital_publications TO user_n8n;
+GRANT SELECT ON capital.macro_theses TO user_n8n;
+GRANT SELECT ON capital.strategy_playbooks TO user_n8n;
+GRANT SELECT ON capital.trade_reviews TO user_n8n;
+GRANT SELECT ON capital.media_channel_metrics TO user_n8n;
+GRANT SELECT ON capital.v_strategy_performance_summary TO user_n8n;
+GRANT SELECT ON capital.v_media_conversion_funnel TO user_n8n;
+GRANT SELECT ON capital.v_latest_macro_indicators TO user_n8n;
+GRANT SELECT ON capital.v_latest_options_vol_surface TO user_n8n;
+
+-- 备份账号：capital 域只读
+GRANT SELECT ON ALL TABLES IN SCHEMA capital TO user_backup;
+GRANT SELECT ON ALL SEQUENCES IN SCHEMA capital TO user_backup;
+ALTER DEFAULT PRIVILEGES FOR ROLE user_mobobrain IN SCHEMA capital
+    GRANT SELECT ON TABLES TO user_backup;
+ALTER DEFAULT PRIVILEGES FOR ROLE user_mobobrain IN SCHEMA capital
+    GRANT SELECT ON SEQUENCES TO user_backup;
 
 -- =============================================================================
 -- C. 说明

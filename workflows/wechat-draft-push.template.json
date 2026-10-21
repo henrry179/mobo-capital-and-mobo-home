@@ -1,0 +1,14 @@
+{
+  "articles": [
+    {
+      "title": "{{ $node['Parse_LLM_JSON'].json.title }}",
+      "author": "莫伯 | MoBoCapital",
+      "digest": "{{ $node['Parse_LLM_JSON'].json.summary }}",
+      "content": "{{ $node['Parse_LLM_JSON'].json.wechat_html }}",
+      "content_source_url": "https://mobocapital.com/memo/{{ $node['Parse_LLM_JSON'].json.slug }}",
+      "thumb_media_id": "{{ $env.WECHAT_DEFAULT_THUMB_MEDIA_ID }}",
+      "need_open_comment": 1,
+      "only_fans_can_comment": 0
+    }
+  ]
+}

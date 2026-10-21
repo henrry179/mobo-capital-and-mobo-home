@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MoBoBrain 云端部署与成本可视化仪表板</title>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--ink:#13243a;--muted:#65758b;--line:#e1e8f0;--navy:#142d4e;--blue:#1769aa;--teal:#11877d;--purple:#6857c9;--amber:#b8750a;--red:#b83c36;--soft-blue:#eaf3fb;--soft-teal:#e8f6f3;--soft-purple:#f0edff;--shadow:0 12px 30px rgba(24,46,75,.07);}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI","Microsoft YaHei",Arial,sans-serif;line-height:1.55}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.wrap{max-width:1440px;margin:0 auto;padding:26px 24px 48px}.hero{background:linear-gradient(125deg,#122746,#1d5791 62%,#147e79);color:#fff;border-radius:22px;padding:28px 30px;position:relative;overflow:hidden;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,.17);right:-60px;top:-120px;box-shadow:0 0 0 35px rgba(255,255,255,.04),0 0 0 70px rgba(255,255,255,.025)}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.78}.hero h1{font-size:clamp(27px,3vw,40px);line-height:1.15;margin:10px 0 12px;letter-spacing:-.03em}.hero p{max-width:900px;color:#dceafa;margin:0}.hero-meta{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.pill{padding:6px 10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;font-size:12px}
+.grid{display:grid;gap:16px}.kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin:18px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:19px}.kpi-label{font-size:12px;color:var(--muted);font-weight:700}.kpi-value{font-size:27px;font-weight:850;letter-spacing:-.03em;margin:5px 0;color:var(--navy)}.kpi-foot{font-size:12px;color:var(--muted)}.layout{grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);align-items:start}.section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:0 0 14px}.section-title h2{font-size:18px;margin:0;letter-spacing:-.02em}.section-title p{font-size:12px;color:var(--muted);margin:4px 0 0}.tag{background:var(--soft-blue);color:var(--blue);padding:5px 8px;font-size:11px;font-weight:800;border-radius:999px;white-space:nowrap}.controls{display:grid;grid-template-columns:1fr 1fr;gap:15px}.control{border:1px solid var(--line);border-radius:13px;padding:13px;background:#fbfcfe}.control label{display:block;font-size:12px;font-weight:800;color:#405269;margin-bottom:8px}.control select,.control input[type=number]{width:100%;padding:10px 11px;border:1px solid #cad5e2;border-radius:9px;color:var(--ink);background:#fff;font:inherit;font-size:13px}.control input[type=range]{width:100%;accent-color:var(--blue)}.range-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}.range-row strong{font-size:14px;color:var(--navy)}.hint{font-size:11px;color:var(--muted);margin-top:7px}.cost-summary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.cost-box{padding:16px;border-radius:14px;background:var(--soft-blue);border:1px solid #cfe2f6}.cost-box.total{background:var(--soft-teal);border-color:#bfe7df}.cost-box span{display:block;color:var(--muted);font-size:11px;font-weight:700}.cost-box strong{display:block;font-size:25px;color:var(--navy);margin:3px 0}.cost-box small{font-size:11px;color:var(--muted)}.status{padding:13px 14px;border-radius:12px;margin-top:13px;font-size:13px}.status.good{background:#eaf7ef;border:1px solid #c7e9d2;color:#155b35}.status.warn{background:#fff5df;border:1px solid #f0d69e;color:#774a00}.status.bad{background:#fcebea;border:1px solid #f1c5c2;color:#8a2420}
+.architecture{display:flex;flex-direction:column;gap:10px}.node{border:1px solid var(--line);border-radius:13px;padding:13px 14px;background:#fff}.node strong{display:block;font-size:13px}.node small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.node.ai{background:var(--soft-purple);border-color:#d7d0ff}.node.server{background:var(--soft-blue);border-color:#cbdff4}.node.storage{background:var(--soft-teal);border-color:#bde5de}.arrow{text-align:center;color:#7b8ca3;font-weight:900;line-height:12px}.sites{display:grid;grid-template-columns:1fr 1fr;gap:10px}.site{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fafcff}.site h3{font-size:13px;margin:0 0 6px}.site p{font-size:11px;color:var(--muted);margin:0}.two-col{grid-template-columns:1fr 1fr;margin-top:16px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:13px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f5f8fc;color:#405269;font-size:11px;white-space:nowrap}tbody tr:last-child td{border-bottom:none}.bar-list{display:flex;flex-direction:column;gap:14px}.bar-head{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:5px}.bar-head span{color:var(--muted)}.bar{height:10px;border-radius:999px;background:#edf1f6;overflow:hidden}.bar span{height:100%;display:block;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--teal));width:0;transition:width .25s}.scenario-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px}.scenario{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff}.scenario h3{font-size:13px;margin:0 0 8px}.scenario .number{font-size:21px;font-weight:850;color:var(--navy)}.scenario p{font-size:11px;color:var(--muted);margin:5px 0 0}.scenario.recommended{border-color:#91d3c7;box-shadow:inset 0 0 0 1px #c2e8e1}.chip{display:inline-block;font-size:10px;font-weight:800;padding:3px 7px;border-radius:999px;background:var(--soft-teal);color:#08796f;margin-bottom:7px}.checklist{display:grid;grid-template-columns:1fr 1fr;gap:9px}.check{display:flex;gap:9px;padding:11px;border:1px solid var(--line);border-radius:11px;background:#fff;font-size:12px}.check input{accent-color:var(--teal);margin-top:3px}.refs{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ref{border:1px solid var(--line);padding:12px;border-radius:12px;background:#fff}.ref strong{font-size:12px;display:block}.ref a{font-size:11px;word-break:break-word}.ref p{font-size:11px;color:var(--muted);margin:5px 0 0}.footer{margin-top:22px;color:var(--muted);font-size:11px;text-align:center}.muted{color:var(--muted)}.subsection{margin-top:16px}.mini{font-size:11px;color:var(--muted)}.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f5f7fa;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11px;word-break:break-word}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:1fr}.scenario-grid{grid-template-columns:1fr}.two-col{grid-template-columns:1fr}}
+@media(max-width:600px){.wrap{padding:13px}.hero{padding:22px 19px;border-radius:16px}.controls,.cost-summary,.sites,.checklist,.refs{grid-template-columns:1fr}.kpi-value{font-size:23px}.card{padding:15px}.kpis{gap:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">PERSONAL CLOUD INFRASTRUCTURE / 2026.10</div>
+  <h1>MoBoBrain × 个人数字档案<br>云端部署与成本仪表板</h1>
+  <p>双独立网站 · OSS 私有对象存储 · X Subscription / Grok Bot 协作 · 成本与隐私边界模拟。模型价格用于规划，不替代云服务商实际账单。</p>
+  <div class="hero-meta"><span class="pill">两站独立</span><span class="pill">纯线上主存储</span><span class="pill">目标 ≤ 1TB</span><span class="pill">大陆备案按需办理</span><span class="pill">数据隐私优先</span></div>
+</header>
+<section class="grid kpis">
+  <div class="card"><div class="kpi-label">当前网站基础设施估算</div><div class="kpi-value" id="infraKpi">¥—</div><div class="kpi-foot">服务器 + 域名 + OSS 存储 + 模拟下行流量</div></div>
+  <div class="card"><div class="kpi-label">AI 订阅估算</div><div class="kpi-value" id="aiKpi">¥—</div><div class="kpi-foot" id="aiKpiFoot">取决于订阅等级与付费周期</div></div>
+  <div class="card"><div class="kpi-label">项目年度总预算区间</div><div class="kpi-value" id="totalKpi">¥—</div><div class="kpi-foot">不含备份、请求费、税费与其他增值服务</div></div>
+  <div class="card"><div class="kpi-label">¥2,400 年度预算状态</div><div class="kpi-value" id="budgetKpi">—</div><div class="kpi-foot" id="budgetFoot">当前模型下判断</div></div>
+</section>
+<div class="grid layout">
+  <section class="card">
+    <div class="section-title"><div><h2>01 / 成本模拟器</h2><p>调整实际使用量与订阅等级，估算年度支出范围。</p></div><span class="tag">交互计算</span></div>
+    <div class="controls">
+      <div class="control"><label for="storage">OSS 存储容量（GB）</label><input id="storage" type="range" min="20" max="1024" step="4" value="500"><div class="range-row"><span>20GB</span><strong id="storageVal">500GB</strong><span>1TB</span></div><div class="hint">实际按已存储数据计费；使用量增长时再扩容。</div></div>
+      <div class="control"><label for="traffic">公网下载量（GB/月）</label><input id="traffic" type="range" min="0" max="500" step="10" value="100"><div class="range-row"><span>0GB</span><strong id="trafficVal">100GB/月</strong><span>500GB</span></div><div class="hint">公开媒体访问越多，下行流量越值得单独核算。</div></div>
+      <div class="control"><label for="plan">X Subscription 套餐</label><select id="plan"><option value="free">Free — 不含付费 Grok Bot</option><option value="plus">Plus — 不含 Grok Bot</option><option value="premium" selected>Premium — 包含 Grok Bot</option><option value="super">Super — 更高使用额度</option><option value="ultra">Ultra — 高用量档</option></select><div class="hint">以官方 X Subscription 当前档位为预算参考。</div></div>
+      <div class="control"><label for="cycle">订阅付费周期</label><select id="cycle"><option value="annual" selected>年付价</option><option value="monthly">月付 × 12</option></select><div class="hint">美元价按下方汇率换算，未含可能税费。</div></div>
+      <div class="control"><label for="fx">预算换算汇率（人民币 / 美元）</label><input id="fx" type="number" min="1" max="20" step="0.05" value="7.00"><div class="hint">仅作预算假设；可按付款日汇率修改。</div></div>
+      <div class="control"><label for="domain">两个域名合计（¥/年）</label><input id="domain" type="number" min="0" max="2000" step="10" value="140"><div class="hint">示例值 ¥100–180/年，实际取决于域名后缀与续费价。</div></div>
+      <div class="control"><label for="server">服务器费用（¥/年）</label><input id="server" type="number" min="0" max="10000" step="10" value="199"><div class="hint">此前候选为 2核4GB、约50GB ESSD；¥199/年是待核验活动价，须确认带宽、资格与续费。</div></div>
+      <div class="control"><label for="backup">额外云端备份预留（¥/年）</label><input id="backup" type="number" min="0" max="20000" step="50" value="0"><div class="hint">当前默认为 0 仅为展示基础开销；正式部署建议将隔离备份单独计价。</div></div>
+    </div>
+    <div class="cost-summary"><div class="cost-box"><span>网站基础设施（年度区间）</span><strong id="infraRange">¥—</strong><small>含参考下载流量低价 / 高价情景</small></div><div class="cost-box total"><span>项目总计（年度区间）</span><strong id="totalRange">¥—</strong><small id="totalSub">网站 + AI 订阅 + 备份预留</small></div></div>
+    <div id="budgetStatus" class="status warn">正在计算预算状态…</div>
+    <div class="subsection"><div class="section-title"><div><h2>成本构成</h2><p>按中位流量价展示各项比例。</p></div></div><div class="bar-list" id="costBars"></div></div>
+    <div class="subsection formula" id="formula">计算公式加载中…</div>
+  </section>
+  <section class="card">
+    <div class="section-title"><div><h2>02 / 推荐架构</h2><p>AI 订阅、应用服务器与对象存储应各自承担明确职责。</p></div><span class="tag">方案三路线</span></div>
+    <div class="architecture">
+      <div class="node ai"><strong>AI 工作层 · X Subscription / Grok Bot</strong><small>开发辅助、代码评审、内容摘要、归类规则和工作流建议；使用额度有限，API 单独核算。</small></div>
+      <div class="arrow">↓ 辅助开发 / 经授权触发任务</div>
+      <div class="node server"><strong>应用层 · 阿里云轻量应用服务器</strong><small>HTTPS、登录鉴权、两个独立站点的应用、后台任务与元数据 API。</small></div>
+      <div class="sites"><div class="site"><h3>网站 A · MoBoBrain</h3><p>财经研究、文章、Markdown/PDF、标签、版本、全文检索与 AI 知识检索。</p></div><div class="site"><h3>网站 B · 个人数字档案</h3><p>照片、视频、简历、私人文档、时间线与个人数据分析。</p></div></div>
+      <div class="arrow">↓ 授权通过后访问文件</div>
+      <div class="node storage"><strong>文件层 · 私有 OSS Bucket</strong><small>保存文件本体；按权限签发短时 URL；前端不得存放长期 AccessKey。</small></div>
+      <div class="node"><strong>备份层 · 隔离的云端副本</strong><small>优先不同账号或地域，设置版本保留和恢复测试；预算需另计。取消本地硬盘不应取消备份设计。</small></div>
+    </div>
+    <div class="status good">设计原则：两个网站共享基础算力可以，但应用、数据库凭证、访问策略和日志必须分离。私人档案默认不公开。</div>
+    <div class="subsection"><div class="section-title"><div><h2>订阅权益（官方参考）</h2><p>价格截至 2026-10-11 官方定价页；购买前复核账号显示。</p></div></div><div class="table-wrap"><table><thead><tr><th>套餐</th><th>月付</th><th>年付</th><th>Grok Bot</th></tr></thead><tbody><tr><td>Plus</td><td>$8</td><td>$80</td><td>不含</td></tr><tr><td>Premium</td><td>$30</td><td>$300</td><td>包含</td></tr><tr><td>Super</td><td>$100</td><td>$1,000</td><td>包含</td></tr><tr><td>Ultra</td><td>$200</td><td>$2,000</td><td>包含</td></tr></tbody></table></div><p class="mini">Grok、Grok Bot 与 Cursor 的部分模型用量共用额度池；订阅不包含可替代 1TB OSS 的存储，也不等同于独立 API 无限调用。</p></div>
+  </section>
+</div>
+<div class="grid scenario-grid">
+  <article class="scenario"><span class="chip">方案一</span><h3>传统云服务</h3><div class="number">数据控制力强</div><p>服务器 + OSS + 两域名；AI 可选。适合优先确保长期运行、数据权限和可迁移性。</p></article>
+  <article class="scenario"><span class="chip" style="background:#fff3df;color:#8a5900">方案二</span><h3>纯 AI / 第三方托管</h3><div class="number">适合原型</div><p>可以快速发布静态页面或公开内容，但不适合仅依靠 X 订阅长期存放 1TB 私人媒体。</p></article>
+  <article class="scenario recommended"><span class="chip">推荐起步</span><h3>方案三：X + 轻量云 + OSS</h3><div class="number">分阶段控成本</div><p>先按实际使用容量建站，随后依据 30 天存储和流量账单扩容；保留方案一的安全边界。</p></article>
+</div>
+<section class="card" style="margin-top:16px"><div class="section-title"><div><h2>03 / 云服务商与服务器候选</h2><p>以下参数是前期方案比较参考，不是当前购买承诺。</p></div><span class="tag">下单前复核</span></div><div class="table-wrap"><table><thead><tr><th>候选</th><th>此前参考配置 / 价格</th><th>适用判断</th><th>需核验</th></tr></thead><tbody><tr><td>阿里云轻量（优先核验）</td><td>2核4GB、约50GB ESSD；约¥199/年活动假设</td><td>与阿里云 OSS 和备案流程衔接直接</td><td>活动资格、地域、带宽/流量、备案资格和续费价格</td></tr><tr><td>腾讯云 Lighthouse</td><td>2核4GB、100GB SSD、约7Mbps、1TB/月；此前参考约¥1,020/年</td><td>备选配置；会挤占总体预算</td><td>当前价格、流量规则、续费价与备案资格</td></tr><tr><td>阿里云 ECS 经济型</td><td>2核2GB；此前约¥99/年活动参考</td><td>成本低，但两站+数据库+全文检索内存余量偏紧</td><td>实际配置、带宽、磁盘、续费和压力测试</td></tr></tbody></table></div><p class="mini">大陆服务器购买前先核验地域与备案资格；服务器创建后通常不能直接更换地域。</p></section>
+<div class="grid two-col">
+  <section class="card"><div class="section-title"><div><h2>04 / 成本敏感性</h2><p>下表展示常见容量和下载场景；不含 X 订阅和备份。</p></div></div><div class="table-wrap"><table><thead><tr><th>场景</th><th>存储</th><th>下载量</th><th>年度估算区间</th></tr></thead><tbody id="scenarioTable"></tbody></table></div><p class="mini">模型：存储 ¥0.12/GB/月；公网下载参考 ¥0.25–0.50/GB；服务器 ¥199/年；域名 ¥100–180/年。按量费用、请求、转换服务和区域价格另计。</p></section>
+  <section class="card"><div class="section-title"><div><h2>05 / 上线前检查</h2><p>勾选用于个人验收；勾选状态仅保留在当前页面会话中。</p></div><span class="tag">安全门槛</span></div><div class="checklist" id="checklist"><label class="check"><input type="checkbox"><span>两个域名 HTTPS 正常，应用与权限隔离。</span></label><label class="check"><input type="checkbox"><span>OSS 默认私有，无匿名读写与公开列目录。</span></label><label class="check"><input type="checkbox"><span>另一账号/地域保留备份，并完成恢复测试。</span></label><label class="check"><input type="checkbox"><span>不存在前端或 GitHub 长期云密钥。</span></label><label class="check"><input type="checkbox"><span>签名链接过期后失效，其他账号不可访问私有文件。</span></label><label class="check"><input type="checkbox"><span>云账单可以区分存储、流量、请求与备份费用。</span></label><label class="check"><input type="checkbox"><span>服务器价格、续费、备案资格已从控制台确认。</span></label><label class="check"><input type="checkbox"><span>AI 不可未经审核批量删除或公开私人文件。</span></label></div><div class="status warn" id="checkStatus">已完成 0 / 8 项。</div></section>
+</div>
+<section class="card subseciton" style="margin-top:16px"><div class="section-title"><div><h2>06 / 官方核验链接</h2><p>购买和备案前优先检查这些原始页面，不以本仪表板估算替代正式报价。</p></div><span class="tag">Sources</span></div><div class="refs">
+<div class="ref"><strong>阿里云 OSS 计费组成与定价</strong><a href="https://help.aliyun.com/zh/oss/understanding-billing/" target="_blank" rel="noopener">help.aliyun.com/zh/oss/understanding-billing/</a><p>存储、外网流量、请求和处理等潜在费用项。</p></div>
+<div class="ref"><strong>阿里云 OSS 付费方式</strong><a href="https://help.aliyun.com/zh/oss/billing-method/" target="_blank" rel="noopener">help.aliyun.com/zh/oss/billing-method/</a><p>按量付费和资源包。</p></div>
+<div class="ref"><strong>阿里云轻量应用服务器使用须知</strong><a href="https://help.aliyun.com/zh/simple-application-server/product-overview/usage-notes" target="_blank" rel="noopener">轻量应用服务器 / 备案须知</a><p>大陆地域网站备案及备案服务码要求。</p></div>
+<div class="ref"><strong>阿里云个人网站 ICP 备案快速入门</strong><a href="https://help.aliyun.com/zh/icp-filing/basic-icp-service/getting-started/quick-start-for-icp-filing-for-personal-websites" target="_blank" rel="noopener">个人网站备案步骤</a><p>备案、网站上线与公安联网备案流程。</p></div>
+<div class="ref"><strong>X Subscription 官方公告</strong><a href="https://x.ai/news/x-subscription" target="_blank" rel="noopener">x.ai/news/x-subscription</a><p>订阅体系与权益说明。</p></div>
+<div class="ref"><strong>X Subscription 官方定价</strong><a href="https://docs.x.ai/x-subscription/pricing" target="_blank" rel="noopener">docs.x.ai/x-subscription/pricing</a><p>当前月付、年付和包含使用额度。</p></div>
+<div class="ref"><strong>Grok Bot 订阅说明</strong><a href="https://docs.x.ai/x-subscription/grok-bot" target="_blank" rel="noopener">docs.x.ai/x-subscription/grok-bot</a><p>不同订阅档位的 Grok Bot 可用规则。</p></div>
+<div class="ref"><strong>xAI API 定价</strong><a href="https://docs.x.ai/developers/pricing" target="_blank" rel="noopener">docs.x.ai/developers/pricing</a><p>开发者 API 的独立计价说明。</p></div>
+</div></section>
+<div class="footer">MoBoBrain 云端部署规划 · 模型价格与官方条款会变化 · 生成日期 2026-10-20<br>本仪表板可离线打开；修改数值后即时重算，数据不会发送至服务器。</div>
+</div>
+<script>
+const plans={free:{name:'Free',monthly:0,annual:0},plus:{name:'Plus',monthly:8,annual:80},premium:{name:'Premium',monthly:30,annual:300},super:{name:'Super',monthly:100,annual:1000},ultra:{name:'Ultra',monthly:200,annual:2000}};
+const fmt=n=>'¥'+Math.round(n).toLocaleString('zh-CN');
+const money2=n=>'¥'+n.toLocaleString('zh-CN',{minimumFractionDigits:0,maximumFractionDigits:0});
+function val(id){return Number(document.getElementById(id).value)||0}
+function render(){
+ const s=val('storage'),t=val('traffic'),fx=val('fx'),d=val('domain'),server=val('server'),backup=val('backup');
+ const plan=plans[document.getElementById('plan').value];const cycle=document.getElementById('cycle').value;
+ const ai=(cycle==='annual'?plan.annual:plan.monthly*12)*fx;
+ const storageCost=s*.12*12; const trafficLow=t*12*.25,trafficHigh=t*12*.5; const mid=(trafficLow+trafficHigh)/2;
+ const low=storageCost+trafficLow+d+server+backup,high=storageCost+trafficHigh+d+server+backup,midInfra=(low+high)/2;const totalLow=low+ai,totalHigh=high+ai;
+ document.getElementById('storageVal').textContent=s+'GB';document.getElementById('trafficVal').textContent=t+'GB/月';
+ document.getElementById('infraKpi').textContent=fmt(midInfra);document.getElementById('aiKpi').textContent=fmt(ai);document.getElementById('aiKpiFoot').textContent=plan.name+' · '+(cycle==='annual'?'年付价':'月付×12')+' · $'+(cycle==='annual'?plan.annual:plan.monthly*12).toLocaleString('en-US')+'/年';
+ document.getElementById('totalKpi').textContent=fmt(totalLow)+'–'+fmt(totalHigh);
+ const budget=document.getElementById('budgetKpi');const foot=document.getElementById('budgetFoot');
+ if(totalHigh<=2400){budget.textContent='预算内';budget.style.color='var(--teal)';foot.textContent='按本模型区间上限仍未超过 ¥2,400';}
+ else if(totalLow<=2400){budget.textContent='临界';budget.style.color='var(--amber)';foot.textContent='低流量估算可能够，高流量情景会超出';}
+ else {budget.textContent='超预算';budget.style.color='var(--red)';foot.textContent='至少存在一项需要削减或增加预算';}
+ document.getElementById('infraRange').textContent=fmt(low)+'–'+fmt(high);document.getElementById('totalRange').textContent=fmt(totalLow)+'–'+fmt(totalHigh);document.getElementById('totalSub').textContent='基础设施 + '+plan.name+' + 备份预留';
+ const st=document.getElementById('budgetStatus');if(totalHigh<=2400){st.className='status good';st.textContent='年度总预算模型落在 ¥2,400 以内；仍须为请求费、税费和未计价备份留余量。'}else if(totalLow<=2400){st.className='status warn';st.textContent='预算处于临界状态；高流量情景超过 ¥2,400，且尚未计入请求费和未计价备份。'}else{st.className='status bad';st.textContent='超出 ¥2,400 年度预算；优先减少实际存储/下载、调整 AI 订阅档位，或把 AI 订阅预算单独核算。'}
+ const items=[['OSS 存储',storageCost,'var(--blue)'],['OSS 下行流量（中位）',mid,'var(--teal)'],['服务器',server,'var(--purple)'],['两个域名',d,'var(--amber)'],['隔离备份预留',backup,'var(--red)'],['AI 订阅',ai,'#7a6fe0']];const max=Math.max(...items.map(x=>x[1]),1);document.getElementById('costBars').innerHTML=items.map(([label,n,color])=>`<div><div class="bar-head"><span>${label}</span><strong>${fmt(n)}</strong></div><div class="bar"><span style="width:${Math.min(100,n/max*100)}%;background:${color}"></span></div></div>`).join('');
+ document.getElementById('formula').textContent=`年度基础设施 = 存储 ${s}GB × ¥0.12 × 12 + 下载 ${t}GB/月 × 12 × ¥0.25–0.50 + 域名 ¥${d} + 服务器 ¥${server} + 备份预留 ¥${backup}；再加 ${plan.name} 订阅 ¥${Math.round(ai)}。`;
+ const cases=[['100GB / 20GB月下载',100,20],['300GB / 50GB月下载',300,50],['500GB / 100GB月下载',500,100],['1TB / 100GB月下载',1024,100],['1TB / 300GB月下载',1024,300]];
+ document.getElementById('scenarioTable').innerHTML=cases.map(([name,gb,dl])=>{const st=gb*.12*12,tl=dl*12*.25,th=dl*12*.5,lo=st+tl+199+100,hi=st+th+199+180;return `<tr><td>${name}</td><td>${gb>=1024?'1,024GB':gb+'GB'}</td><td>${dl}GB/月</td><td>${fmt(lo)}–${fmt(hi)}</td></tr>`}).join('');
+}
+['storage','traffic','plan','cycle','fx','domain','server','backup'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+const checks=[...document.querySelectorAll('#checklist input')];function checkUpdate(){const n=checks.filter(c=>c.checked).length;const el=document.getElementById('checkStatus');el.textContent=`已完成 ${n} / ${checks.length} 项。`+(n===checks.length?' 建议上线前再次完整复核。':'');el.className='status '+(n===checks.length?'good':'warn')}checks.forEach(c=>c.addEventListener('change',checkUpdate));render();checkUpdate();
+</script>
+</body></html>

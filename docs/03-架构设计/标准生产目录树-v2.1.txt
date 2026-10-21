@@ -1,0 +1,35 @@
+/opt/mobo-stack/
+├── CLAUDE.md                                   # 多智能体共享架构宪章 (v2.1)
+├── TASK_STATE.md                               # 多智能体协同 16 步动态交接账本 (v2.1)
+├── .env                                        # 全栈敏感环境变量 (chmod 600，严禁入 Git)
+├── docker-compose.yml                          # 6 容器编排与内存硬限流配置
+├── caddy/
+│   └── Caddyfile                               # 双域名 HTTPS 网关与 /internal BasicAuth 守卫
+├── init-scripts/                               # PostgreSQL 16 (pgvector) 初始化 SQL 序列
+│   ├── 01-init-dual-db.sql                     # 双库创建与 user_mobobrain / user_archive 权限隔离
+│   ├── 02-archive-schema.sql                   # 莫伯之家 (db_archive) 5 大核心表与周度聚合视图
+│   ├── 03-archive-triggers.sql                 # 莫伯之家完读书籍/运动打卡/复盘自动同步时间线触发器
+│   ├── 04-mobocapital-schema.sql               # 莫伯资本 (db_mobobrain) 7 大投研/复盘/孵化/自媒体表
+│   ├── 05-mobocapital-nav-and-triggers.sql     # 莫伯资本 NAV 高水位估值核算与回撤风控熔断触发器
+│   └── 06-mobocapital-terminal-schema.sql      # 莫伯资本 /terminal 宏观 Z-Score 与期权波动率曲面表
+├── sites/                                      # 零内存开销静态前端工作区 (挂载至 mobo-caddy)
+│   ├── mobocapital/                            # MoBoCapital.com 站点根目录
+│   │   ├── index.html                          # 华尔街机构级前端交互门户
+│   │   ├── data/public-data.json               # 公域与 LP_PROSPECT 物理脱敏数据包
+│   │   ├── data/terminal-snapshot.json         # 每日宏观先行指标与期权波动率曲面快照
+│   │   └── internal/internal-data.json         # BasicAuth 保护的内网全量包 (含交割单签名URL)
+│   └── mobohome/                               # MoBoHome.com 站点根目录
+│       ├── index.html                          # 温润叙事风格个人档案馆前端门户
+│       ├── data/public-home-data.json          # 公域物理脱敏数据包 (剔除 is_sensitive=TRUE)
+│       └── internal/internal-home-data.json    # BasicAuth 保护的内网全量包 (含私密影像签名URL)
+├── dashboard/                                  # Streamlit 深度量化与相关性实验室
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── app.py
+└── scripts/                                    # 宿主机与终端自动化工具链
+    ├── mobo_cli.py                             # v2.1 双站全功能终端录入、OSS 归档与 JSON 同步引擎
+    ├── macro_iv_collector.py                   # v1.0 每日宏观 Z-Score 与期权 IV 分位自动采集器
+    ├── oss_guard_setup.py                      # v2.1 阿里云 OSS 生命周期冷沉降与防盗链初始化脚本
+    ├── backup-cron.sh                          # 每日 03:00 双库 pg_dump + Restic 加密冷备脚本
+    ├── disaster-recovery.sh                    # 六阶段裸机一键恢复状态机脚本
+    └── mobo_watchdog.sh                        # 2C4G 宿主机内存、磁盘与备份健康巡检哨兵

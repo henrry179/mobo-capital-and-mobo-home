@@ -1,6 +1,7 @@
 # 网站 A 数据字典（`db_mobobrain.intel` + `n8n`）
 
-> 对应 SQL：[`04-mobobrain-schema.sql`](../../deploy/postgres/initdb/04-mobobrain-schema.sql)、[`05-indexes-grants.sql`](../../deploy/postgres/initdb/05-indexes-grants.sql)。
+> 对应 SQL：[`04-mobobrain-schema.sql`](../../deploy/postgres/initdb/04-mobobrain-schema.sql)、[`08-indexes-grants.sql`](../../deploy/postgres/initdb/08-indexes-grants.sql)。
+> 莫伯资本投研域（`capital` Schema）见 [`莫伯资本数据字典.md`](莫伯资本数据字典.md)。
 
 ## 1. 边界
 

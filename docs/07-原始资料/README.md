@@ -1,0 +1,61 @@
+# 原始资料与归档（docs/07）
+
+> 本目录保存**不再作为执行基线**、但具有追溯价值的材料：原始方案文档、外部项目档案，以及 v1.1 → v2.1 演进过程中被取代的实现。
+> **执行基线在仓库根目录与 `docs/00~06`。** 本目录任何内容都不直接参与部署。
+
+## 1. 目录索引
+
+| 路径 | 内容 | 状态 |
+|---|---|---|
+| `原始方案/莫伯双站系统全栈架构与部署总册.docx` | v1.0 原始需求基线（MoBoBrain + 个人数字档案，2026-10-15） | 历史基线，被 v1.1 / v2.1 取代 |
+| `原始方案/MoBoBrain双网站建设方案.docx` | 双站建设方案 + 成本模型 + 部署架构（含 HTML 仪表板说明） | 决策参考 |
+| `原始方案/阿里云云端多智能体网站平台_部署与运营整合方案.docx` | 8C8G 多智能体平台形态（Claude Code / Codex / Cursor / Hermes / Grok） | **扩展路线**，非当前基线（当前为 2C4G 六容器） |
+| `外部项目档案/全球宏观财经金融OPC_Hermes_GrokBot_统一项目档案_区分用户与AI.md` | 宏观/财经 OPC 项目的统一档案（区分用户陈述与 AI 判断） | 背景参考 |
+| `外部项目档案/全球宏观财经金融OPC_Hermes_GrokBot统一项目档案.md` | 同主题早期版本 | 已被上一份取代 |
+| `归档-代码/` | v2.1 演进中被取代的实现与配置草稿 | 仅供比对，禁止直接部署 |
+| `归档-代码/mobo-stack.env.vars.txt` | 旧生产 `.env` 的**变量名清单**（值已全部丢弃） | 参考命名 |
+
+## 2. 归档代码清单
+
+| 子目录 | 文件 | 被取代原因 |
+|---|---|---|
+| `02-sql-精简版/` | `01-init-dual-db.sql`、`02-archive-schema.sql`、`03-archive-triggers.sql` | v2.1 会话产出的**精简版**初始化脚本：列名更短（如 `id`/`file_sha256`/`oss_thumbnail_key`）、无 Schema 隔离、权限较弱。主线使用 `deploy/postgres/initdb/01~09.sql`（Schema 化、权限完整、含 `capital` 域） |
+| `03-部署配置草稿/` | `Caddyfile-v2.1.txt`、`5.1-Caddyfile-精简版.txt`、`P0-Caddyfile-草稿.txt`、`5.2-六容器编排-v2.1.yaml`、`docker-compose-v2.1.yaml`、`oss_guard_setup-v2.1.py` | 主线已合并：双主域 + `/internal` + `/lab` + 日志 + 安全头；Compose 保留三网络与 healthcheck 并叠加内存硬限流 |
+| `04-应用代码/` | `mobo_cli-v1.py`、`mobo_cli-v2.1.py`、`mobo_cli-v2.1_02.py`、`mobo_cli-v2.1_01.py`、`app-dashboard-v2.1.py`、`mobohome-index-早期版.html`、`site-占位首页.html`、`requirements-dashboard-固定版本.txt` | 单文件 CLI 已被模块化 `services/mobo-cli/mobo_cli/` 取代（含 `exporters.py` 脱敏、`capital.py` 投研读写）；看板以 `services/archive-dashboard/` 为准；门户以 `sites/` 为准 |
+| `05-脚本/` | `backup-cron-v2.1.sh`、`disaster-recovery-v2.1.sh` | 主线 `deploy/backup/` 版本更完整（`pg_dump -Fc`、globals、校验、保留策略、非破坏性演练、`--dry-run`） |
+
+> `mobo_cli-v2.1_02.py` 与 `mobo_cli-v2.1_01.py` 内容完全相同（MD5 一致），属重复副本。
+
+## 3. 兼容性差异清单（v1.1 主线 ↔ v2.1 精简版）
+
+归档脚本与主线脚本**不能混用**。关键差异：
+
+| 主题 | 主线（`deploy/postgres/initdb/`） | v2.1 精简版（归档） | 迁移动作 |
+|---|---|---|---|
+| Schema 隔离 | `archive` / `intel` / `capital` / `n8n` | 全部落在 `public` | 精简版数据需迁到对应 Schema（`ALTER TABLE ... SET SCHEMA`） |
+| 资产主键 | `archive.archive_assets.asset_id` | `id` | 字段名映射 |
+| 内容哈希 | `sha256_hash` | `file_sha256` | 字段名映射 + 长度校验（64 位 hex） |
+| 缩略图 Key | `thumbnail_key` | `oss_thumbnail_key` | 字段名映射 |
+| 可见性字段 | `privacy`（archive 域） | `is_sensitive`（布尔） | 统一为 `visibility ∈ {PUBLIC, LP_PROSPECT, INTERNAL}`（capital 域） |
+| 投研表 | `capital.*`（限定 Schema） | 无 Schema 限定 | 全部加 `capital.` 前缀 |
+| 初始化依赖 | `\getenv` 读 `PG_PASS_MOBOBRAIN` 等 | 硬编码角色口令 | **仅主线版本注入环境变量**，归档版本含明文口令，禁止用于生产 |
+| 前端数据源 | `services/mobo-cli` 导出（含脱敏自检） | 单文件 CLI 直接写 JSON | 以主线导出为准 |
+
+> 归档的 `02-sql-精简版/01-init-dual-db.sql` 原本硬编码明文口令，**已全部替换为 `ChangeMe_*` 占位符**并加了 `[ARCHIVED / SANITIZED]` 头；即使如此也禁止在生产执行。迁移数据请用 `pg_dump` 导出后用主线 `01~09.sql` 建库导入。
+
+## 4. 外部资料引用（仓库外）
+
+以下文件位于仓库上级目录 `E:\01-文档资料\报告与规划`，**不纳入版本库**，仅按需查阅：
+
+| 文件 | 用途 |
+|---|---|
+| `莫伯双站系统全栈架构与部署总册_v2.1-1020.md` | T01–T16 任务账本原始表格（已整理进根目录 `TASK_STATE.md`） |
+| `MB-T1T13-迭代耗时表-2026.csv` / `.html` | 迭代耗时与工时统计 |
+| `MoBoBrain-运营看板.html`、`mb-cost-report.html` | 运营与成本看板（可参考版式） |
+| `2026-10-16-MoBoBrain-远程部署准备与项目拆分.html` | 远程部署准备与任务拆分 |
+
+## 5. 归档纪律
+
+1. 归档件不修改、不修复；发现历史 bug 以新文档说明，不回改归档。
+2. 归档件中的任何口令、AK/SK、哈希一律视为已泄露，不得复用。
+3. 需要恢复某项能力时，先在 `docs/01-项目治理/决策记录/` 写 ADR，再在主线实现。

@@ -30,9 +30,9 @@ set -a
 . ./.env
 set +a
 
-: "${POSTGRES_SUPER_USER:?缺少 POSTGRES_SUPER_USER}"
-: "${ARCHIVE_DB_NAME:?缺少 ARCHIVE_DB_NAME}"
-: "${MOBOBRAIN_DB_NAME:?缺少 MOBOBRAIN_DB_NAME}"
+: "${PG_SUPER_USER:?缺少 PG_SUPER_USER}"
+: "${PG_DB_ARCHIVE:?缺少 PG_DB_ARCHIVE}"
+: "${PG_DB_MOBOBRAIN:?缺少 PG_DB_MOBOBRAIN}"
 
 CURL_OPTS=(-sS -o /dev/null -w '%{http_code}' --max-time 10)
 CURL_HEADER=(-sS -I --max-time 10)
@@ -90,13 +90,13 @@ else
         fi
     }
 
-    check_code "www 公开站" "https://${DOMAIN_WWW}/" "200"
-    check_code "kb 知识库匿名" "https://${DOMAIN_KB}/" "401"
+    check_code "www 公开站" "https://${DOMAIN_CAPITAL}/" "200"
+    check_code "kb 知识库匿名" "https://${DOMAIN_PKM}/" "401"
     check_code "n8n 匿名" "https://${DOMAIN_N8N}/" "401"
-    check_code "archive 匿名" "https://${DOMAIN_ARCHIVE}/" "401"
+    check_code "archive 匿名" "https://${DOMAIN_LAB}/" "401"
     check_code "admin 匿名" "https://${DOMAIN_ADMIN}/" "401"
 
-    if curl "${CURL_HEADER[@]}" "https://${DOMAIN_ARCHIVE}/" 2>/dev/null | grep -qi 'x-robots-tag:.*noindex'; then
+    if curl "${CURL_HEADER[@]}" "https://${DOMAIN_LAB}/" 2>/dev/null | grep -qi 'x-robots-tag:.*noindex'; then
         ok "archive noindex"
     else
         bad "archive 缺少 X-Robots-Tag: noindex"
@@ -108,7 +108,7 @@ fi
 # -----------------------------------------------------------------------------
 echo
 echo "[3] 数据库"
-PG_EXEC=(docker compose exec -T postgres psql -U "$POSTGRES_SUPER_USER" -v ON_ERROR_STOP=1)
+PG_EXEC=(docker compose exec -T postgres psql -U "$PG_SUPER_USER" -v ON_ERROR_STOP=1)
 
 if "${PG_EXEC[@]}" -d postgres -tAc "SELECT 1" >/dev/null 2>&1; then
     ok "Postgres 可连接"
@@ -116,7 +116,7 @@ else
     bad "Postgres 不可连接"
 fi
 
-for db in "$MOBOBRAIN_DB_NAME" "$ARCHIVE_DB_NAME"; do
+for db in "$PG_DB_MOBOBRAIN" "$PG_DB_ARCHIVE"; do
     if "${PG_EXEC[@]}" -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='${db}'" | grep -q 1; then
         ok "数据库存在：$db"
     else
@@ -125,7 +125,7 @@ for db in "$MOBOBRAIN_DB_NAME" "$ARCHIVE_DB_NAME"; do
 done
 
 for tbl in timeline_events entity_links reading_items reading_logs fitness_workouts fitness_biometrics project_retrospectives archive_assets; do
-    if "${PG_EXEC[@]}" -d "$ARCHIVE_DB_NAME" -tAc "SELECT to_regclass('archive.${tbl}') IS NOT NULL" | grep -q t; then
+    if "${PG_EXEC[@]}" -d "$PG_DB_ARCHIVE" -tAc "SELECT to_regclass('archive.${tbl}') IS NOT NULL" | grep -q t; then
         ok "archive.$tbl"
     else
         bad "archive.$tbl 缺失"
@@ -133,20 +133,20 @@ for tbl in timeline_events entity_links reading_items reading_logs fitness_worko
 done
 
 for tbl in sources articles_vault content_drafts ingestion_runs llm_usage; do
-    if "${PG_EXEC[@]}" -d "$MOBOBRAIN_DB_NAME" -tAc "SELECT to_regclass('intel.${tbl}') IS NOT NULL" | grep -q t; then
+    if "${PG_EXEC[@]}" -d "$PG_DB_MOBOBRAIN" -tAc "SELECT to_regclass('intel.${tbl}') IS NOT NULL" | grep -q t; then
         ok "intel.$tbl"
     else
         bad "intel.$tbl 缺失"
     fi
 done
 
-if "${PG_EXEC[@]}" -d "$ARCHIVE_DB_NAME" -tAc "SELECT count(*) FROM archive.v_weekly_life_analytics" >/dev/null 2>&1; then
+if "${PG_EXEC[@]}" -d "$PG_DB_ARCHIVE" -tAc "SELECT count(*) FROM archive.v_weekly_life_analytics" >/dev/null 2>&1; then
     ok "v_weekly_life_analytics 可查询"
 else
     bad "v_weekly_life_analytics 查询失败"
 fi
 
-TRIGGERS="$("${PG_EXEC[@]}" -d "$ARCHIVE_DB_NAME" -tAc "
+TRIGGERS="$("${PG_EXEC[@]}" -d "$PG_DB_ARCHIVE" -tAc "
 SELECT count(*) FROM pg_trigger
 WHERE tgrelid IN ('archive.reading_items'::regclass,
                   'archive.reading_logs'::regclass,
@@ -160,7 +160,7 @@ else
 fi
 
 # 触发器幂等快速验证（在事务中回滚，不污染生产）
-if "${PG_EXEC[@]}" -d "$ARCHIVE_DB_NAME" >/dev/null 2>&1 <<'SQL'
+if "${PG_EXEC[@]}" -d "$PG_DB_ARCHIVE" >/dev/null 2>&1 <<'SQL'
 BEGIN;
 INSERT INTO archive.reading_items (title, status, domain, finished_at)
 VALUES ('smoke-test-book', 'COMPLETED', 'LEARNING_EXAM', CURRENT_DATE)

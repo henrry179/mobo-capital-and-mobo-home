@@ -22,6 +22,7 @@ from zoneinfo import ZoneInfo
 import psycopg2
 from psycopg2.extras import Json
 
+from . import capital, site_sync
 from .config import Settings, get_settings
 from .db import connect_archive, connect_mobobrain
 from .embeddings import embed_text, vector_literal
@@ -703,6 +704,110 @@ def cmd_retro(args: argparse.Namespace) -> int:
 
 
 # =============================================================================
+# 莫伯资本（capital 域）投研录入
+# =============================================================================
+def cmd_capital_thesis(args: argparse.Namespace) -> int:
+    settings = get_settings(args.env_file)
+    with connect_mobobrain(settings) as conn:
+        if args.list:
+            rows = capital.list_theses(conn, limit=args.limit)
+            print_kv("宏观论点", {"count": len(rows)})
+            for row in rows:
+                print(
+                    f"  - {row['thesis_code']} | {row['title']} | bias={row['directional_bias']}"
+                    f" | score={row['conviction_score']} | {row['status']} | {row['visibility']}"
+                )
+            return 0
+        result = capital.upsert_thesis(
+            conn,
+            thesis_code=args.code,
+            title=args.title,
+            region=args.region,
+            asset_class=args.asset_class,
+            time_horizon=args.horizon,
+            directional_bias=args.bias,
+            conviction_score=args.conviction,
+            core_logic_md=args.logic or "",
+            invalidation_criteria=args.invalidation or "",
+            leading_indicators=json.loads(args.indicators) if args.indicators else None,
+            visibility=args.visibility,
+        )
+    print_kv("论点已写入", {k: str(v) for k, v in result.items()})
+    return 0
+
+
+def cmd_capital_trade(args: argparse.Namespace) -> int:
+    settings = get_settings(args.env_file)
+    with connect_mobobrain(settings) as conn:
+        if args.close:
+            result = capital.close_trade(
+                conn,
+                trade_code=args.trade_code,
+                exit_date=args.exit_date,
+                realized_r_multiple=args.r_multiple,
+                realized_return_pct=args.return_pct,
+                portfolio_impact_bps=args.impact_bps,
+                discipline_score=args.discipline,
+                execution_review_md=args.execution_review or "",
+                lessons_learned_md=args.lessons or "",
+            )
+            print_kv("交易已平仓", {k: str(v) for k, v in result.items()})
+            nav = capital.nav_snapshot(conn)
+            print_kv("组合净值（触发器自动核算）", {k: str(v) for k, v in nav.items()})
+            return 0
+        result = capital.record_trade(
+            conn,
+            trade_code=args.trade_code,
+            underlying_ticker=args.ticker,
+            asset_name=args.asset_name,
+            direction=args.direction,
+            instrument_structure=args.structure or "",
+            entry_date=args.entry_date,
+            initial_risk_pct=args.risk_pct,
+            pre_trade_thesis_md=args.thesis_md or "",
+            strategy_code=args.strategy_code,
+            thesis_code=args.thesis_code,
+            visibility=args.visibility,
+        )
+    print_kv("交易已登记", {k: str(v) for k, v in result.items()})
+    return 0
+
+
+def cmd_capital_nav(args: argparse.Namespace) -> int:
+    settings = get_settings(args.env_file)
+    with connect_mobobrain(settings) as conn:
+        nav = capital.nav_snapshot(conn)
+        perf = capital.strategy_performance(conn)
+    print_kv("组合净值台账", {k: str(v) for k, v in nav.items()})
+    print("策略表现")
+    for row in perf:
+        print(
+            f"  - {row['strategy_code']} | {row['strategy_name']} | 交易={row['closed_trades_count']}"
+            f" | 胜率={row['actual_win_rate_pct']} | 累计R={row['cumulative_r_multiple']}"
+            f" | 纪律={row['avg_discipline_score']}"
+        )
+    return 0
+
+
+def cmd_export_site(args: argparse.Namespace) -> int:
+    settings = get_settings(args.env_file)
+    written: dict[str, str] = {}
+    include_internal = not args.public_only
+    if args.site in ("capital", "all"):
+        for key, path in site_sync.export_capital_site(
+            settings, include_internal=include_internal
+        ).items():
+            written[f"capital.{key}"] = str(path)
+    if args.site in ("home", "all"):
+        for key, path in site_sync.export_home_site(
+            settings, include_internal=include_internal
+        ).items():
+            written[f"home.{key}"] = str(path)
+    print_kv("已写出静态数据包", written)
+    return 0
+
+
+# =============================================================================
 # argparse
 # =============================================================================
 def build_parser() -> argparse.ArgumentParser:
@@ -803,6 +908,60 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--tags")
     p.add_argument("--embed", action="store_true")
     p.set_defaults(func=cmd_retro)
+
+    p = sub.add_parser("export-site", help="导出双站公私域静态 JSON 数据包（脱敏后写盘）")
+    p.add_argument("--site", default="all", choices=["all", "capital", "home"])
+    p.add_argument(
+        "--public-only",
+        action="store_true",
+        help="只导出公域包，不生成 internal/ 全量包",
+    )
+    p.set_defaults(func=cmd_export_site)
+
+    p = sub.add_parser("capital-thesis", help="录入/查看莫伯资本宏观论点")
+    p.add_argument("--code", help="论点编号，如 THESIS-2026Q4-CN-RETAIL")
+    p.add_argument("--title")
+    p.add_argument("--region", default="GLOBAL")
+    p.add_argument("--asset-class", default="MULTI")
+    p.add_argument("--horizon", default="1_3_MONTHS")
+    p.add_argument(
+        "--bias",
+        default="NEUTRAL",
+        choices=["BULLISH", "BEARISH", "NEUTRAL", "VOL_LONG", "VOL_SHORT"],
+    )
+    p.add_argument("--conviction", type=int, default=5)
+    p.add_argument("--logic", help="核心逻辑 Markdown")
+    p.add_argument("--invalidation", help="证伪条件")
+    p.add_argument("--indicators", help="先行指标 JSON 字符串")
+    p.add_argument("--visibility", default="PUBLIC", choices=["PUBLIC", "LP_PROSPECT", "INTERNAL"])
+    p.add_argument("--list", action="store_true", help="只列出论点")
+    p.add_argument("--limit", type=int, default=20)
+    p.set_defaults(func=cmd_capital_thesis)
+
+    p = sub.add_parser("capital-trade", help="登记/平仓莫伯资本交易复盘")
+    p.add_argument("--trade-code", required=True)
+    p.add_argument("--ticker", help="标的代码（开仓时必填）")
+    p.add_argument("--asset-name", help="标的名称")
+    p.add_argument("--direction", default="LONG", choices=["LONG", "SHORT", "DELTA_NEUTRAL", "RELATIVE_VALUE"])
+    p.add_argument("--structure", help="工具结构，如 45DTE Bull Call")
+    p.add_argument("--entry-date", help="开仓日期 YYYY-MM-DD")
+    p.add_argument("--risk-pct", type=float, help="单笔初始风险占 NAV 百分比")
+    p.add_argument("--thesis-md", help="交易前论点 Markdown")
+    p.add_argument("--strategy-code")
+    p.add_argument("--thesis-code")
+    p.add_argument("--visibility", default="PUBLIC", choices=["PUBLIC", "LP_PROSPECT", "INTERNAL"])
+    p.add_argument("--close", action="store_true", help="平仓模式")
+    p.add_argument("--exit-date", help="平仓日期 YYYY-MM-DD")
+    p.add_argument("--r-multiple", type=float, help="实现 R 倍数")
+    p.add_argument("--return-pct", type=float, help="实现收益率 %%")
+    p.add_argument("--impact-bps", type=int, help="对组合净值的贡献（基点）")
+    p.add_argument("--discipline", type=int, help="纪律评分 1–10")
+    p.add_argument("--execution-review", help="执行复盘 Markdown")
+    p.add_argument("--lessons", help="经验教训 Markdown")
+    p.set_defaults(func=cmd_capital_trade)
+
+    p = sub.add_parser("capital-nav", help="查看组合净值台账与策略表现")
+    p.set_defaults(func=cmd_capital_nav)
 
     return parser
 
