@@ -396,6 +396,25 @@
     byId('budget', html);
   }
 
+  // ---------------------------------------------------------------- 凭据提示
+  function renderCredentials() {
+    fetchJSON('/data/credentials.local.json').then(function (c) {
+      if (!c || !c.layers) return;
+      var html = '<div class="panel-head" style="margin:10px 0 6px"><span class="muted mono" style="font-size:11px">本地开发凭据（仅本地模式）</span></div>';
+      html += '<table class="t"><thead><tr><th>层</th><th>在哪里输</th><th>用户名</th><th>密码 / 码</th></tr></thead><tbody>' +
+        c.layers.map(function (l) {
+          return '<tr><td>' + esc(l.layer) + '</td><td class="muted">' + esc(l.where) + '</td>' +
+            '<td class="mono">' + esc(l.username || '—') + '</td>' +
+            '<td class="mono">' + esc(l.password || '—') + '</td></tr>';
+        }).join('') + '</tbody></table>';
+      if (c.public_sites) {
+        html += '<div class="muted" style="font-size:12px;margin-top:6px">公开无需凭据：' + esc(c.public_sites.join('、')) + '</div>';
+      }
+      var el = $('credentials');
+      if (el) el.innerHTML = html;
+    });
+  }
+
   // ---------------------------------------------------------------- 顶部交互
   function bindTop() {
     Array.prototype.forEach.call(document.querySelectorAll('#clearance button'), function (b) {
@@ -428,7 +447,7 @@
       state.data.home = r[2] || {};
       state.status = r[3] || null;
       renderKPI(); renderServices(); renderRuntime(); renderResearch();
-      renderPipeline(); renderArchive(); renderPlan(); renderBudget();
+      renderPipeline(); renderArchive(); renderPlan(); renderBudget(); renderCredentials();
       var b = $('banner');
       if (state.errors.length) {
         b.className = 'banner err';

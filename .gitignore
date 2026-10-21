@@ -10,6 +10,7 @@ secrets/
 
 # --- 控制台运行时数据（由 collect-status.sh / quality-gate.sh 生成）-------------
 services/console/data/*.json
+services/console/data/credentials.local.json
 
 # --- 静态站点生成产物（由 CLI 导出，勿入库）--------------------------------
 sites/*/data/*.json

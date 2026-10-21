@@ -173,6 +173,15 @@ node services/console/tests/contract-check.mjs 2>&1 | sed 's/^/    /'
 node services/console/tests/contract-check.mjs >/dev/null 2>&1; ck "Q15 控制台数据契约满足（页面不空白的静态保证）" $?
 
 echo
+echo "############ Q16 本地凭据文件不入库 ############"
+if git ls-files --error-unmatch services/console/data/credentials.local.json >/dev/null 2>&1; then
+  echo "    警告：凭据文件被 Git 跟踪"
+  ck "Q16 credentials.local.json 未入库" 1
+else
+  ck "Q16 credentials.local.json 未入库" 0
+fi
+
+echo
 echo "############################################################"
 echo "  质量门：PASS=$PASS  FAIL=$FAIL"
 echo "############################################################"

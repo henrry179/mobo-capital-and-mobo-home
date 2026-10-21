@@ -168,3 +168,6 @@ with open(out, 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
 print(f'[collect] 已写入 {out}')
 PY
+
+# 本地开发凭据（不入库），供控制台"本地开发凭据"卡片展示
+bash tools/wsl/write-local-credentials.sh 2>/dev/null || true
