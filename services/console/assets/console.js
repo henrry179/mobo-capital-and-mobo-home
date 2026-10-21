@@ -92,28 +92,46 @@
   }
 
   // ---------------------------------------------------------------- 入口矩阵
-  var FALLBACK_SERVICES = [
-    { name: '莫伯资本 主站', url: '/', auth: '公开', code: null },
-    { name: '莫伯之家 主站', url: '/', auth: '公开', code: null },
-    { name: '思源 知识库', url: '/', auth: 'BasicAuth', code: null },
-    { name: 'n8n 自动化', url: '/', auth: 'BasicAuth', code: null },
-    { name: '生命体征 实验室', url: '/', auth: 'BasicAuth', code: null },
-    { name: '莫伯系统 控制台', url: '/', auth: 'BasicAuth', code: null }
-  ];
+  /** 兜底：没有 status.json 时，按当前域名推导同族入口（保证卡片始终是真链接） */
+  function deriveServices() {
+    var host = location.hostname || 'localhost';
+    var parts = host.split('.');
+    var isLocal = host === 'localhost' || /\.localhost$/.test(host) || host === '127.0.0.1';
+    var base = isLocal ? 'localhost' : parts.slice(-2).join('.');
+    var fam = isLocal ? 'localhost' : base;
+    function u(label) { return 'http://' + label + '.' + fam + '/'; }
+    return [
+      { name: '莫伯资本 主站', url: isLocal ? 'http://localhost/' : 'http://' + base + '/', auth: '公开', code: null },
+      { name: '莫伯之家 主站', url: isLocal ? 'http://mobohome.localhost/' : 'http://mobohome.' + base + '/', auth: '公开', code: null },
+      { name: '思源 知识库', url: u('kb'), auth: 'BasicAuth', code: null },
+      { name: 'n8n 自动化', url: u('n8n'), auth: 'BasicAuth', code: null },
+      { name: '生命体征 实验室', url: u('lab'), auth: 'BasicAuth', code: null },
+      { name: '莫伯系统 控制台', url: u('admin'), auth: 'BasicAuth', code: null }
+    ];
+  }
+
+  /** 单个入口卡片的 HTML（导出以便做契约测试） */
+  function buildServiceCard(s) {
+    var dot = s.code === 200 ? 'up' : (s.code === 401 ? 'auth' : 'down');
+    var stateTxt = s.code === 200 ? 'OK' : (s.code === 401 ? '需认证' : (s.code ? 'HTTP ' + s.code : '未探测'));
+    var href = s.url || '#';
+    var isSelf = /admin/.test(href) || /控制台/.test(s.name || '');
+    var label = isSelf ? '当前页' : '打开 ↗';
+    return '<a class="svc' + (isSelf ? ' self' : '') + '" href="' + esc(href) + '"' +
+      (isSelf ? '' : ' target="_blank" rel="noopener"') + ' title="' + esc(href) + '">' +
+      '<div class="row1"><span class="name">' + esc(s.name) + '</span>' +
+      '<span class="open">' + label + '</span>' +
+      '<span class="dot ' + dot + '" title="' + esc(stateTxt) + '"></span></div>' +
+      '<div class="url">' + esc(s.url || '') + '</div>' +
+      '<div class="tags"><span class="tag ' + (/公开/.test(s.auth) ? 'pub' : 'auth') + '">' + esc(s.auth || '') + '</span>' +
+      '<span class="tag">' + esc(stateTxt) + '</span></div>' +
+      '</a>';
+  }
 
   function renderServices() {
     var st = state.status || {};
-    var list = (st.services && st.services.length) ? st.services : FALLBACK_SERVICES;
-    byId('services', list.map(function (s) {
-      var dot = s.code === 200 ? 'up' : (s.code === 401 ? 'auth' : 'down');
-      var stateTxt = s.code === 200 ? 'OK' : (s.code === 401 ? '需认证' : (s.code ? 'HTTP ' + s.code : '未探测'));
-      return '<div class="svc">' +
-        '<div class="row1"><span class="name">' + esc(s.name) + '</span><span class="dot ' + dot + '" title="' + esc(stateTxt) + '"></span></div>' +
-        '<div class="url">' + esc(s.url || '') + '</div>' +
-        '<div class="tags"><span class="tag ' + (/公开/.test(s.auth) ? 'pub' : 'auth') + '">' + esc(s.auth || '') + '</span>' +
-        '<span class="tag">' + esc(stateTxt) + '</span></div>' +
-        '</div>';
-    }).join(''));
+    var list = (st.services && st.services.length) ? st.services : deriveServices();
+    byId('services', list.map(buildServiceCard).join(''));
   }
 
   // ---------------------------------------------------------------- 运行时
@@ -426,4 +444,9 @@
     load();
     startAuto();
   });
+
+  // 导出纯函数，供契约测试（services/console/tests/contract-check.mjs）调用
+  if (typeof window !== 'undefined') {
+    window.MoboConsole = { buildServiceCard: buildServiceCard, deriveServices: deriveServices };
+  }
 })();

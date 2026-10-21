@@ -118,6 +118,47 @@ for (const p of [capitalPath, homePath]) {
   for (const key of PRIVATE) if (raw.includes(key)) problems.push(`${p} 含私有字段 "${key}"（公域包禁止）`);
 }
 
+// 7) 入口卡片必须是可点击链接（不是纯文本）
+if (exists('services/console/assets/console.js')) {
+  const js = fs.readFileSync(path.join(ROOT, 'services/console/assets/console.js'), 'utf8');
+  // 在最小 DOM 桩上执行，取出导出的纯函数
+  const stub = {
+    window: {},
+    document: { addEventListener: () => {}, getElementById: () => null, querySelectorAll: () => [] },
+    location: { hostname: 'admin.localhost', protocol: 'http:' },
+    fetch: () => Promise.reject(new Error('offline')),
+    setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0,
+    navigator: { clipboard: { writeText: async () => {} } },
+    Array, Object, JSON, Math, Date, String, Number, isFinite, isNaN, Promise, console,
+  };
+  stub.window.document = stub.document;
+  stub.window.location = stub.location;
+  try {
+    const fn = new Function('window', 'document', 'location', 'fetch', 'navigator', 'setInterval', 'clearInterval', 'setTimeout', 'Array', 'Object', 'JSON', 'Math', 'Date', 'String', 'Number', 'isFinite', 'isNaN', 'Promise', 'console',
+      js);
+    fn(stub.window, stub.document, stub.location, stub.fetch, stub.navigator, stub.setInterval, stub.clearInterval, stub.setTimeout,
+      Array, Object, JSON, Math, Date, String, Number, isFinite, isNaN, Promise, console);
+    const api = stub.window.MoboConsole;
+    if (!api || typeof api.buildServiceCard !== 'function') {
+      problems.push('console.js 未导出 MoboConsole.buildServiceCard（契约测试入口丢失）');
+    } else {
+      const card = api.buildServiceCard({ name: '莫伯之家 主站', url: 'http://mobohome.localhost/', auth: '公开', code: 200 });
+      if (!/<a class="svc[^"]*" href="http:\/\/mobohome\.localhost\/"/.test(card)) {
+        problems.push('入口卡片未渲染为可点击 <a href>：' + card.slice(0, 90));
+      }
+      if (!card.includes('target="_blank"')) problems.push('入口卡片缺少 target="_blank"（新标签打开）');
+      if (!/class="dot up"/.test(card)) problems.push('入口卡片缺少状态点');
+      const derived = api.deriveServices();
+      if (!Array.isArray(derived) || derived.length !== 6) problems.push('deriveServices 未返回 6 个入口');
+      for (const s of derived) {
+        if (!/^https?:\/\//.test(s.url || '')) problems.push(`兜底入口 URL 非法: ${s.url}`);
+      }
+    }
+  } catch (e) {
+    problems.push('console.js 无法在测试桩中执行: ' + e.message);
+  }
+}
+
 if (problems.length) {
   console.error('契约检查未通过：');
   problems.forEach(p => console.error('  - ' + p));
