@@ -56,10 +56,12 @@ process.exit(miss?1:0)"; ck "引用变量均在 .env.example 中" $?
 
 echo
 echo "############ Q5 密钥零入库 ############"
+# 排除本脚本自身（其正则字面量会被自身扫描命中）
 SECRET_RE='LTAI5t[A-Za-z0-9]{16,}|MoBo_(PgSuper|Capital|Home|Restic)[A-Za-z0-9_]{8,}|BEGIN OPENSSH'
-hits=$(git grep -InE "$SECRET_RE" -- . 2>/dev/null | grep -vE 'REPLACE|xxxx' | wc -l | tr -d ' ')
-git grep -InE "$SECRET_RE" -- . 2>/dev/null | grep -vE 'REPLACE|xxxx' | head -5 | sed 's/^/    /'
-echo "    命中（排除占位符后）: $hits"
+SCAN_PATHS=(-- . ':!tools/wsl/quality-gate.sh')
+hits=$(git grep -InE "$SECRET_RE" -- "${SCAN_PATHS[@]}" 2>/dev/null | grep -vE 'REPLACE|xxxx' | wc -l | tr -d ' ')
+git grep -InE "$SECRET_RE" -- "${SCAN_PATHS[@]}" 2>/dev/null | grep -vE 'REPLACE|xxxx' | head -5 | sed 's/^/    /'
+echo "    命中（排除占位符与本脚本）: $hits"
 [ "$hits" -eq 0 ]; ck "无真实密钥入库（占位符除外）" $?
 
 echo
