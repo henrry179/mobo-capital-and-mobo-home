@@ -3,9 +3,10 @@
 # 运行目录：/opt/mobo-stack（项目根目录）
 # 依赖：.env（chmod 600）、deploy/、services/、sites/
 #
-# 红线一：2C4G 内存硬限流 —— 六个容器 mem_limit 合计 1.64GB，常驻约 1.46GB
-#         （caddy 80 + postgres 600 + siyuan 300 + n8n 350 + dashboard 200 + restic 150）
-#         宿主机另配 4GB Swap（vm.swappiness=10）
+# 红线一：2C4G 内存硬限流 —— 六个容器 mem_limit 合计 1.84GB
+#         （caddy 80 + postgres 600 + siyuan 300 + n8n 512 + dashboard 200 + restic 150）
+#         本地实测常驻约 636MiB；2C4G 云端目标 ≤1.2GB，宿主机另配 4GB Swap（vm.swappiness=10）
+#         注：n8n 启动迁移期 V8 堆峰值约 300MB，故取 512MB 限额 + 400MB 堆上限
 # 网络分层：edge_net(Caddy 公网) / internal_net(internal:true) / egress_net(仅出网)
 # =============================================================================
 
@@ -86,6 +87,8 @@ services:
       POSTGRES_USER: ${PG_SUPER_USER}
       POSTGRES_PASSWORD: ${PG_SUPER_PASSWORD}
       POSTGRES_DB: postgres
+      # PGDATA 指向挂载点下的子目录：避免 initdb 报 "not empty / lost+found"
+      PGDATA: /var/lib/postgresql/data/pgdata
       # initdb/01-init-dual-db.sql 通过 \getenv 读取（角色与库名）
       PG_DB_MOBOBRAIN: ${PG_DB_MOBOBRAIN}
       PG_USER_MOBOBRAIN: ${PG_USER_MOBOBRAIN}
@@ -135,9 +138,11 @@ services:
     restart: unless-stopped
     mem_limit: 300m
     memswap_limit: 450m
+    # 思源 v3.8+ 内核为 CLI 形态：需显式给出 serve 子命令
     command:
-      - "--workspace=/siyuan/workspace/"
+      - "serve"
       - "--accessAuthCode=${SIYUAN_ACCESS_AUTH_CODE}"
+      - "--port=6806"
     volumes:
       - ./deploy/volumes/mobobrain_data:/siyuan/workspace
     networks:
@@ -151,8 +156,8 @@ services:
     image: n8nio/n8n:latest
     container_name: mobobrain-n8n
     restart: unless-stopped
-    mem_limit: 350m
-    memswap_limit: 500m
+    mem_limit: 512m
+    memswap_limit: 700m
     environment:
       TZ: ${TZ}
       GENERIC_TIMEZONE: ${TZ}
@@ -176,7 +181,8 @@ services:
       EXECUTIONS_PROCESS: main
       EXECUTIONS_DATA_PRUNE: "true"
       EXECUTIONS_DATA_MAX_AGE: "168"
-      NODE_OPTIONS: "--max-old-space-size=300"
+      # 启动迁移阶段 V8 堆峰值约 300MB，留 400MB 上限 + cgroup 512MB
+      NODE_OPTIONS: "--max-old-space-size=400"
       # Code 节点允许使用 crypto（url_hash/规范化）
       NODE_FUNCTION_ALLOW_BUILTIN: "crypto"
       # 微信草稿箱直推（工作流 #2）

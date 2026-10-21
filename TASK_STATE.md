@@ -9,16 +9,29 @@
 
 | 任务 | 内容 | 验收 | 状态 |
 |---|---|---|---|
-| L0 | 本地环境与编排基线（Docker Desktop + `.env.local` + `docker compose config`） | 六容器可编排、变量缺失 0 | READY |
-| L1 | 数据库内核落地验证（01~09 SQL 首次初始化 + `tests/sql/smoke.sql`） | 9 组检查全绿；`capital` 域就位 | READY |
-| L2 | 应用与门户本地跑通（看板、CLI 四类新命令、双站门户、静态数据包导出） | `export-site` 产出 5 个 JSON，脱敏审计 0 违规 | READY |
-| L3 | n8n 本地联调（#1/#2/#3 阶段一，LLM 可用桩） | `capital_publications` 出现 `PENDING_REVIEW` | READY |
-| L4 | 本地备份与恢复演练（本地 Restic 仓库 + `restore-drill.sh`） | 核心表计数一致、RTO 记录在案 | READY |
-| L5 | 质量门（单测 / JSON / bash -n / smoke / 内存实测 < 1.55GB） | 全部通过并留记录 | READY |
-| L6 | 公网就绪包（域名、ICP、密钥、监控、验收材料备好但不启用） | 材料清单 100% 齐备 | READY |
+| L0 | 本地环境与编排基线 | **WSL2 内 Docker 29.1.3 + Compose 2.40.3**；六容器 healthy；命名卷 + 镜像加速就绪 | **完成** |
+| L1 | 数据库内核落地验证 | 01–09 SQL 首次初始化；`tests/sql/smoke.sql` **9 组全绿**（含 capital 10 表+4 视图、NAV 触发器、跨库拒绝） | **完成** |
+| L2 | 应用与门户本地跑通 | **CLI 闭环已通**：投研录入 → 平仓 → NAV 触发器核算（毛 1.0460 / 净 1.0368 / 累计R 4.15）→ 策略聚合 → 导出 5 个数据包（公域 0 私有字段 / 0 INTERNAL）；`doctor` FAIL=0 | **部分完成**（看板四模块与门户真数据渲染待做） |
+| L3 | n8n 本地联调 | 三工作流阶段一跑通；`capital_publications` 出现 `PENDING_REVIEW`；发布节点禁用 | 未开始 |
+| L4 | 本地备份与恢复演练 | 本地 Restic 仓库有快照；`restore-drill.sh` 计数一致；RTO 实测 | 未开始 |
+| L5 | 质量门 | 单测 / JSON / `bash -n` / smoke / 内存实测 | **部分通过**（smoke ✅、内存 ✅ 实测 636MiB；单测待跑） |
+| L6 | 公网就绪包 | 域名、ICP、密钥、监控、验收材料备好但不启用 | 未开始 |
 
-> 详细步骤见 [`docs/05-运维与灾备/本地开发与部署.md`](docs/05-运维与灾备/本地开发与部署.md)。
-> **逐条验收**见 [`docs/05-运维与灾备/本地阶段自检清单.md`](docs/05-运维与灾备/本地阶段自检清单.md)（L0–L6 检查项 + 证据留痕 + RTO/内存记录 + 复检触发条件）。
+### D0（2026-10-21）已达成
+
+| 项 | 结果 |
+|---|---|
+| 运行时 | WSL2 内 Docker Engine（免 Windows 管理员权限），见 [ADR-0011](docs/01-项目治理/决策记录/ADR-0011-WSL2作为本地开发运行时.md) |
+| 六容器 | caddy / postgres / siyuan / n8n / dashboard / restic **全部 healthy** |
+| 网关入口 | 公开站 200；`lab`/`kb`/`n8n`/`admin` 未认证 401、认证 200；`/internal/*` 未认证 401 |
+| 数据库 | 冒烟 9 组全绿；双库四 Schema（intel / capital / n8n / archive） |
+| 内存 | 合计约 **636 MiB**（限额合计 1.84GB），远低于 1.55GB 常驻红线 |
+| 当日修复的 8 个真问题 | 见 [开发部署任务执行时间线](docs/01-项目治理/开发部署任务执行时间线.md) §2 D0 表 |
+| 入口 | `http://localhost/`（莫伯资本）、`http://mobohome.localhost/`（莫伯之家）、`http://lab.localhost/`、`http://kb.localhost/`、`http://n8n.localhost/`、`http://admin.localhost/`；BasicAuth `mobo / mobo-local` |
+
+> 详细步骤见 [`docs/05-运维与灾备/本地开发与部署.md`](docs/05-运维与灾备/本地开发与部署.md)；
+> 逐条验收见 [`docs/05-运维与灾备/本地阶段自检清单.md`](docs/05-运维与灾备/本地阶段自检清单.md)；
+> **执行时间线**见 [`docs/01-项目治理/开发部署任务执行时间线.md`](docs/01-项目治理/开发部署任务执行时间线.md)。
 
 ## 1. 16 步原子任务矩阵（T01–T16）
 

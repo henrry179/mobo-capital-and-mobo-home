@@ -65,7 +65,10 @@ REVOKE ALL ON DATABASE db_mobobrain FROM PUBLIC;
 REVOKE ALL ON DATABASE db_archive   FROM PUBLIC;
 
 GRANT CONNECT, TEMPORARY ON DATABASE db_mobobrain TO user_mobobrain;
-GRANT CONNECT, TEMPORARY ON DATABASE db_mobobrain TO user_n8n;
+-- n8n 需要库级 CREATE 权限：镜像入口会执行 CREATE SCHEMA IF NOT EXISTS "n8n"，
+-- 而 PostgreSQL 的 ACL 检查早于 IF NOT EXISTS 的存在性判断，缺 CREATE 会报
+-- "permission denied for database"。Schema 本体已由本脚本以 AUTHORIZATION 建好。
+GRANT CONNECT, TEMPORARY, CREATE ON DATABASE db_mobobrain TO user_n8n;
 GRANT CONNECT           ON DATABASE db_mobobrain TO user_backup;
 
 GRANT CONNECT, TEMPORARY ON DATABASE db_archive TO user_archive;

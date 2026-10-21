@@ -21,14 +21,15 @@
 
 ## 2. 当前状态
 
-- **模式**：**本地优先（Local-First）** —— 双主域未注册、ICP 未启动，**暂不进入公网部署**；云端任务挂起，本地完成 L0–L6
-- **阶段**：E0 工程基线完成（v2.1 双站口径），进入本地开发与验证
-- **已完成**：总册 v2.1 + 架构宪章 + 16 步账本、治理/需求/架构/数据字典/运维/合规文档、数据库 `01~09` SQL、六容器 Compose（内存硬限流）、双域 Caddyfile、CLI（投研录入 + 公私域脱敏导出）、Streamlit 看板、双站静态门户、n8n 工作流与提示词资产、备份/灾备/演练/巡检脚本、测试与沙盒
-- **待验证**：容器初始化、`tests/sql/smoke.sql`、`pytest`、内存实测尚未在有 Docker 的机器执行（L1/L5 任务）
+- **模式**：**本地优先（Local-First）** —— 双主域未注册、ICP 未启动，**暂不进入公网部署**
+- **阶段**：**本地全栈已跑通（L0/L1 完成）** —— WSL2 内 Docker 六容器全部 healthy，数据库冒烟 9 组全绿
+- **已完成**：总册 v2.1 + 架构宪章 + 16 步账本 + **开发部署执行时间线**、治理/需求/架构/数据字典/运维/合规文档、数据库 `01~09` SQL、六容器 Compose（内存硬限流）、双域 Caddyfile、CLI（投研录入 + 公私域脱敏导出）、Streamlit 看板、双站静态门户、n8n 工作流与提示词资产、备份/灾备/演练/巡检脚本、WSL2 本地运行时脚本、测试与沙盒
+- **内存实测**：六容器合计约 **636 MiB**（限额 1.84GB），低于 1.55GB 常驻红线
+- **待验证**：CLI/看板单测、n8n 三工作流阶段一联调、本地 Restic 恢复演练（L2–L4）
 - **未完成**：云端采购与备案、n8n 阶段二发布（微信/X，当前只产 JSON 草稿）、公网验收
 - **生产可用性**：**尚未达到**。所有密钥均为占位符；切换公网前必须按 `docs/05-运维与灾备/部署手册.md` 完成替换与验收
 
-> **下一步入口**：[`docs/05-运维与灾备/本地开发与部署.md`](docs/05-运维与灾备/本地开发与部署.md)（L0–L6 全流程与排障）｜[`docs/05-运维与灾备/本地阶段自检清单.md`](docs/05-运维与灾备/本地阶段自检清单.md)（逐条验收与证据留痕）
+> **下一步入口**：[开发部署执行时间线](docs/01-项目治理/开发部署任务执行时间线.md)（D0→D5 本地 / T0+6 公网）｜[本地开发与部署](docs/05-运维与灾备/本地开发与部署.md)｜[本地自检清单](docs/05-运维与灾备/本地阶段自检清单.md)｜[WSL2 运行时](tools/wsl/README.md)
 
 ---
 
@@ -130,13 +131,32 @@ node tools/local-preview/start.js
 
 ### 模式 B · Docker 全栈（目标形态）
 
+**Windows + WSL2 （本机当前形态）**：
+
+```bash
+# 一次性：WSL 内装 Docker Engine（免 Windows 管理员权限）
+wsl -u root -e bash -lc "bash /mnt/d/.../tools/wsl/install-docker-in-wsl.sh"
+
+# 日常：起全栈 + 冒烟 + 内存统计
+cd /mnt/e/01-文档资料/报告与规划/莫伯双站系统
+bash tools/wsl/wsl-up.sh
+```
+
+| 入口 | 地址 | 认证 |
+|---|---|---|
+| 莫伯资本 | `http://localhost/` | 公开 |
+| 莫伯之家 | `http://mobohome.localhost/` | 公开 |
+| 生命体征实验室 | `http://lab.localhost/` | BasicAuth |
+| 思源笔记 / n8n / 操作台 | `http://kb.localhost/` `http://n8n.localhost/` `http://admin.localhost/` | BasicAuth |
+
+**通用 Docker（含 Docker Desktop / Linux）**：
+
 ```bash
 cp .env.example .env.local      # 覆盖本地口令与 localhost 域名
-docker compose -f docker-compose.yml -f docker-compose.local.yml --env-file .env.local config >/dev/null
-docker compose -f docker-compose.yml -f docker-compose.local.yml --env-file .env.local up -d postgres
-# → 跑 tests/sql/smoke.sql（9 组：结构/触发器/视图/权限/capital 域/双库隔离）
 docker compose -f docker-compose.yml -f docker-compose.local.yml --env-file .env.local up -d --build
-docker stats --no-stream        # 常驻应约 1.46GB
+docker compose -f docker-compose.yml -f docker-compose.local.yml --env-file .env.local exec -T postgres \
+  psql -U postgres -d db_archive -f /tmp/smoke.sql   # 9 组冒烟
+docker stats --no-stream        # 常驻应 < 1.55GB
 ```
 
 没有 OSS 时看板会自动切到"52 周合成沙盒"；灌沙盒数据：

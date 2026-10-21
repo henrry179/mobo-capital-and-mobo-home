@@ -4,7 +4,14 @@
 # =============================================================================
 FROM alpine:3.20
 
-RUN apk add --no-cache \
+# apk 源可配置：默认官方源；受限网络下通过 build arg 指向国内镜像
+ARG APK_MIRROR=
+
+RUN set -eux; \
+    if [ -n "$APK_MIRROR" ]; then \
+        sed -i "s|https://dl-cdn.alpinelinux.org|${APK_MIRROR}|g" /etc/apk/repositories; \
+    fi; \
+    apk add --no-cache \
         bash \
         ca-certificates \
         curl \

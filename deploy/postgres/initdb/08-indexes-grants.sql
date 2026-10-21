@@ -13,6 +13,15 @@
 
 SET search_path TO archive, public;
 
+-- 属主角色读写授权（初始化脚本由 postgres 执行，表属主是 postgres，
+-- 必须显式把读写权授予业务账号，否则应用报 permission denied for table）
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA archive TO user_archive;
+GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA archive TO user_archive;
+ALTER DEFAULT PRIVILEGES IN SCHEMA archive
+    GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO user_archive;
+ALTER DEFAULT PRIVILEGES IN SCHEMA archive
+    GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO user_archive;
+
 -- 语义检索：HNSW cosine
 CREATE INDEX IF NOT EXISTS idx_assets_embedding_hnsw
     ON archive.archive_assets USING hnsw (embedding vector_cosine_ops)
@@ -67,6 +76,21 @@ ALTER DEFAULT PRIVILEGES FOR ROLE user_archive IN SCHEMA archive
 \c db_mobobrain
 
 SET search_path TO intel, public;
+
+-- 属主角色读写授权（intel + capital 两个域）
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA intel TO user_mobobrain;
+GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA intel TO user_mobobrain;
+ALTER DEFAULT PRIVILEGES IN SCHEMA intel
+    GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO user_mobobrain;
+ALTER DEFAULT PRIVILEGES IN SCHEMA intel
+    GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO user_mobobrain;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA capital TO user_mobobrain;
+GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA capital TO user_mobobrain;
+ALTER DEFAULT PRIVILEGES IN SCHEMA capital
+    GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO user_mobobrain;
+ALTER DEFAULT PRIVILEGES IN SCHEMA capital
+    GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO user_mobobrain;
 
 -- 语义检索：HNSW cosine
 CREATE INDEX IF NOT EXISTS idx_articles_embedding_hnsw

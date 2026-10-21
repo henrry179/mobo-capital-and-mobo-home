@@ -1,4 +1,4 @@
-"""莫伯资本（capital Schema）读写封装。
+﻿"""莫伯资本（capital Schema）读写封装。
 
 对应表（`db_mobobrain.capital`）：
 
@@ -16,6 +16,8 @@
 from __future__ import annotations
 
 from typing import Any, Mapping, Sequence
+
+from psycopg2.extras import RealDictCursor
 
 CAPITAL_SCHEMA = "capital"
 
@@ -40,7 +42,7 @@ def upsert_thesis(
     visibility: str = "PUBLIC",
 ) -> dict[str, Any]:
     """写入或更新一条宏观论点（按 thesis_code 幂等）。"""
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
             INSERT INTO capital.macro_theses (
@@ -78,7 +80,7 @@ def list_theses(conn, *, limit: int = 50, only_active: bool = True) -> list[dict
     if only_active:
         sql += " WHERE status IN ('ACTIVE', 'VALIDATED')"
     sql += " ORDER BY conviction_score DESC, created_at DESC LIMIT %s;"
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(sql, (limit,))
         return _rows(cur)
 
@@ -101,7 +103,7 @@ def upsert_playbook(
     visibility: str = "LP_PROSPECT",
 ) -> dict[str, Any]:
     """写入或更新一条策略手册（按 strategy_code 幂等）。"""
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
             INSERT INTO capital.strategy_playbooks (
@@ -154,7 +156,7 @@ def record_trade(
     visibility: str = "PUBLIC",
 ) -> dict[str, Any]:
     """登记一笔开仓交易（trade_reviews）。"""
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             "SELECT id FROM capital.strategy_playbooks WHERE strategy_code = %s;",
             (strategy_code,) if strategy_code else (None,),
@@ -183,8 +185,8 @@ def record_trade(
             """,
             (
                 trade_code,
-                thesis_row[0] if thesis_row else None,
-                strategy_row[0] if strategy_row else None,
+                thesis_row.get("id") if thesis_row else None,
+                strategy_row.get("id") if strategy_row else None,
                 underlying_ticker, asset_name, direction, instrument_structure,
                 entry_date, initial_risk_pct, pre_trade_thesis_md, visibility,
             ),
@@ -207,7 +209,7 @@ def close_trade(
     lessons_learned_md: str = "",
 ) -> dict[str, Any]:
     """平仓一笔交易；NAV 与回撤熔断由数据库触发器自动核算。"""
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
             UPDATE capital.trade_reviews
@@ -236,7 +238,7 @@ def close_trade(
 
 def nav_snapshot(conn) -> dict[str, Any]:
     """读取最新净值台账 + 风险状态（回撤熔断状态）。"""
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
             SELECT valuation_date, gross_nav, high_water_mark, net_nav,
@@ -262,14 +264,14 @@ def list_publications(conn, *, limit: int = 20, published_only: bool = True) -> 
         sql += " WHERE publish_status = 'PUBLISHED'"
     sql += " ORDER BY COALESCE(published_at, created_at) DESC LIMIT %s;"
     params.append(limit)
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(sql, params)
         return _rows(cur)
 
 
 def strategy_performance(conn) -> list[dict[str, Any]]:
     """策略胜率 / 盈亏比 / 纪律得分聚合（来自 v_strategy_performance_summary）。"""
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
             SELECT strategy_code, strategy_name, strategy_family,

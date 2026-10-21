@@ -1,4 +1,4 @@
-"""静态站点数据包同步：数据库 → 公私域 JSON → sites/ 目录。
+﻿"""静态站点数据包同步：数据库 → 公私域 JSON → sites/ 目录。
 
 与红线一（静态前台、服务端 0 额外内存）和红线四（公私域物理脱敏）配套：
 CLI 负责"写盘前脱敏"，Caddy 只做只读分发。
@@ -16,6 +16,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from psycopg2.extras import RealDictCursor
+
 from . import capital, exporters
 
 # 莫伯之家公域允许的隐私级别（VAULT / PRIVATE 不进公域）
@@ -27,7 +29,7 @@ def _rows(cur) -> list[dict[str, Any]]:
 
 
 def _fetch_capital(conn) -> dict[str, list[dict[str, Any]]]:
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
             SELECT id, thesis_code, title, region, asset_class, time_horizon,
@@ -99,7 +101,7 @@ def _fetch_capital(conn) -> dict[str, list[dict[str, Any]]]:
 
 
 def _fetch_home(conn) -> dict[str, list[dict[str, Any]]]:
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
             SELECT event_id, title, summary, domain, event_type, occurred_at,
@@ -176,7 +178,7 @@ def export_capital_site(settings, *, include_internal: bool = True) -> dict[str,
     written: dict[str, Path] = {}
     with connect_mobobrain(settings) as conn:
         data = _fetch_capital(conn)
-        with conn.cursor() as cur:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute("SELECT * FROM capital.v_latest_macro_indicators;")
             macro_snapshot = _rows(cur)
             cur.execute("SELECT * FROM capital.v_latest_options_vol_surface;")

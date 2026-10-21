@@ -1,12 +1,24 @@
 FROM python:3.12-slim
 
+# pip 源可配置：生产用官方源；受限网络下通过 build arg 指向国内镜像
+ARG PIP_INDEX_URL=https://pypi.org/simple
+ARG PIP_TRUSTED_HOST=
+ARG APT_MIRROR=
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    PIP_INDEX_URL=${PIP_INDEX_URL} \
+    PIP_TRUSTED_HOST=${PIP_TRUSTED_HOST}
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl \
-    && rm -rf /var/lib/apt/lists/*
+RUN set -eux; \
+    if [ -n "$APT_MIRROR" ]; then \
+        sed -i "s|deb.debian.org|${APT_MIRROR}|g; s|security.debian.org|${APT_MIRROR}|g" \
+            /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null || true; \
+    fi; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends curl; \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

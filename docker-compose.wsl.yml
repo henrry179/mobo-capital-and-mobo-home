@@ -1,0 +1,93 @@
+# =============================================================================
+# 莫伯双站系统 · WSL2 本地覆盖
+# 用途：在 Windows + WSL2（Docker Engine 装在 WSL 内）的开发机上跑本地全栈
+# 用法：
+#   cd /mnt/e/01-文档资料/报告与规划/莫伯双站系统
+#   docker compose -f docker-compose.yml -f docker-compose.wsl.yml --env-file .env.local up -d
+#
+# 与基础编排的差异：
+#   1) 数据目录从 /mnt/e 绑定挂载改为 **命名卷**（数据落在 WSL 的 ext4，速度快 5–20 倍）
+#   2) 看板镜像构建使用国内 pip 源（受限网络下 pypi.org 不可达）
+#   3) 网关使用本地 HTTP 配置（无公网域名，不需要 ACME）
+#   4) 额外暴露思源/n8n/看板端口到环回地址，便于 Windows 侧 CLI 直连
+# =============================================================================
+
+name: ${COMPOSE_PROJECT_NAME:-mobo-stack}
+
+services:
+  caddy:
+    volumes:
+      - ./deploy/caddy/Caddyfile.local:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+      - caddy_logs:/var/log/caddy
+    environment:
+      DOMAIN_CAPITAL: localhost
+      DOMAIN_HOME: mobohome.localhost
+      DOMAIN_PKM: kb.localhost
+      DOMAIN_N8N: n8n.localhost
+      DOMAIN_ADMIN: admin.localhost
+      DOMAIN_LAB: lab.localhost
+
+  postgres:
+    networks:
+      internal_net:
+        ipv4_address: 172.30.0.2
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./deploy/postgres/initdb:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+
+  mobobrain-pkm:
+    networks:
+      internal_net:
+        ipv4_address: 172.30.0.3
+    volumes:
+      - mobobrain_data:/siyuan/workspace
+    ports:
+      - "6806:6806"
+
+  mobobrain-n8n:
+    volumes:
+      - n8n_data:/home/node/.n8n
+    ports:
+      - "5678:5678"
+
+  archive-dashboard:
+    build:
+      context: ./services/archive-dashboard
+      dockerfile: Dockerfile
+      args:
+        PIP_INDEX_URL: https://pypi.tuna.tsinghua.edu.cn/simple
+        APT_MIRROR: mirrors.aliyun.com
+    ports:
+      - "8501:8501"
+
+  restic-backup:
+    build:
+      context: ./deploy/backup
+      dockerfile: Dockerfile
+      args:
+        APK_MIRROR: https://mirrors.aliyun.com
+    volumes:
+      - backup_staging:/backup
+      - mobobrain_data:/data/mobobrain_data:ro
+      - n8n_data:/data/n8n_data:ro
+
+volumes:
+  pg_data:
+  mobobrain_data:
+  n8n_data:
+  caddy_data:
+  caddy_config:
+  caddy_logs:
+  backup_staging:
+
+networks:
+  # 固定子网，便于宿主机侧 CLI 以稳定地址直连容器（internal 网络不做端口 DNAT）
+  internal_net:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+          gateway: 172.30.0.1
