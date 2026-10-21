@@ -46,8 +46,8 @@
 
 ## 3. 五条不可逾越的架构红线
 
-1. **2C4G 内存硬限流**：严格维持 6 个容器，`mem_limit` 合计 1.84GB，常驻实测约 0.64GB（云端目标 ≤1.2GB）；严禁引入 Elasticsearch、Redis 集群或额外常驻 Web 后端。
-   `caddy 80m` / `postgres 600m` / `siyuan 300m` / `n8n 512m` / `dashboard 200m` / `restic 150m`；宿主机 4GB Swap、`vm.swappiness=10`。
+1. **2C4G 内存硬限流**：严格维持 6 个容器，`mem_limit` 合计 1.94GB，常驻实测约 0.61GB（云端目标 ≤1.3GB）；严禁引入 Elasticsearch、Redis 集群或额外常驻 Web 后端。
+   `caddy 80m` / `postgres 600m` / `siyuan 400m` / `n8n 512m` / `dashboard 200m` / `restic 150m`；宿主机 4GB Swap、`vm.swappiness=10`。
    n8n 限额取 512m 是因为其启动迁移期 V8 堆峰值约 300MB（`NODE_OPTIONS=--max-old-space-size=400`）。
 2. **PostgreSQL 双库物理隔离**：`user_mobobrain` 仅读写 `db_mobobrain`（`intel` + `capital`）；`user_archive` 仅读写 `db_archive`；严禁 FDW、严禁超级用户运行业务。
 3. **OSS 内网免流与冷热分层**：容器内强制 `oss-cn-hangzhou-internal.aliyuncs.com`；原件前缀 `photo/`、`video/`、`scan_doc/`、`blotters/` 自动转冷；前端列表只加载 `thumbnails/`。

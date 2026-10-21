@@ -3,9 +3,10 @@
 # 运行目录：/opt/mobo-stack（项目根目录）
 # 依赖：.env（chmod 600）、deploy/、services/、sites/
 #
-# 红线一：2C4G 内存硬限流 —— 六个容器 mem_limit 合计 1.84GB
-#         （caddy 80 + postgres 600 + siyuan 300 + n8n 512 + dashboard 200 + restic 150）
-#         本地实测常驻约 636MiB；2C4G 云端目标 ≤1.2GB，宿主机另配 4GB Swap（vm.swappiness=10）
+# 红线一：2C4G 内存硬限流 —— 六个容器 mem_limit 合计 1.94GB
+#         （caddy 80 + postgres 600 + siyuan 400 + n8n 512 + dashboard 200 + restic 150）
+#         本地实测常驻约 610MiB（siyuan 初始化工作区后约 267MiB）；2C4G 云端目标 ≤1.3GB，
+#         宿主机另配 4GB Swap（vm.swappiness=10）
 #         注：n8n 启动迁移期 V8 堆峰值约 300MB，故取 512MB 限额 + 400MB 堆上限
 # 网络分层：edge_net(Caddy 公网) / internal_net(internal:true) / egress_net(仅出网)
 # =============================================================================
@@ -136,8 +137,8 @@ services:
     image: b3log/siyuan:latest
     container_name: mobobrain-pkm
     restart: unless-stopped
-    mem_limit: 300m
-    memswap_limit: 450m
+    mem_limit: 400m
+    memswap_limit: 550m
     # 思源 v3.8+ 内核为 CLI 形态：需显式给出 serve 子命令
     command:
       - "serve"

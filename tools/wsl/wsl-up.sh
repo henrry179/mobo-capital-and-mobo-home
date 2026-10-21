@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # =============================================================================
 # WSL2 本地全栈启动脚本（幂等）
 #   1) 生成 Caddy BasicAuth 哈希 → 写入 .env.local
@@ -38,11 +38,18 @@ else
 fi
 
 echo
-echo "=== [2/6] 校验 compose ==="
+echo "=== [2/6] 清理残留容器（保留命名卷）==="
+# 失败退出的容器会继续占用网络端点（静态 IP 报 "Address already in use"），
+# 因此每次启动前先移除容器，命名卷（数据）保持不动。
+$COMPOSE rm -sf >/dev/null 2>&1
+docker container prune -f >/dev/null 2>&1
+
+echo
+echo "=== [3/6] 校验 compose ==="
 $COMPOSE config >/dev/null && echo "  compose config: OK" || { echo "  compose config: FAILED"; exit 1; }
 
 echo
-echo "=== [3/6] 启动 postgres（首次会执行 01~09 初始化）==="
+echo "=== [4/6] 启动 postgres（首次会执行 01~09 初始化）==="
 $COMPOSE up -d postgres
 echo "  等待就绪..."
 for i in $(seq 1 90); do
@@ -54,22 +61,22 @@ done
 $COMPOSE logs postgres 2>/dev/null | grep -Ei 'FATAL|ERROR|initdb: error' | tail -5
 
 echo
-echo "=== [4/6] 数据库冒烟（tests/sql/smoke.sql）==="
+echo "=== [5/6] 数据库冒烟（tests/sql/smoke.sql）==="
 $COMPOSE cp tests/sql/smoke.sql postgres:/tmp/smoke.sql >/dev/null 2>&1
 $COMPOSE exec -T postgres psql -U postgres -d db_archive -v ON_ERROR_STOP=1 -f /tmp/smoke.sql 2>&1 | grep -E '^(NOTICE|SMOKE|psql:.*ERROR)' | head -25
 
 echo
-echo "=== [5/6] 启动全栈 ==="
+echo "=== [6/6] 启动全栈 ==="
 $COMPOSE up -d 2>&1 | tail -8
 sleep 10
 $COMPOSE ps --format 'table {{.Name}}\t{{.Status}}' 2>/dev/null || $COMPOSE ps
 
 echo
-echo "=== [6/6] 内存占用（红线：合计 < 1.55GB）==="
+echo "=== [7/7] 内存占用（红线：合计 < 1.55GB）==="
 docker stats --no-stream --format 'table {{.Name}}\t{{.MemUsage}}\t{{.MemPerc}}' 2>/dev/null
 echo "--- 合计 ---"
 docker stats --no-stream --format '{{.MemUsage}}' 2>/dev/null \
-  | awk -F' / ' '{split($1,a,"m|MiB"); s+=a[1]} END {printf "  约 %.0f MiB\n", s}'
+  | awk -F' / ' '{ split($1, a, " "); v = a[1] + 0; if (a[2] ~ /GiB/) v *= 1024; else if (a[2] ~ /KiB/) v /= 1024; s += v } END {printf "  约 %.0f MiB\n", s}'
 
 cat <<'DONE'
 
