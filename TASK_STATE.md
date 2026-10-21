@@ -1,54 +1,70 @@
 # TASK_STATE.md — 莫伯双站系统（MoBoCapital & MoBoHome）多智能体交接账本
 
-- **账本版本**：v2.1（Dual-Site Full-Stack Edition）
+- **账本版本**：v2.1.1（Local-First Edition）
 - **最后更新**：2026-10-21
-- **当前阶段**：双站工程基线已在仓库完成（文档 / 数据库 / 编排 / 网关 / CLI / 看板 / 门户 / 工作流资产），等待云端资源与真实环境联调
-- **状态口径**：`DONE` 已完成并验证｜`CODE_READY` 代码已交付待环境验证｜`READY` 方案就绪待执行｜`BLOCKED` 被外部条件阻塞
+- **当前模式**：**本地优先（ADR-0010）** —— 双主域未注册、ICP 未启动，**不进入公网部署**；全部工作在本地完成，云端动作挂起
+- **状态口径**：`DONE` 已完成并验证｜`CODE_READY` 交付物已就位、待环境验证｜`READY` 方案就绪待执行｜`BLOCKED` 被外部条件阻塞｜`暂缓` 本阶段主动挂起
+
+## 0. 本地阶段任务（L0–L6）
+
+| 任务 | 内容 | 验收 | 状态 |
+|---|---|---|---|
+| L0 | 本地环境与编排基线（Docker Desktop + `.env.local` + `docker compose config`） | 六容器可编排、变量缺失 0 | READY |
+| L1 | 数据库内核落地验证（01~09 SQL 首次初始化 + `tests/sql/smoke.sql`） | 9 组检查全绿；`capital` 域就位 | READY |
+| L2 | 应用与门户本地跑通（看板、CLI 四类新命令、双站门户、静态数据包导出） | `export-site` 产出 5 个 JSON，脱敏审计 0 违规 | READY |
+| L3 | n8n 本地联调（#1/#2/#3 阶段一，LLM 可用桩） | `capital_publications` 出现 `PENDING_REVIEW` | READY |
+| L4 | 本地备份与恢复演练（本地 Restic 仓库 + `restore-drill.sh`） | 核心表计数一致、RTO 记录在案 | READY |
+| L5 | 质量门（单测 / JSON / bash -n / smoke / 内存实测 < 1.55GB） | 全部通过并留记录 | READY |
+| L6 | 公网就绪包（域名、ICP、密钥、监控、验收材料备好但不启用） | 材料清单 100% 齐备 | READY |
+
+> 详细步骤见 [`docs/05-运维与灾备/本地开发与部署.md`](docs/05-运维与灾备/本地开发与部署.md)。
 
 ## 1. 16 步原子任务矩阵（T01–T16）
 
 | 任务 | 阶段 | 任务与交付物 | 负责 | 状态 | 验收命令 / 判定标准 |
 |---|---|---|---|---|---|
-| T01 | 一 云底座 | 阿里云 2C4G ECS（杭州）、同地域双 OSS 桶、30 元余额熔断、双域名与 ICP 提交 | 莫伯 | BLOCKED | `ping mobocapital.com` 与 `ping mobohome.com` 正常解析；备案进入管局审核 |
-| T02 | 一 云底座 | 宿主机 4GB Swap、`vm.swappiness=10`、目录树初始化 | 运维 | CODE_READY | `free -m` 显示 Swap≈4095MB；`/opt/mobo-stack` 目录树就位 |
-| T03 | 一 云底座 | 生产 `.env` 生成与 `chmod 600` 锁定 | 运维 | CODE_READY | `stat -c "%a" /opt/mobo-stack/.env` 输出 600 |
-| T04 | 一 云底座 | `oss_guard_setup.py` 注入冷沉降与防盗链 | 工具链 | CODE_READY | 控制台 4 条生命周期 Enabled；公开桶禁止空 Referer |
-| T05 | 二 双库内核 | 注入 `01-init-dual-db.sql`，验证跨库访问拒绝 | 架构 | CODE_READY | `user_mobobrain` 连 `db_archive` 返回拒绝 |
-| T06 | 二 双库内核 | 注入 `02/03`（莫伯之家表与触发器） | 架构 | CODE_READY | 插入 `fitness_workouts` 自动同步到 `timeline_events` |
-| T07 | 二 双库内核 | 注入 `04–07`（intel 采集域 + capital 投研域 + 终端） | 架构 | CODE_READY | 平仓一笔 `trade_reviews` 自动更新 `portfolio_nav_ledger` 与回撤熔断状态 |
-| T08 | 三 前端与看板 | `archive-dashboard` 构建与内存验证 | 前端 | CODE_READY | 容器常驻 < 180MB；`/\_stcore/health` 200 |
-| T09 | 三 前端与看板 | 部署 `sites/mobocapital/index.html` | 前端 | CODE_READY | 五大栏目与三级权限切换流畅；`/data/public-data.json` 可访问 |
-| T10 | 三 前端与看板 | 部署 `sites/mobohome/index.html` | 前端 | CODE_READY | 人生篇章过滤、影像画廊与藏书馆渲染正常 |
-| T11 | 三 前端与看板 | `mobo-cli` 投研录入 + `macro_iv_collector.py` + 宿主机 Cron | 工具链 | CODE_READY | `mobo-cli export-site` 产出公域与 internal 数据包；`terminal-snapshot.json` 刷新 |
-| T12 | 三 前端与看板 | 公私域 JSON 物理脱敏审计 | 工具链 | CODE_READY | `pytest services/mobo-cli/tests/test_exporters.py` 通过；`audit_payload().ok == True` |
-| T13 | 四 网关与发布 | 部署思源与 n8n，导入工作流 #1 / #2 | 工具链 | CODE_READY | Webhook 触发后 `capital_publications` 正常入库（`PENDING_REVIEW`） |
-| T14 | 四 网关与发布 | Caddy 双域路由与 `/internal/*` BasicAuth | 架构 | CODE_READY | 未授权访问 `/internal/*` 返回 401；`caddy validate` 通过 |
-| T15 | 四 网关与发布 | `mobo-restic-backup` 与每日 03:00 加密备份 | 运维 | CODE_READY | `restic snapshots` 可见最新双库快照；`restore-drill.sh` 对账一致 |
-| T16 | 五 封版 | `disaster-recovery.sh --dry-run` 演练、内存终验、验收与交接 | 运维 | READY | 全栈总内存 < 1.55GB，六容器 healthy；验收清单全绿 |
+| T01 | 一 云底座 | 阿里云 2C4G ECS、同地域双 OSS 桶、30 元余额熔断 | 莫伯 | **暂缓** | 域名/云资源到位后恢复 |
+| T02 | 一 云底座 | 双 OSS 桶与 4 条生命周期规则 | 莫伯 | **暂缓** | 控制台 4 条规则 Enabled |
+| T03 | 一 云底座 | RAM 子账号、预算/流量/余额告警 | 莫伯 | **暂缓** | 告警生效；AK/SK 只存密码管理器 |
+| T04 | 一 云底座 | 双主域注册、实名与个人 ICP | 莫伯 | **BLOCKED** | 域名未注册；恢复条件见 ADR-0010 |
+| T05 | 二 宿主机 | 4GB Swap、`vm.swappiness=10`、目录树 | 运维 | 暂缓（本地等价物 L0） | `free -m` 显示 Swap≈4095MB |
+| T06 | 二 宿主机 | 生产 `.env`(600) 与卷权限 | 运维 | CODE_READY | `stat -c "%a" .env` = 600 |
+| T07 | 二 宿主机 | `oss_guard_setup.py` 冷沉降与防盗链 | 工具链 | CODE_READY（本地 DRY_RUN） | 输出 `[OK] Lifecycle & Referer Guard Applied` |
+| T08 | 二 双库内核 | 注入 01–09，验证双库隔离与 `capital` 域 | 架构 | **L1 待验证** | `user_mobobrain` 连 `db_archive` 被拒；`capital.*` 就位 |
+| T09 | 三 前端与看板 | 落盘 CLI/看板/门户/工作流/提示词 | 前端 | CODE_READY | 脚本可执行；门户可打开 |
+| T10 | 三 前端与看板 | 全栈启动 + `smoke.sql` + 内存实测 | 架构 | **L1/L5 待验证** | 六容器 healthy；总内存 < 1.55GB |
+| T11 | 四 网关与发布 | 双域 DNS + Caddy HTTPS | 架构 | **暂缓**（本地用 `localhost` 验路由） | 未授权 `/internal/*` 返回 401 |
+| T12 | 四 网关与发布 | 导入 n8n 工作流并绑定凭证 | 工具链 | **L3 待验证**（发布阶段禁用） | 合成结果入库 `PENDING_REVIEW` |
+| T13 | 四 网关与发布 | 首次 Restic 备份 | 运维 | **L4 待验证**（本地仓库） | `restic snapshots` 可见快照 |
+| T14 | 五 封版 | 监控告警 + 巡检哨兵 + 证书提醒 | 运维 | CODE_READY（本地可跑哨兵） | 断网/磁盘 80%/NAV 黄红区 5 分钟内告警 |
+| T15 | 五 封版 | 恢复演练（`restore-drill.sh` + `--dry-run`） | 运维 | **L4 待验证** | 核心表记录数一致；实测 RTO 记录在案 |
+| T16 | 五 封版 | 验收清单、成本对账、交接 runbook | 运维 | READY | 验收全绿；首年支出 ≤ 2,400 |
 
 ## 2. 最新增量交付物（2026-10-21 批次）
 
 | 类别 | 交付物 | 路径 |
 |---|---|---|
-| 规划 | 双站 v2.1 总册、生产级落地附录、架构宪章、16 步账本 | `docs/00-总册/`、根目录 `CLAUDE.md` / `TASK_STATE.md` |
+| 规划 | 双站 v2.1 总册、生产级落地附录、架构宪章、16 步账本、本地优先 ADR | `docs/00-总册/`、`docs/01-项目治理/决策记录/ADR-0010*`、根目录 `CLAUDE.md` / `TASK_STATE.md` |
+| 本地 | 本地开发与部署指南（L0–L6 全流程与排障） | `docs/05-运维与灾备/本地开发与部署.md` |
 | 数据库 | `capital` 投研域三脚本（05–07）、索引授权（08）、`updated_at`（09） | `deploy/postgres/initdb/` |
 | 编排 | 六容器硬限流、三网络、`sites/` 挂载、n8n 静态目录 | `docker-compose.yml` |
 | 网关 | 双主域 + `/internal` + `/lab` 跳转 + 安全头 + JSON 日志 | `deploy/caddy/Caddyfile` |
 | 应用 | `exporters.py` 脱敏、`capital.py` 投研读写、`site_sync.py` 导出、4 个新 CLI 命令 | `services/mobo-cli/mobo_cli/` |
 | 前端 | 莫伯资本门户、莫伯之家门户 | `sites/mobocapital/`、`sites/mobohome/` |
-| 自动化 | 1+3 合成提示词、微信草稿箱模板、X 串推 Code 节点 | `workflows/` |
+| 自动化 | 1+3 合成提示词、微信草稿箱模板、X 串推 Code 节点、工作流 #1/#2/#3 | `workflows/` |
 | 运维 | 巡检哨兵、bootstrap 落盘脚本、docx 生成器 | `deploy/scripts/`、`tools/doc-builder/` |
 
 ## 3. 智能体唤醒指令速查
 
 ```bash
-# ① 数据库注入与容器编排（T05–T07、T14）
-cd /opt/mobo-stack && docker compose up -d postgres && \
-docker compose exec -T postgres psql -U postgres -d db_archive -f /docker-entrypoint-initdb.d/02-archive-schema.sql
+# ① 数据库注入与容器编排（T08、T10 的本地等价物）
+cd /opt/mobo-stack && docker compose --env-file .env.local up -d postgres && \
+docker compose --env-file .env.local exec -T postgres psql -U postgres -d db_archive \
+  -f /docker-entrypoint-initdb.d/02-archive-schema.sql
 
 # ② CLI 联调与脱敏审计（T11、T12）
 cd /opt/mobo-stack && python3 -m mobo_cli export-site --site all && \
-python3 -c "import json;d=json.load(open('sites/mobocapital/data/public-data.json'));print('keys',list(d))"
+grep -c private_blotter_oss_key sites/mobocapital/data/public-data.json   # 期望 0
 
 # ③ 前端与数据源绑定（T09、T10）
 # 编辑 sites/mobocapital/index.html 与 sites/mobohome/index.html 的数据拉取逻辑
@@ -58,8 +74,9 @@ python3 -c "import json;d=json.load(open('sites/mobocapital/data/public-data.jso
 
 | 阻塞 | 影响 | 解除条件 |
 |---|---|---|
-| 域名与 ICP | T01/T11/T14 | 备案通过 |
-| 阿里云账号与预算 | T01 | 账号可下单 |
-| LLM / Embedding 凭证 | T07/T11/T13 | 提供 Base URL、Key、模型 |
-| 微信开放平台与 X API 凭证 | T13 阶段二 | 提供 AppID/Secret 与 OAuth |
-| Docker / Python 本地环境 | 所有"待验证"项 | 在有 Docker 的机器执行 `tests/sql/smoke.sql` 与 `pytest` |
+| 双主域未注册 | T04 / T11 | 注册并实名，完成主体一致性核对 |
+| ICP 未启动 | T11 | 域名到手后提交个人备案 |
+| 阿里云账号与预算 | T01–T03 | 账号可下单（本地阶段不阻塞） |
+| LLM / Embedding 凭证 | T07 采集评分、T12 合成 | 提供 Base URL、Key、模型（本地可用桩） |
+| 微信开放平台与 X API 凭证 | T12 阶段二 | 后期再接；当前只产出 JSON 草稿 |
+| 本机 Docker / Python | 所有"待验证"项 | 在本地按 `docs/05-运维与灾备/本地开发与部署.md` 执行 L0–L5 |

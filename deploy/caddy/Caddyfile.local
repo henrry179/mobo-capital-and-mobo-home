@@ -1,0 +1,132 @@
+# =============================================================================
+# 莫伯双站系统 · Caddy 本地开发覆盖（纯 HTTP，不申请证书）
+# 用于本地优先阶段：无公网域名、无 ACME，浏览器直接 http 访问
+# 启动：docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
+# 说明：*.localhost 由浏览器按 RFC 6761 自动解析到 127.0.0.1
+# =============================================================================
+
+{
+	admin off
+	servers {
+		protocols h1
+	}
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MiB
+			roll_keep 3
+		}
+		format json
+	}
+}
+
+(security_headers) {
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+}
+
+(protected) {
+	basic_auth {
+		{$CADDY_ADMIN_USER} {$CADDY_ADMIN_PASSWORD_HASH}
+	}
+	import security_headers
+	header {
+		X-Robots-Tag "noindex, nofollow, noarchive"
+		Cache-Control "no-store, no-cache, must-revalidate"
+	}
+}
+
+(public_json) {
+	header {
+		Cache-Control "public, max-age=60, must-revalidate"
+	}
+	file_server
+}
+
+# --- 莫伯资本（本地）--------------------------------------------------------
+http://localhost {
+	encode zstd gzip
+	root * /srv/sites/mobocapital
+	import security_headers
+	header {
+		X-Robots-Tag "index, follow"
+	}
+
+	@internal_zone path /internal/*
+	handle @internal_zone {
+		import protected
+		file_server
+	}
+
+	@public_data path /data/*.json
+	handle @public_data {
+		import public_json
+	}
+
+	handle {
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+# --- 莫伯之家（本地）--------------------------------------------------------
+http://mobohome.localhost {
+	encode zstd gzip
+	root * /srv/sites/mobohome
+	import security_headers
+	header {
+		X-Robots-Tag "index, follow"
+	}
+
+	@home_internal path /internal/*
+	handle @home_internal {
+		import protected
+		file_server
+	}
+
+	@public_data path /data/*.json
+	handle @public_data {
+		import public_json
+	}
+
+	@lab path /lab /lab/*
+	handle @lab {
+		redir http://lab.localhost{uri} 302
+	}
+
+	handle {
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+# --- 实验室 / 思源 / n8n / 操作台（本地）-----------------------------------
+http://lab.localhost {
+	encode zstd gzip
+	import protected
+	reverse_proxy archive-dashboard:8501
+}
+
+http://kb.localhost {
+	encode zstd gzip
+	import protected
+	reverse_proxy mobobrain-pkm:6806
+}
+
+http://n8n.localhost {
+	encode zstd gzip
+	import protected
+	reverse_proxy mobobrain-n8n:5678 {
+		flush_interval -1
+	}
+}
+
+http://admin.localhost {
+	encode zstd gzip
+	import protected
+	root * /srv/console
+	file_server
+}

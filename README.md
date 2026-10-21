@@ -21,11 +21,14 @@
 
 ## 2. 当前状态
 
-- **阶段**：E0 工程基线完成（v2.1 双站口径），等待云端资源与真实环境联调
+- **模式**：**本地优先（Local-First）** —— 双主域未注册、ICP 未启动，**暂不进入公网部署**；云端任务挂起，本地完成 L0–L6
+- **阶段**：E0 工程基线完成（v2.1 双站口径），进入本地开发与验证
 - **已完成**：总册 v2.1 + 架构宪章 + 16 步账本、治理/需求/架构/数据字典/运维/合规文档、数据库 `01~09` SQL、六容器 Compose（内存硬限流）、双域 Caddyfile、CLI（投研录入 + 公私域脱敏导出）、Streamlit 看板、双站静态门户、n8n 工作流与提示词资产、备份/灾备/演练/巡检脚本、测试与沙盒
-- **待验证**：本机无 Docker/Python，`docker compose config`、容器初始化、`tests/sql/smoke.sql`、`pytest` 尚未执行；统一在 T-08/T-10 执行
-- **阻塞**：阿里云账号与预算、双主域注册与 ICP、LLM/Embedding 与微信/X 凭证
-- **生产可用性**：**尚未达到**。所有密钥均为占位符，部署前必须按 `docs/05-运维与灾备/部署手册.md` 完成替换与验收
+- **待验证**：容器初始化、`tests/sql/smoke.sql`、`pytest`、内存实测尚未在有 Docker 的机器执行（L1/L5 任务）
+- **未完成**：云端采购与备案、n8n 阶段二发布（微信/X，当前只产 JSON 草稿）、公网验收
+- **生产可用性**：**尚未达到**。所有密钥均为占位符；切换公网前必须按 `docs/05-运维与灾备/部署手册.md` 完成替换与验收
+
+> **下一步入口**：[`docs/05-运维与灾备/本地开发与部署.md`](docs/05-运维与灾备/本地开发与部署.md)（L0–L6 全流程与排障）
 
 ---
 
@@ -107,28 +110,36 @@ flowchart TB
 
 ## 6. 快速开始（本地开发）
 
-> 生产部署见 `docs/05-运维与灾备/部署手册.md`。本地需要 Docker Desktop（Windows）或 Docker Engine + Compose v2。
+> 当前处于**本地优先**模式：不买服务器、不申请域名也能把整套系统跑起来。
+> 完整步骤见 [`docs/05-运维与灾备/本地开发与部署.md`](docs/05-运维与灾备/本地开发与部署.md)；公网部署见 [`部署手册.md`](docs/05-运维与灾备/部署手册.md)。
 
 ```bash
-# 1. 环境变量
-cp .env.example .env
+# 1. 本地环境变量（不要用生产的 .env）
+cp .env.example .env.local
+#    按 .env.example 说明覆盖本地口令与 localhost 域名
 
-# 2. 生成密码哈希与随机密钥
-docker run --rm caddy:2.9-alpine caddy hash-password --plaintext '替换为你的强密码'
-openssl rand -base64 32
+# 2. 校验编排
+docker compose --env-file .env.local config >/dev/null
 
-# 3. 编辑 .env：至少替换所有 ChangeMe_*、双主域、阿里云凭证
+# 3. 起数据库（首次执行 01~09 初始化）
+docker compose --env-file .env.local up -d postgres
 
-# 4. 启动
-docker compose config
-docker compose up -d --build
+# 4. 冒烟（9 组检查：结构/触发器/视图/权限/capital 域/双库隔离）
+docker compose --env-file .env.local cp tests/sql/smoke.sql postgres:/tmp/smoke.sql
+docker compose --env-file .env.local exec -T postgres psql -U postgres -d db_archive -f /tmp/smoke.sql
 
-# 5. 校验
-docker compose ps
-docker compose exec -T postgres psql -U postgres -d db_archive -f /tmp/smoke.sql
+# 5. 起全栈
+docker compose --env-file .env.local up -d --build
+docker compose --env-file .env.local ps
+docker stats --no-stream        # 常驻应约 1.46GB
 ```
 
-没有 OSS 时可先只启动 `postgres` 与 `archive-dashboard`，看板会自动切到"52 周合成沙盒"。
+没有 OSS 时看板会自动切到"52 周合成沙盒"；灌沙盒数据：
+
+```bash
+docker compose --env-file .env.local cp seeds/52-week-sandbox.sql postgres:/tmp/seed.sql
+docker compose --env-file .env.local exec -T postgres psql -U postgres -d db_archive -f /tmp/seed.sql
+```
 
 ### CLI 速查
 
@@ -138,7 +149,7 @@ cd services/mobo-cli && pip install -e ".[dev]"
 mobo-cli doctor                     # 配置自检
 mobo-cli upload a.jpg --category PHOTO
 mobo-cli workout --type RUNNING --minutes 51 --distance-km 10
-mobo-cli capital-thesis --code THESIS-2026Q4-CN-RETAIL --title "..." --conviction 8
+mobo-cli capital-thesis --code THESIS-LOCAL-01 --title "..." --conviction 8
 mobo-cli capital-trade --trade-code T-001 --ticker 300ETF --entry-date 2026-10-18 --risk-pct 1.25
 mobo-cli capital-trade --trade-code T-001 --close --exit-date 2026-10-25 --r-multiple 1.8 --impact-bps 180
 mobo-cli capital-nav                 # NAV 与回撤熔断状态

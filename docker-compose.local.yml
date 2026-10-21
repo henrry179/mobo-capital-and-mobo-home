@@ -1,0 +1,45 @@
+# =============================================================================
+# 莫伯双站系统 · 本地开发覆盖（Local-First 阶段）
+# 用法：
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml --env-file .env.local up -d
+#
+# 作用：
+#   1) Caddy 改用纯 HTTP 的 Caddyfile.local（无 ACME、无公网域名依赖）
+#   2) 把应用端口额外映射到 127.0.0.1，便于绕过网关直连调试
+#   3) 本地域名统一走 *.localhost（RFC 6761 自动解析到环回地址）
+#
+# 注意：Compose 对 ports 是「追加」而非「覆盖」，基础编排里的 80/443 仍然会占用本机端口；
+#       若本机 80/443 已被占用，请先停掉占用进程，或临时注释基础编排中的 caddy.ports。
+# =============================================================================
+
+name: ${COMPOSE_PROJECT_NAME:-mobo-stack}
+
+services:
+  caddy:
+    container_name: mobo-caddy
+    volumes:
+      - ./deploy/caddy/Caddyfile.local:/etc/caddy/Caddyfile:ro
+    environment:
+      DOMAIN_CAPITAL: localhost
+      DOMAIN_HOME: mobohome.localhost
+      DOMAIN_PKM: kb.localhost
+      DOMAIN_N8N: n8n.localhost
+      DOMAIN_ADMIN: admin.localhost
+      DOMAIN_LAB: lab.localhost
+
+  # 直连调试端口（仅绑定环回地址，不对外暴露）
+  archive-dashboard:
+    ports:
+      - "127.0.0.1:8501:8501"
+
+  mobobrain-n8n:
+    ports:
+      - "127.0.0.1:5678:5678"
+
+  mobobrain-pkm:
+    ports:
+      - "127.0.0.1:6806:6806"
+
+  postgres:
+    ports:
+      - "127.0.0.1:5432:5432"
