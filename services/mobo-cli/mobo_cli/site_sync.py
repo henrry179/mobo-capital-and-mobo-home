@@ -152,11 +152,22 @@ def _fetch_home(conn) -> dict[str, list[dict[str, Any]]]:
         )
         workouts = _rows(cur)
 
+        cur.execute(
+            """
+            SELECT item_id, title, authors, domain, status, rating, core_takeaways
+            FROM archive.reading_items
+            ORDER BY COALESCE(finished_at, created_at) DESC
+            LIMIT 200;
+            """
+        )
+        readings = _rows(cur)
+
     return {
         "timeline": timeline,
         "assets": assets,
         "retros": retros,
         "workouts": workouts,
+        "readings": readings,
     }
 
 
@@ -169,6 +180,70 @@ def _home_public(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if str(r.get("privacy", "PUBLIC")).upper() in allowed and not r.get("is_sensitive")
     ]
     return [exporters.strip_private_fields(r) for r in kept]
+
+
+# 门户（sites/mobohome/index.html）期望的字段形态，与库内表结构不同：
+# 门户用 timeline_stories / gallery_assets / reading_library 三组键。
+_PLACEHOLDER_THUMB = (
+    "data:image/svg+xml;charset=utf-8,"
+    "%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='450'%3E"
+    "%3Crect width='800' height='450' fill='%23141721'/%3E"
+    "%3Ctext x='50%25' y='50%25' fill='%236b7280' font-size='26' "
+    "text-anchor='middle' font-family='sans-serif'%3E%E6%9C%AA%E6%8C%89%E8%B4%A8%E7%B3%BB%E5%8F%98%E6%9C%AC%E8%AF%81%E4%BB%A3%EF%BC%9C%3C/text%3E"
+    "%3C/svg%3E"
+)
+
+
+def _to_timeline_story(row: dict[str, Any]) -> dict[str, Any]:
+    """库内 timeline_events → 门户期望的 timeline_stories。"""
+    metrics = row.get("metrics_payload") or {}
+    if not isinstance(metrics, dict):
+        metrics = {}
+    return {
+        "id": str(row.get("event_id", "")),
+        "event_date": str(row.get("occurred_at", ""))[:10],
+        "category": str(row.get("event_type") or row.get("domain") or "event").lower(),
+        "title": row.get("title", ""),
+        "summary": row.get("summary") or "",
+        "location_name": row.get("location_name") or "",
+        "importance": int(row.get("importance_score") or 5),
+        "mood_score": int(metrics.get("mood_score") or 5),
+        "energy_score": int(row.get("energy_impact") or 5),
+        "tags": list(row.get("tags") or []),
+        "metadata": {
+            "life_chapter": str(row.get("domain") or "人生纪事"),
+            "content_markdown": row.get("summary") or "",
+        },
+        "attached_media": [],
+    }
+
+
+def _to_gallery_asset(row: dict[str, Any]) -> dict[str, Any]:
+    """库内 archive_assets → 门户期望的 gallery_assets。"""
+    media = row.get("media_metadata") or {}
+    if not isinstance(media, dict):
+        media = {}
+    thumb = media.get("public_thumb_url") or _PLACEHOLDER_THUMB
+    return {
+        "id": str(row.get("asset_id", "")),
+        "asset_type": "video" if "video" in str(row.get("mime_type", "")) else "photo",
+        "title": row.get("title", ""),
+        "captured_at": str(row.get("captured_at") or row.get("document_date") or "")[:10],
+        "public_thumb_url": thumb,
+    }
+
+
+def _to_reading_book(row: dict[str, Any]) -> dict[str, Any]:
+    """库内 reading_items → 门户期望的 reading_library。"""
+    return {
+        "id": str(row.get("item_id", "")),
+        "title": row.get("title", ""),
+        "author": "、".join(row.get("authors") or []),
+        "category": str(row.get("domain") or "GENERAL"),
+        "status": str(row.get("status") or "READING"),
+        "rating": int(row.get("rating") or 0),
+        "core_takeaway": row.get("core_takeaways") or "",
+    }
 
 
 def export_capital_site(settings, *, include_internal: bool = True) -> dict[str, Path]:
@@ -230,6 +305,11 @@ def export_home_site(settings, *, include_internal: bool = True) -> dict[str, Pa
         data = _fetch_home(conn)
 
     public = {
+        # 门户视图形态（sites/mobohome/index.html 直接消费）
+        "timeline_stories": [_to_timeline_story(r) for r in _home_public(data["timeline"])],
+        "gallery_assets": [_to_gallery_asset(r) for r in _home_public(data["assets"])],
+        "reading_library": [_to_reading_book(r) for r in _home_public(data["readings"])],
+        # 原始表结构形态（控制台 / 二次分析用）
         "timeline_events": _home_public(data["timeline"]),
         "archive_assets": _home_public(data["assets"]),
         "retrospectives": _home_public(data["retros"]),
@@ -244,6 +324,9 @@ def export_home_site(settings, *, include_internal: bool = True) -> dict[str, Pa
 
     if include_internal:
         internal = {
+            "timeline_stories": [_to_timeline_story(r) for r in data["timeline"]],
+            "gallery_assets": [_to_gallery_asset(r) for r in data["assets"]],
+            "reading_library": [_to_reading_book(r) for r in data["readings"]],
             "timeline_events": data["timeline"],
             "archive_assets": data["assets"],
             "retrospectives": data["retros"],

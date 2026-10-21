@@ -1,71 +1,123 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>莫伯双站 · 操作台</title>
-  <style>
-    :root { color-scheme: dark; --bg:#0b1020; --panel:#141b32; --line:#26304d; --text:#e8ecf8; --muted:#93a0c2; --accent:#7aa2ff; --ok:#4ade80; --warn:#fbbf24; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, #1a2a5a 0%, var(--bg) 55%); color:var(--text); min-height:100vh; }
-    main { max-width: 1080px; margin: 0 auto; padding: 48px 20px 80px; }
-    h1 { font-size: clamp(28px, 4vw, 44px); margin: 0 0 8px; letter-spacing: -0.02em; }
-    .sub { color: var(--muted); margin: 0 0 32px; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-    a.card { display:block; text-decoration:none; color:inherit; background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)); border:1px solid var(--line); border-radius:16px; padding:18px 18px 16px; transition: transform .15s ease, border-color .15s ease; }
-    a.card:hover { transform: translateY(-2px); border-color: var(--accent); }
-    .tag { display:inline-block; font-size:12px; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:2px 8px; margin-bottom:12px; }
-    .card h2 { font-size:17px; margin:0 0 6px; }
-    .card p { margin:0; color:var(--muted); font-size:13px; line-height:1.55; }
-    .note { margin-top:28px; border:1px solid var(--line); background:rgba(20,27,50,.7); border-radius:14px; padding:16px 18px; color:var(--muted); font-size:13px; line-height:1.7; }
-    .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ok); margin-right:6px; }
-    code { color:#cfe0ff; background:#0f1730; border:1px solid var(--line); padding:1px 6px; border-radius:6px; }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>莫伯系统控制台 · MoBo Control Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/console.css" />
 </head>
 <body>
-<main>
-  <h1>莫伯双站 · 操作台</h1>
-  <p class="sub">MoBoBrain 知识库与内容自动化中枢 × Wolfram 式计算型个人数字档案</p>
+<div class="shell">
 
-  <div class="grid">
-    <a class="card" data-sub="www" href="#">
-      <span class="tag">公开</span>
-      <h2>网站 A · 公开专栏</h2>
-      <p>静态文章与公开笔记。无需登录，允许搜索引擎索引。</p>
-    </a>
-    <a class="card" data-sub="kb" href="#">
-      <span class="tag">BasicAuth</span>
-      <h2>网站 A · 知识库</h2>
-      <p>思源笔记。核心研究库、双链、全文检索与附件。</p>
-    </a>
-    <a class="card" data-sub="n8n" href="#">
-      <span class="tag">BasicAuth</span>
-      <h2>网站 A · 自动化</h2>
-      <p>n8n 工作流：RSS 采集、LLM 提炼、思源推送、多平台草稿。</p>
-    </a>
-    <a class="card" data-sub="archive" href="#">
-      <span class="tag">BasicAuth · 私有</span>
-      <h2>网站 B · 数字档案</h2>
-      <p>时间线、阅读、运动、复盘、资产总账与周度计算看板。</p>
-    </a>
+  <!-- ===================== 顶栏 ===================== -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">MB</div>
+      <div>
+        <h1>莫伯系统控制台</h1>
+        <p>MoBo Control Deck · 莫伯资本 × 莫伯之家 · 统一观测与操作面</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="seg" id="clearance" role="group" aria-label="可见性">
+        <button data-lvl="PUBLIC" class="on">PUBLIC</button>
+        <button data-lvl="LP_PROSPECT">LP_PROSPECT</button>
+        <button data-lvl="INTERNAL">INTERNAL</button>
+      </div>
+      <div class="meta">
+        <span id="envBadge" class="badge">本地开发</span>
+        <span id="clock" class="mono muted"></span>
+        <label class="toggle"><input type="checkbox" id="autoRefresh" checked /><span>自动刷新 15s</span></label>
+      </div>
+    </div>
+  </header>
+
+  <div id="banner" class="banner hidden"></div>
+
+  <!-- ===================== KPI ===================== -->
+  <section class="kpis" id="kpis"></section>
+
+  <!-- ===================== 服务矩阵 ===================== -->
+  <section class="panel">
+    <div class="panel-head">
+      <h2>入口矩阵</h2>
+      <span class="muted mono">6 个入口 · 鉴权与可达性</span>
+    </div>
+    <div class="services" id="services"></div>
+  </section>
+
+  <div class="grid-2">
+    <!-- ===================== 运行时 ===================== -->
+    <section class="panel">
+      <div class="panel-head"><h2>运行时</h2><span class="muted mono" id="runtimeStamp">—</span></div>
+      <div id="runtime" class="runtime"></div>
+    </section>
+
+    <!-- ===================== 投研与风控 ===================== -->
+    <section class="panel">
+      <div class="panel-head"><h2>投研与风控</h2><span class="muted mono">capital 域</span></div>
+      <div id="research" class="research"></div>
+    </section>
   </div>
 
-  <div class="note">
-    <p><span class="dot"></span>本页是静态操作台，不包含任何密钥，也不直接访问数据库。</p>
-    <p>入口地址由当前域名自动推导：<code>admin.example.com</code> → <code>kb.example.com</code>、<code>n8n.example.com</code>、<code>archive.example.com</code>、<code>www.example.com</code>。</p>
-    <p>日常检查：<code>docker compose ps</code>、<code>docker stats --no-stream</code>、<code>deploy/scripts/smoke-test.sh</code>、<code>restic snapshots</code>。</p>
+  <div class="grid-2">
+    <!-- ===================== 内容流水线 ===================== -->
+    <section class="panel">
+      <div class="panel-head"><h2>内容流水线</h2><span class="muted mono">intel 域 + 四端发布</span></div>
+      <div id="pipeline" class="pipeline"></div>
+    </section>
+
+    <!-- ===================== 个人档案 ===================== -->
+    <section class="panel">
+      <div class="panel-head"><h2>个人档案</h2><span class="muted mono">archive 域</span></div>
+      <div id="archive" class="archive"></div>
+    </section>
   </div>
-</main>
-<script>
-  (function () {
-    var host = location.hostname;
-    var parts = host.split('.');
-    var base = parts.length > 2 ? parts.slice(1).join('.') : host;
-    document.querySelectorAll('a.card[data-sub]').forEach(function (a) {
-      var sub = a.getAttribute('data-sub');
-      a.href = location.protocol + '//' + sub + '.' + base + '/';
-    });
-  })();
-</script>
+
+  <div class="grid-2">
+    <!-- ===================== 任务与质量门 ===================== -->
+    <section class="panel">
+      <div class="panel-head"><h2>任务与质量门</h2><span class="muted mono">L0–L6 / Q0–Q14</span></div>
+      <div id="plan" class="plan"></div>
+    </section>
+
+    <!-- ===================== 运维动作 ===================== -->
+    <section class="panel">
+      <div class="panel-head"><h2>运维动作</h2><span class="muted mono">复制即用</span></div>
+      <div id="actions" class="actions"></div>
+    </section>
+  </div>
+
+  <div class="grid-2">
+    <!-- ===================== 成本与预算 ===================== -->
+    <section class="panel">
+      <div class="panel-head"><h2>成本与预算</h2><span class="muted mono">红线 2,400 / 年</span></div>
+      <div id="budget" class="budget"></div>
+    </section>
+
+    <!-- ===================== 红线与合规 ===================== -->
+    <section class="panel">
+      <div class="panel-head"><h2>架构红线与合规</h2><span class="muted mono">不可逾越</span></div>
+      <div class="redlines">
+        <div class="rl"><b>1</b><span>六容器限额合计 1.94GB，常驻 ≤1.55GB；前台静态化，服务端 0 额外内存</span></div>
+        <div class="rl"><b>2</b><span>双库物理隔离：user_mobobrain / user_archive 互不可见</span></div>
+        <div class="rl"><b>3</b><span>OSS 内网免流 + 冷热分层；前端只加载 thumbnails/</span></div>
+        <div class="rl"><b>4</b><span>公私域物理脱敏 + 三级可见性；/internal 强制 BasicAuth</span></div>
+        <div class="rl"><b>5</b><span>境内脱敏 + 免责声明 + HITL 人工终审闸门</span></div>
+        <div class="rl warn"><b>!</b><span>微信/X 阶段二发布当前<b>禁用</b>，只产出 JSON 草稿</span></div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <span>莫伯双站系统 v2.1.1 · Local-First · <a href="/docs/01-项目治理/开发部署任务执行时间线.md">执行时间线</a></span>
+    <span class="mono">本页面不含任何密钥 · 数据来自各站脱敏 JSON 与运行时状态文件</span>
+  </footer>
+</div>
+<script src="assets/console.js"></script>
 </body>
 </html>

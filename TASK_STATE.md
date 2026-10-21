@@ -66,7 +66,8 @@
   应用   `exporters.py` 脱敏、`capital.py` 投研读写、`site_sync.py` 导出、4 个新 CLI 命令   `services/mobo-cli/mobo_cli/`  
   前端   莫伯资本门户、莫伯之家门户   `sites/mobocapital/`、`sites/mobohome/`  
   自动化   1+3 合成提示词、微信草稿箱模板、X 串推 Code 节点、工作流 #1/#2/#3   `workflows/`  
-  运维   巡检哨兵、bootstrap 落盘脚本、docx 生成器   `deploy/scripts/`、`tools/doc-builder/`  
+  UI   莫伯系统控制台（admin 域）：KPI / 入口矩阵 / 运行时 / 投研风控 / 流水线 / 档案 / 任务 / 运维 / 预算 / 红线   `services/console/`  
+  运维   巡检哨兵、bootstrap 落盘脚本、docx 生成器   `deploy/scripts/`、`tools/wsl/`（状态收集 + 质量门）、`tools/doc-builder/`  
 
 ## 3. 智能体唤醒指令速查
 

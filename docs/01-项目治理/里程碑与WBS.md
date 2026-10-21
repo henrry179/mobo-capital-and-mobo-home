@@ -24,7 +24,7 @@
 |---|---|---|---|---|
 | L0 | 本地环境与编排基线 | Docker Desktop + `.env.local`；`docker compose config` 通过；变量缺失 0 | — | READY |
 | L1 | 数据库内核落地验证 | 01–09 首次初始化；`tests/sql/smoke.sql` 9 组全绿；`capital` 域就位 | L0 | READY |
-| L2 | 应用与门户本地跑通 | 看板四模块；CLI `capital-*`/`export-site` 可用；5 个静态数据包产出；脱敏审计 0 违规 | L1 | READY |
+| L2 | 应用与门户本地跑通 | 看板四模块；CLI `capital-*`/`export-site` 可用；5 个静态数据包产出；脱敏审计 0 违规 | L1 | 部分完成 |
 | L3 | n8n 本地联调（阶段一） | 工作流 #1/#2/#3 阶段一跑通；`capital_publications` 出现 `PENDING_REVIEW`；发布节点保持禁用 | L1/L2 | READY |
 | L4 | 本地备份与恢复演练 | 本地 Restic 仓库有快照；`restore-drill.sh` 核心表计数一致；RTO 有记录 | L1 | READY |
 | L5 | 质量门 | 单测 / JSON 校验 / `bash -n` / smoke / 内存实测 < 1.55GB 全绿 | L2–L4 | READY |

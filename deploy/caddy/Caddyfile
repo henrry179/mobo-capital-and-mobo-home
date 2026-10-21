@@ -170,7 +170,28 @@
 	encode zstd gzip
 	import protected
 	root * /srv/console
-	file_server
+
+	# 控制台数据面：同源只读转发两站脱敏 JSON（避免跨域）
+	@api_capital path /api/capital/*
+	handle @api_capital {
+		root * /srv/sites/mobocapital
+		uri strip_prefix /api/capital
+		file_server
+	}
+
+	@api_home path /api/home/*
+	handle @api_home {
+		root * /srv/sites/mobohome
+		uri strip_prefix /api/home
+		file_server
+	}
+
+	handle {
+		header {
+			Cache-Control "no-store"
+		}
+		file_server
+	}
 }
 
 # ---------------------------------------------------------------------------

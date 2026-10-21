@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="MoBoHome 沙盒占位图">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#141721"/>
+      <stop offset="55%" stop-color="#1E2333"/>
+      <stop offset="100%" stop-color="#2A3147"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#g)"/>
+  <circle cx="640" cy="92" r="54" fill="#D4A373" opacity="0.16"/>
+  <path d="M0 372 C 150 316, 250 404, 400 352 C 540 304, 640 372, 800 330 L800 450 L0 450 Z" fill="#0C0E14" opacity="0.72"/>
+  <path d="M0 404 C 180 360, 300 430, 470 392 C 610 361, 700 404, 800 380 L800 450 L0 450 Z" fill="#090A0F" opacity="0.85"/>
+  <text x="46" y="86" font-family="Noto Serif SC, Georgia, serif" font-size="30" fill="#E6ECF7" opacity="0.92">慢就是快</text>
+  <text x="46" y="124" font-family="JetBrains Mono, monospace" font-size="13" fill="#D4A373" opacity="0.85" letter-spacing="3">MOBO HOME · SANDBOX PLACEHOLDER</text>
+</svg>
