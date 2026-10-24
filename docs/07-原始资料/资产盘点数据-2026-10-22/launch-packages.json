@@ -1,0 +1,209 @@
+{
+  "total": {
+    "files": 44814,
+    "bytes": 37814088408,
+    "gb": 35.217
+  },
+  "excluded": {
+    "files": 15063,
+    "bytes": 28438339072,
+    "gb": 26.485,
+    "share": 75.21,
+    "reasons": [
+      {
+        "exclude_reason": "视频（用户明确排除）",
+        "files": 61,
+        "bytes": 16384482579,
+        "gb": 15.2592,
+        "share_total": 43.33,
+        "share_remaining": 174.75
+      },
+      {
+        "exclude_reason": "GitHub/Hermes 状态快照（用户明确排除）",
+        "files": 14536,
+        "bytes": 7086870642,
+        "gb": 6.6002,
+        "share_total": 18.74,
+        "share_remaining": 75.59
+      },
+      {
+        "exclude_reason": "Git 版本库（用户明确排除）",
+        "files": 453,
+        "bytes": 4761204466,
+        "gb": 4.4342,
+        "share_total": 12.59,
+        "share_remaining": 50.78
+      },
+      {
+        "exclude_reason": "音频（用户明确排除）",
+        "files": 13,
+        "bytes": 205781385,
+        "gb": 0.1916,
+        "share_total": 0.54,
+        "share_remaining": 2.19
+      }
+    ]
+  },
+  "remaining": {
+    "files": 29751,
+    "bytes": 9375749336,
+    "gb": 8.732,
+    "share": 24.79,
+    "categories": [
+      {
+        "category": "图片",
+        "files": 14036,
+        "bytes": 5358095864,
+        "gb": 4.9901,
+        "share_total": 14.17,
+        "share_remaining": 57.15
+      },
+      {
+        "category": "PDF",
+        "files": 301,
+        "bytes": 2486430385,
+        "gb": 2.3157,
+        "share_total": 6.58,
+        "share_remaining": 26.52
+      },
+      {
+        "category": "Word",
+        "files": 742,
+        "bytes": 734026538,
+        "gb": 0.6836,
+        "share_total": 1.94,
+        "share_remaining": 7.83
+      },
+      {
+        "category": "压缩包",
+        "files": 18,
+        "bytes": 477020518,
+        "gb": 0.4443,
+        "share_total": 1.26,
+        "share_remaining": 5.09
+      },
+      {
+        "category": "Markdown",
+        "files": 9162,
+        "bytes": 100558780,
+        "gb": 0.0937,
+        "share_total": 0.27,
+        "share_remaining": 1.07
+      },
+      {
+        "category": "字体",
+        "files": 5,
+        "bytes": 69757228,
+        "gb": 0.065,
+        "share_total": 0.18,
+        "share_remaining": 0.74
+      },
+      {
+        "category": "其他",
+        "files": 2217,
+        "bytes": 52968978,
+        "gb": 0.0493,
+        "share_total": 0.14,
+        "share_remaining": 0.56
+      },
+      {
+        "category": "代码/配置",
+        "files": 2962,
+        "bytes": 48685578,
+        "gb": 0.0453,
+        "share_total": 0.13,
+        "share_remaining": 0.52
+      },
+      {
+        "category": "演示/表格",
+        "files": 62,
+        "bytes": 45643378,
+        "gb": 0.0425,
+        "share_total": 0.12,
+        "share_remaining": 0.49
+      },
+      {
+        "category": "文本",
+        "files": 174,
+        "bytes": 2282913,
+        "gb": 0.0021,
+        "share_total": 0.01,
+        "share_remaining": 0.02
+      },
+      {
+        "category": "临时/系统",
+        "files": 72,
+        "bytes": 279176,
+        "gb": 0.0003,
+        "share_total": 0.0,
+        "share_remaining": 0.0
+      }
+    ],
+    "packages": [
+      {
+        "package": "99-原始归档（不上服务器）",
+        "files": 2093,
+        "bytes": 3960911436,
+        "gb": 3.6889,
+        "share_total": 10.47,
+        "share_remaining": 42.25
+      },
+      {
+        "package": "People-archive",
+        "files": 21064,
+        "bytes": 3856006570,
+        "gb": 3.5912,
+        "share_total": 10.2,
+        "share_remaining": 41.13
+      },
+      {
+        "package": "A-public",
+        "files": 1141,
+        "bytes": 759310564,
+        "gb": 0.7072,
+        "share_total": 2.01,
+        "share_remaining": 8.1
+      },
+      {
+        "package": "A-internal",
+        "files": 1883,
+        "bytes": 669216204,
+        "gb": 0.6233,
+        "share_total": 1.77,
+        "share_remaining": 7.14
+      },
+      {
+        "package": "B-private",
+        "files": 216,
+        "bytes": 68709615,
+        "gb": 0.064,
+        "share_total": 0.18,
+        "share_remaining": 0.73
+      },
+      {
+        "package": "00-清理/临时",
+        "files": 3134,
+        "bytes": 56808579,
+        "gb": 0.0529,
+        "share_total": 0.15,
+        "share_remaining": 0.61
+      },
+      {
+        "package": "B-public",
+        "files": 2,
+        "bytes": 2503162,
+        "gb": 0.0023,
+        "share_total": 0.01,
+        "share_remaining": 0.03
+      },
+      {
+        "package": "90-工程仓（Git 部署）",
+        "files": 218,
+        "bytes": 2283206,
+        "gb": 0.0021,
+        "share_total": 0.01,
+        "share_remaining": 0.02
+      }
+    ]
+  }
+}

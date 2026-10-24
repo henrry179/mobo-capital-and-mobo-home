@@ -1,0 +1,22 @@
+{
+  "mentors": [
+    { "name": "霍华德·马克斯", "en": "Howard Marks", "role": "周期 · 第二层思维" },
+    { "name": "瑞·达利欧", "en": "Ray Dalio", "role": "债务周期 · 原则" },
+    { "name": "安东·克雷尔", "en": "Anton Kreil", "role": "ITPM 记分卡" },
+    { "name": "单伟建", "en": "Weijian Shan", "role": "产业地缘" },
+    { "name": "布雷特·斯汀博格", "en": "Steenbarger", "role": "交易认知工程" },
+    { "name": "迈克·贝拉菲奥雷", "en": "Bellafiore", "role": "PlayBook SOP" }
+  ],
+  "bot_army": [
+    { "code": "R01", "name": "利刃", "role": "CIO", "job": "拍板 · 非对称" },
+    { "code": "R02", "name": "铁腕", "role": "COO", "job": "协调执行" },
+    { "code": "R03", "name": "暖刀", "role": "CBF", "job": "行为纠偏" },
+    { "code": "R04", "name": "算法", "role": "CQA", "job": "因子回测" },
+    { "code": "R05", "name": "猎豹", "role": "CPM", "job": "仓位执行" },
+    { "code": "R06", "name": "长镜", "role": "CMR", "job": "宏观研究" },
+    { "code": "R07", "name": "显微", "role": "CFR", "job": "基本面" },
+    { "code": "R08", "name": "棋手", "role": "CGO", "job": "博弈推演" },
+    { "code": "R09", "name": "铁壁", "role": "CRO", "job": "风控硬闸" },
+    { "code": "R10", "name": "暗哨", "role": "CIA", "job": "另类数据" }
+  ]
+}

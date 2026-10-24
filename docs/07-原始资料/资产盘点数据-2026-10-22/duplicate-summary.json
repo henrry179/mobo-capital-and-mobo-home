@@ -1,0 +1,603 @@
+{
+  "candidate_files": 22871,
+  "candidate_bytes": 5808365924,
+  "duplicate_groups": 1621,
+  "redundant_files": 13354,
+  "redundant_bytes": 2632647611,
+  "redundant_gb": 2.452,
+  "failed": [],
+  "by_ext": [
+    {
+      "ext": ".pdf",
+      "groups": 89,
+      "files": 262,
+      "bytes": 1630430147,
+      "gb": 1.518
+    },
+    {
+      "ext": ".png",
+      "groups": 584,
+      "files": 671,
+      "bytes": 665612490,
+      "gb": 0.62
+    },
+    {
+      "ext": ".gz",
+      "groups": 5,
+      "files": 64,
+      "bytes": 142562585,
+      "gb": 0.133
+    },
+    {
+      "ext": ".md",
+      "groups": 551,
+      "files": 8542,
+      "bytes": 99630004,
+      "gb": 0.093
+    },
+    {
+      "ext": ".jpg",
+      "groups": 96,
+      "files": 132,
+      "bytes": 28356632,
+      "gb": 0.026
+    },
+    {
+      "ext": ".py",
+      "groups": 120,
+      "files": 1747,
+      "bytes": 16046530,
+      "gb": 0.015
+    },
+    {
+      "ext": ".docx",
+      "groups": 10,
+      "files": 10,
+      "bytes": 14596271,
+      "gb": 0.014
+    },
+    {
+      "ext": ".sty",
+      "groups": 11,
+      "files": 327,
+      "bytes": 6361675,
+      "gb": 0.006
+    },
+    {
+      "ext": ".tex",
+      "groups": 9,
+      "files": 251,
+      "bytes": 4315259,
+      "gb": 0.004
+    },
+    {
+      "ext": ".bst",
+      "groups": 4,
+      "files": 126,
+      "bytes": 3939123,
+      "gb": 0.004
+    },
+    {
+      "ext": ".json",
+      "groups": 14,
+      "files": 251,
+      "bytes": 3673568,
+      "gb": 0.003
+    },
+    {
+      "ext": ".7z",
+      "groups": 1,
+      "files": 1,
+      "bytes": 3476766,
+      "gb": 0.003
+    },
+    {
+      "ext": ".webp",
+      "groups": 22,
+      "files": 22,
+      "bytes": 3194992,
+      "gb": 0.003
+    },
+    {
+      "ext": ".html",
+      "groups": 5,
+      "files": 101,
+      "bytes": 2017720,
+      "gb": 0.002
+    },
+    {
+      "ext": ".bak-20260914-102044",
+      "groups": 2,
+      "files": 20,
+      "bytes": 1853630,
+      "gb": 0.002
+    },
+    {
+      "ext": ".bak-090517-rmweixin",
+      "groups": 1,
+      "files": 10,
+      "bytes": 1602570,
+      "gb": 0.001
+    },
+    {
+      "ext": ".sh",
+      "groups": 8,
+      "files": 153,
+      "bytes": 648394,
+      "gb": 0.001
+    },
+    {
+      "ext": ".pyc",
+      "groups": 3,
+      "files": 49,
+      "bytes": 454380,
+      "gb": 0.0
+    },
+    {
+      "ext": ".yaml",
+      "groups": 10,
+      "files": 97,
+      "bytes": 420807,
+      "gb": 0.0
+    },
+    {
+      "ext": ".jsonl",
+      "groups": 5,
+      "files": 10,
+      "bytes": 369696,
+      "gb": 0.0
+    },
+    {
+      "ext": ".ipynb",
+      "groups": 2,
+      "files": 2,
+      "bytes": 318765,
+      "gb": 0.0
+    },
+    {
+      "ext": ".bak-20260915-terminology-20260915-104102",
+      "groups": 1,
+      "files": 9,
+      "bytes": 250848,
+      "gb": 0.0
+    },
+    {
+      "ext": NaN,
+      "groups": 16,
+      "files": 169,
+      "bytes": 249371,
+      "gb": 0.0
+    },
+    {
+      "ext": ".bak-20260914-093513",
+      "groups": 1,
+      "files": 10,
+      "bytes": 244570,
+      "gb": 0.0
+    },
+    {
+      "ext": ".exe",
+      "groups": 3,
+      "files": 4,
+      "bytes": 240496,
+      "gb": 0.0
+    },
+    {
+      "ext": ".bib",
+      "groups": 3,
+      "files": 75,
+      "bytes": 222200,
+      "gb": 0.0
+    },
+    {
+      "ext": ".js",
+      "groups": 3,
+      "files": 51,
+      "bytes": 217152,
+      "gb": 0.0
+    },
+    {
+      "ext": ".1783728907",
+      "groups": 1,
+      "files": 20,
+      "bytes": 205980,
+      "gb": 0.0
+    },
+    {
+      "ext": ".xlsx",
+      "groups": 1,
+      "files": 1,
+      "bytes": 155668,
+      "gb": 0.0
+    },
+    {
+      "ext": ".bak-20260921-cover",
+      "groups": 1,
+      "files": 5,
+      "bytes": 133205,
+      "gb": 0.0
+    },
+    {
+      "ext": ".bak-20260921-mz2",
+      "groups": 1,
+      "files": 5,
+      "bytes": 121465,
+      "gb": 0.0
+    },
+    {
+      "ext": ".bak-2026-07-22-pre-rev2",
+      "groups": 1,
+      "files": 1,
+      "bytes": 120453,
+      "gb": 0.0
+    },
+    {
+      "ext": ".sql",
+      "groups": 6,
+      "files": 6,
+      "bytes": 111374,
+      "gb": 0.0
+    },
+    {
+      "ext": ".pack",
+      "groups": 1,
+      "files": 1,
+      "bytes": 103857,
+      "gb": 0.0
+    },
+    {
+      "ext": ".txt",
+      "groups": 6,
+      "files": 31,
+      "bytes": 99638,
+      "gb": 0.0
+    },
+    {
+      "ext": ".bundled_manifest",
+      "groups": 2,
+      "files": 22,
+      "bytes": 76689,
+      "gb": 0.0
+    },
+    {
+      "ext": ".sample",
+      "groups": 9,
+      "files": 25,
+      "bytes": 67628,
+      "gb": 0.0
+    },
+    {
+      "ext": ".ps1",
+      "groups": 2,
+      "files": 32,
+      "bytes": 42354,
+      "gb": 0.0
+    },
+    {
+      "ext": ".mjs",
+      "groups": 1,
+      "files": 24,
+      "bytes": 34152,
+      "gb": 0.0
+    },
+    {
+      "ext": ".apache",
+      "groups": 1,
+      "files": 3,
+      "bytes": 30522,
+      "gb": 0.0
+    },
+    {
+      "ext": ".h",
+      "groups": 1,
+      "files": 1,
+      "bytes": 10036,
+      "gb": 0.0
+    },
+    {
+      "ext": ".css",
+      "groups": 1,
+      "files": 1,
+      "bytes": 8642,
+      "gb": 0.0
+    },
+    {
+      "ext": ".ds_store",
+      "groups": 1,
+      "files": 2,
+      "bytes": 8192,
+      "gb": 0.0
+    },
+    {
+      "ext": ".bsd",
+      "groups": 1,
+      "files": 3,
+      "bytes": 4032,
+      "gb": 0.0
+    },
+    {
+      "ext": ".idx",
+      "groups": 1,
+      "files": 1,
+      "bytes": 1772,
+      "gb": 0.0
+    },
+    {
+      "ext": ".1776779732089",
+      "groups": 1,
+      "files": 1,
+      "bytes": 1391,
+      "gb": 0.0
+    },
+    {
+      "ext": ".1776778731662",
+      "groups": 1,
+      "files": 1,
+      "bytes": 1355,
+      "gb": 0.0
+    },
+    {
+      "ext": ".1776778664119",
+      "groups": 1,
+      "files": 1,
+      "bytes": 1330,
+      "gb": 0.0
+    },
+    {
+      "ext": ".1776778479383",
+      "groups": 1,
+      "files": 1,
+      "bytes": 1235,
+      "gb": 0.0
+    }
+  ],
+  "top_groups": [
+    {
+      "sha256": "da87cf1ac66fac6caa105b88b3f2b8539e3e11495b9b992e24ea5a0bc58ba616",
+      "bytes": 19049268,
+      "copies": 4,
+      "redundant_bytes": 57147804,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\007.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\007.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\007.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\007.pdf"
+      ]
+    },
+    {
+      "sha256": "340c034bbad71cfbfaf53436be0996106c319523516f057f9634df6d6d8bb877",
+      "bytes": 26699183,
+      "copies": 3,
+      "redundant_bytes": 53398366,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\POTM2-20260320\\026.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\01-031\\026.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\POTM2-20260320\\026.pdf"
+      ]
+    },
+    {
+      "sha256": "80fc88760f92b3cb6550153c9af76e9902d927734472f21348f34a3ae2e90e05",
+      "bytes": 2126561,
+      "copies": 25,
+      "redundant_bytes": 51037464,
+      "ext": ".gz",
+      "canonical": "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-25T230503+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+      "sample_duplicates": [
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-26T230554+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-27T230506+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-28T230519+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-29T230539+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-31T061404+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz"
+      ]
+    },
+    {
+      "sha256": "39474f25d58d919ee2aea3820d3718c1996a900c9fd611887319857424e6179d",
+      "bytes": 19560337,
+      "copies": 3,
+      "redundant_bytes": 39120674,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\0027.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0027.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0027.pdf"
+      ]
+    },
+    {
+      "sha256": "62022bc6879242ada3fcc514d8511002b896791385c22669674c2afede278807",
+      "bytes": 19247329,
+      "copies": 3,
+      "redundant_bytes": 38494658,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\POTM2-20260320\\019.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\01-031\\019.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\POTM2-20260320\\019.pdf"
+      ]
+    },
+    {
+      "sha256": "6299e8603f789b1b0e0af998ab4fa10f6e70c0d637e561d5064936b3947ecb73",
+      "bytes": 2215425,
+      "copies": 18,
+      "redundant_bytes": 37662225,
+      "ext": ".gz",
+      "canonical": "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-01T230500+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+      "sample_duplicates": [
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-02T230526+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-07T063530+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-07T230518+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-09T091059+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+        "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-14T081817+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz"
+      ]
+    },
+    {
+      "sha256": "d6cfb3567f0bb7b66dbd00f5a01adf6b94c6f1af2dee11da3efd9a410f7104b6",
+      "bytes": 17676957,
+      "copies": 3,
+      "redundant_bytes": 35353914,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\004.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\004.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\004.pdf"
+      ]
+    },
+    {
+      "sha256": "1382a4ff4e8c1bca3fd65afe31fdbb2752cdaf1b7b1035fbc061292af7c5dea9",
+      "bytes": 17209187,
+      "copies": 3,
+      "redundant_bytes": 34418374,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\0019.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0019.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0019.pdf"
+      ]
+    },
+    {
+      "sha256": "f7c67ec05dece0daf6ffde34b07c36b2c40132d53e4c2fa5940f44ba1a1c9210",
+      "bytes": 16590697,
+      "copies": 3,
+      "redundant_bytes": 33181394,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\0022.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0022.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0022.pdf"
+      ]
+    },
+    {
+      "sha256": "2886e8d48357e28dfd4c396fefc4c0c1f7ec63c08170b17d64c5c0fa72cbd23b",
+      "bytes": 16448180,
+      "copies": 3,
+      "redundant_bytes": 32896360,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\006.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\006.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\006.pdf"
+      ]
+    },
+    {
+      "sha256": "22546d40022962bcbb6ed1432f1804f56b9c4c39852bb8e24e07ce3c21f62ad1",
+      "bytes": 15743434,
+      "copies": 3,
+      "redundant_bytes": 31486868,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\0030.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0030.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0030.pdf"
+      ]
+    },
+    {
+      "sha256": "b1bb189c3c801e23d5d85ba0f70a8e647d04c895a1b1be4a5db4be946e54881e",
+      "bytes": 15523642,
+      "copies": 3,
+      "redundant_bytes": 31047284,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\0039.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0039.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0039.pdf"
+      ]
+    },
+    {
+      "sha256": "6934663814b5c8677453f81edf5b1d7e057e53ad7ef9424f0b2143561909385c",
+      "bytes": 14493677,
+      "copies": 3,
+      "redundant_bytes": 28987354,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\0038.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0038.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0038.pdf"
+      ]
+    },
+    {
+      "sha256": "e416bcbfbc4e334704e6005a43d5471209f048da2057340e8f2431cae007704d",
+      "bytes": 14492610,
+      "copies": 3,
+      "redundant_bytes": 28985220,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\008.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\008.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\008.pdf"
+      ]
+    },
+    {
+      "sha256": "203501baac91604a01b4171bf28e0cc02b969d58703578cde85c5162a0864d89",
+      "bytes": 14277169,
+      "copies": 3,
+      "redundant_bytes": 28554338,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\POTM2-20260320\\020.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\01-031\\020.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\POTM2-20260320\\020.pdf"
+      ]
+    },
+    {
+      "sha256": "94c10015396e2bbb63bd3b4bfc893a2b6697f5607918d7d8de1ee5537176edac",
+      "bytes": 14197291,
+      "copies": 3,
+      "redundant_bytes": 28394582,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\POTM2-20260320\\017.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\01-031\\017.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\POTM2-20260320\\017.pdf"
+      ]
+    },
+    {
+      "sha256": "5342aa0f626d974ae799fa7dd0e69ea8eb7ea465b321cb5f84c029284eae5cd8",
+      "bytes": 13953259,
+      "copies": 3,
+      "redundant_bytes": 27906518,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\0012.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0012.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0012.pdf"
+      ]
+    },
+    {
+      "sha256": "d10aef845b2a86212a5ec9e189283481d495d226a334b03a96c39e432778ff84",
+      "bytes": 13788963,
+      "copies": 3,
+      "redundant_bytes": 27577926,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\POTM2-20260320\\030.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\01-031\\030.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\POTM2-20260320\\030.pdf"
+      ]
+    },
+    {
+      "sha256": "7bd86e99319c86c0c22cd5f37968791289bff2785411e89cff76b89a179dff77",
+      "bytes": 13538934,
+      "copies": 3,
+      "redundant_bytes": 27077868,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\0013.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0013.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0013.pdf"
+      ]
+    },
+    {
+      "sha256": "4b42307e943d770cf868a04276cb7a3cacb07631776349b029781c51bee24298",
+      "bytes": 13509894,
+      "copies": 3,
+      "redundant_bytes": 27019788,
+      "ext": ".pdf",
+      "canonical": "ITPM原稿内容\\PTM2-20260320\\0017.pdf",
+      "sample_duplicates": [
+        "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0017.pdf",
+        "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0017.pdf"
+      ]
+    }
+  ]
+}

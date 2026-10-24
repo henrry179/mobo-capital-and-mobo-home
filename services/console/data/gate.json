@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-22T11:50:55+08:00",
+  "pass": 22,
+  "fail": 0,
+  "items": [
+    { "id": "Q0", "name": "Q0 仓库可访问（safe.directory）", "ok": true },
+    { "id": "Q1", "name": "Q1 bash -n 全部通过", "ok": true },
+    { "id": "Q2", "name": "Q2 工作流模板 JSON 可解析", "ok": true },
+    { "id": "Q3", "name": "Q3 基础编排可解析", "ok": true },
+    { "id": "Q3", "name": "Q3 本地覆盖可解析", "ok": true },
+    { "id": "Q3", "name": "Q3 WSL 覆盖可解析", "ok": true },
+    { "id": "Q4", "name": "Q4 引用变量均在 .env.example 中", "ok": true },
+    { "id": "Q5", "name": "Q5 无真实密钥入库", "ok": true },
+    { "id": "Q6", "name": "Q6 六容器运行、无 unhealthy", "ok": true },
+    { "id": "Q7", "name": "Q7 smoke.sql 全绿", "ok": true },
+    { "id": "Q8", "name": "Q8 mobo-cli 单测通过", "ok": true },
+    { "id": "Q9", "name": "Q9 archive-dashboard 单测通过", "ok": true },
+    { "id": "Q10", "name": "Q10 公开站 200 / 受保护站 401→200", "ok": true },
+    { "id": "Q10", "name": "Q10 /internal/* 未认证 401", "ok": true },
+    { "id": "Q10b", "name": "Q10b 控制台可读取两站脱敏数据", "ok": true },
+    { "id": "Q11", "name": "Q11 doctor FAIL=0", "ok": true },
+    { "id": "Q11", "name": "Q11 export-site 产出数据包", "ok": true },
+    { "id": "Q11", "name": "Q11 公域包 0 私有字段 / 0 INTERNAL", "ok": true },
+    { "id": "Q12", "name": "Q12 常驻合计 < 1550 MiB", "ok": true },
+    { "id": "Q13", "name": "Q13 迁移 runner 与迁移文件就绪", "ok": true },
+    { "id": "Q13", "name": "Q13 恢复/灾备脚本语法通过", "ok": true },
+    { "id": "Q14", "name": "Q14 Markdown 相对链接 0 断链", "ok": true }
+  ]
+}

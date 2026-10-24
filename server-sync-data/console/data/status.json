@@ -1,0 +1,233 @@
+{
+  "generated_at": "2026-10-21T16:13:41.642912+08:00",
+  "mode": "local-wsl",
+  "containers": [
+    {
+      "name": "archive-dashboard",
+      "status": "Up 41 minutes (healthy)",
+      "healthy": true,
+      "mem": "157.7MiB / 200MiB",
+      "mem_pct": 78.84
+    },
+    {
+      "name": "mobo-caddy",
+      "status": "Up 27 minutes (healthy)",
+      "healthy": true,
+      "mem": "43.73MiB / 80MiB",
+      "mem_pct": 54.66
+    },
+    {
+      "name": "mobo-postgres",
+      "status": "Up 41 minutes (healthy)",
+      "healthy": true,
+      "mem": "72.28MiB / 600MiB",
+      "mem_pct": 12.05
+    },
+    {
+      "name": "mobo-restic-backup",
+      "status": "Up 41 minutes",
+      "healthy": false,
+      "mem": "20MiB / 150MiB",
+      "mem_pct": 13.33
+    },
+    {
+      "name": "mobobrain-n8n",
+      "status": "Up 41 minutes (healthy)",
+      "healthy": true,
+      "mem": "390.9MiB / 512MiB",
+      "mem_pct": 76.35
+    },
+    {
+      "name": "mobobrain-pkm",
+      "status": "Up About a minute",
+      "healthy": false,
+      "mem": "39.37MiB / 400MiB",
+      "mem_pct": 9.84
+    }
+  ],
+  "memory": {
+    "used_mib": 724,
+    "limit_mib": 1550
+  },
+  "host": {
+    "disk_used_pct": 4,
+    "mem_total_mib": 24032,
+    "mem_used_mib": 4017
+  },
+  "git": {
+    "commit": "e6bd1425cd57b2c74391255e16d9dfc8775bb6b6",
+    "branch": "main",
+    "dirty": 7
+  },
+  "db": {
+    "timeline_events": 116,
+    "archive_assets": 6,
+    "reading_items": 12,
+    "trade_reviews": 2,
+    "macro_theses": 3,
+    "publications": 3,
+    "pending_review": 1,
+    "articles": 0,
+    "drafts": 0,
+    "ingestion_runs": 0
+  },
+  "backup": {
+    "last_snapshot": "",
+    "id": ""
+  },
+  "services": [
+    {
+      "name": "莫伯资本 主站",
+      "url": "http://localhost/",
+      "auth": "公开",
+      "code": 200
+    },
+    {
+      "name": "莫伯之家 主站",
+      "url": "http://mobohome.localhost/",
+      "auth": "公开",
+      "code": 200
+    },
+    {
+      "name": "思源 知识库",
+      "url": "http://kb.localhost/",
+      "auth": "BasicAuth",
+      "code": 401
+    },
+    {
+      "name": "n8n 自动化",
+      "url": "http://n8n.localhost/",
+      "auth": "BasicAuth",
+      "code": 401
+    },
+    {
+      "name": "生命体征 实验室",
+      "url": "http://lab.localhost/",
+      "auth": "BasicAuth",
+      "code": 401
+    },
+    {
+      "name": "莫伯系统 控制台",
+      "url": "http://admin.localhost/",
+      "auth": "BasicAuth",
+      "code": 401
+    }
+  ],
+  "gate": {
+    "at": "2026-10-21T16:06:48+08:00",
+    "pass": 22,
+    "fail": 0,
+    "items": [
+      {
+        "id": "Q0",
+        "name": "Q0 仓库可访问（safe.directory）",
+        "ok": true
+      },
+      {
+        "id": "Q1",
+        "name": "Q1 bash -n 全部通过",
+        "ok": true
+      },
+      {
+        "id": "Q2",
+        "name": "Q2 工作流模板 JSON 可解析",
+        "ok": true
+      },
+      {
+        "id": "Q3",
+        "name": "Q3 基础编排可解析",
+        "ok": true
+      },
+      {
+        "id": "Q3",
+        "name": "Q3 本地覆盖可解析",
+        "ok": true
+      },
+      {
+        "id": "Q3",
+        "name": "Q3 WSL 覆盖可解析",
+        "ok": true
+      },
+      {
+        "id": "Q4",
+        "name": "Q4 引用变量均在 .env.example 中",
+        "ok": true
+      },
+      {
+        "id": "Q5",
+        "name": "Q5 无真实密钥入库",
+        "ok": true
+      },
+      {
+        "id": "Q6",
+        "name": "Q6 六容器运行、无 unhealthy",
+        "ok": true
+      },
+      {
+        "id": "Q7",
+        "name": "Q7 smoke.sql 全绿",
+        "ok": true
+      },
+      {
+        "id": "Q8",
+        "name": "Q8 mobo-cli 单测通过",
+        "ok": true
+      },
+      {
+        "id": "Q9",
+        "name": "Q9 archive-dashboard 单测通过",
+        "ok": true
+      },
+      {
+        "id": "Q10",
+        "name": "Q10 公开站 200 / 受保护站 401→200",
+        "ok": true
+      },
+      {
+        "id": "Q10",
+        "name": "Q10 /internal/* 未认证 401",
+        "ok": true
+      },
+      {
+        "id": "Q10b",
+        "name": "Q10b 控制台可读取两站脱敏数据",
+        "ok": true
+      },
+      {
+        "id": "Q11",
+        "name": "Q11 doctor FAIL=0",
+        "ok": true
+      },
+      {
+        "id": "Q11",
+        "name": "Q11 export-site 产出数据包",
+        "ok": true
+      },
+      {
+        "id": "Q11",
+        "name": "Q11 公域包 0 私有字段 / 0 INTERNAL",
+        "ok": true
+      },
+      {
+        "id": "Q12",
+        "name": "Q12 常驻合计 < 1550 MiB",
+        "ok": true
+      },
+      {
+        "id": "Q13",
+        "name": "Q13 迁移 runner 与迁移文件就绪",
+        "ok": true
+      },
+      {
+        "id": "Q13",
+        "name": "Q13 恢复/灾备脚本语法通过",
+        "ok": true
+      },
+      {
+        "id": "Q14",
+        "name": "Q14 Markdown 相对链接 0 断链",
+        "ok": true
+      }
+    ]
+  }
+}

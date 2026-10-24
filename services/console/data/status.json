@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-10-24T21:45:00+08:00",
+  "mode": "github-pages",
+  "containers": [],
+  "memory": { "used_mib": 0, "limit_mib": 1550 },
+  "host": {},
+  "git": { "branch": "main", "dirty": 0 },
+  "db": {},
+  "backup": { "last_snapshot": "", "id": "" },
+  "services": [
+    {
+      "name": "莫伯资本 主站",
+      "url": "../../sites/mobocapital/",
+      "auth": "公开",
+      "code": 200
+    },
+    {
+      "name": "莫伯之家 主站",
+      "url": "../../sites/mobohome/",
+      "auth": "公开",
+      "code": 200
+    },
+    {
+      "name": "思源 知识库",
+      "url": "#",
+      "auth": "仓外",
+      "code": null
+    },
+    {
+      "name": "n8n 自动化",
+      "url": "#",
+      "auth": "仓外",
+      "code": null
+    },
+    {
+      "name": "生命体征 实验室",
+      "url": "#",
+      "auth": "仓外",
+      "code": null
+    },
+    {
+      "name": "莫伯系统 控制台",
+      "url": "./",
+      "auth": "公开",
+      "code": 200
+    }
+  ],
+  "gate": { "at": "2026-10-24T21:45:00+08:00", "pass": 0, "fail": 0, "items": [] },
+  "note": "GitHub Pages 演示用；本机请运行 bash tools/wsl/collect-status.sh 覆盖为本地探测结果。"
+}

@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>莫伯双站 · 内容资产双维盘点仪表板</title>
+<meta name="description" content="莫伯双站系统内容资产：目录空间 × 文件类型双维盘点，含双站分流、重复分析与整理路线。">
+<style>
+  :root{
+    --bg:#060b14; --bg-2:#080f1c; --panel:#0d1626; --panel-2:#101c30;
+    --line:rgba(148,163,184,.14); --line-2:rgba(214,179,106,.22);
+    --text:#e8eef8; --muted:#8fa2bb; --dim:#64748b;
+    --gold:#d6b36a; --gold-2:#f0d79b; --blue:#4cc9f0; --teal:#2dd4bf;
+    --rose:#fb7185; --orange:#fb923c; --violet:#a78bfa; --green:#34d399;
+    --slate:#64748b; --pink:#f472b6; --yellow:#facc15; --cyan:#22d3ee;
+    --radius:18px; --max:1440px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:
+      radial-gradient(1100px 620px at 10% -8%, rgba(76,201,240,.10), transparent 62%),
+      radial-gradient(900px 520px at 92% -4%, rgba(214,179,106,.09), transparent 58%),
+      linear-gradient(180deg,#060b14 0%,#070d18 42%,#060b14 100%);
+    color:var(--text);
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif;
+    font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(rgba(148,163,184,.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148,163,184,.028) 1px, transparent 1px);
+    background-size:52px 52px;
+    mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, #000 20%, transparent 78%);
+  }
+  a{color:inherit; text-decoration:none}
+  .wrap{width:min(var(--max),calc(100% - 48px)); margin:0 auto; position:relative; z-index:1}
+  .mono{font-family:"Cascadia Code","Consolas","SFMono-Regular",monospace}
+  .topbar{
+    position:sticky; top:0; z-index:60;
+    background:rgba(6,11,20,.78); backdrop-filter:blur(18px) saturate(130%);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{height:64px; display:flex; align-items:center; justify-content:space-between; gap:24px}
+  .brand{display:flex; align-items:center; gap:12px; min-width:220px}
+  .brand-mark{
+    width:34px; height:34px; border-radius:9px; display:grid; place-items:center;
+    border:1px solid var(--line-2);
+    background:linear-gradient(145deg, rgba(214,179,106,.24), rgba(76,201,240,.10));
+    color:var(--gold-2); font-weight:800; font-size:13px; letter-spacing:.04em;
+    box-shadow:0 0 24px rgba(214,179,106,.10);
+  }
+  .brand-name{font-size:13px; letter-spacing:.16em; font-weight:700; color:#dce6f4}
+  .brand-sub{font-size:10px; color:var(--dim); letter-spacing:.18em; margin-top:-1px}
+  nav{display:flex; gap:4px; align-items:center; flex-wrap:wrap; justify-content:center}
+  nav a{
+    font-size:12px; color:var(--muted); padding:7px 11px; border-radius:8px;
+    border:1px solid transparent; transition:.2s;
+  }
+  nav a:hover,nav a.active{color:var(--gold-2); background:rgba(214,179,106,.07); border-color:rgba(214,179,106,.16)}
+  .stamp{
+    display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted);
+    white-space:nowrap; border:1px solid var(--line); border-radius:999px; padding:6px 12px;
+  }
+  .dot{width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 10px var(--green)}
+  .hero{padding:76px 0 34px}
+  .eyebrow{font-size:11px; letter-spacing:.3em; color:var(--gold); text-transform:uppercase; display:flex; align-items:center; gap:12px}
+  .eyebrow::after{content:""; width:80px; height:1px; background:linear-gradient(90deg,var(--gold),transparent)}
+  h1{
+    margin:16px 0 14px; font-size:clamp(38px,4.7vw,62px); line-height:1.08; letter-spacing:-.03em;
+    font-weight:750;
+    background:linear-gradient(110deg,#f6fbff 0%,#dfe9f5 38%,var(--gold-2) 78%,var(--gold) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .lede{max-width:840px; margin:0; color:var(--muted); font-size:15px; line-height:1.9}
+  .lede strong{color:#dbe7f6; font-weight:600}
+  .hero-meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px}
+  .pill{
+    display:inline-flex; align-items:center; gap:7px; padding:6px 11px; border-radius:999px;
+    border:1px solid var(--line); color:var(--muted); font-size:11.5px; background:rgba(13,22,38,.55);
+  }
+  .pill b{color:#dce7f5; font-weight:600}
+  .pill.gold{border-color:rgba(214,179,106,.26); color:var(--gold-2); background:rgba(214,179,106,.06)}
+  .kpis{display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-top:30px}
+  .kpi{
+    position:relative; overflow:hidden; border:1px solid var(--line); border-radius:14px;
+    padding:16px 15px 14px; background:linear-gradient(180deg, rgba(16,28,48,.86), rgba(10,18,32,.86));
+    min-height:118px; transition:.25s;
+  }
+  .kpi:hover{transform:translateY(-2px); border-color:rgba(148,163,184,.28)}
+  .kpi::after{content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--accent,var(--blue)); opacity:.55}
+  .kpi .label{font-size:10.5px; letter-spacing:.08em; color:var(--dim); text-transform:uppercase}
+  .kpi .value{font-size:30px; line-height:1.15; font-weight:750; letter-spacing:-.03em; margin-top:6px; color:#f4f8ff; font-variant-numeric:tabular-nums}
+  .kpi .value small{font-size:12px; color:var(--muted); font-weight:500; margin-left:3px; letter-spacing:0}
+  .kpi .sub{font-size:10.5px; color:var(--muted); margin-top:4px; line-height:1.45}
+  .kpi .sub em{color:var(--accent,var(--blue)); font-style:normal}
+  .kpi.blue{--accent:var(--blue)} .kpi.gold{--accent:var(--gold)} .kpi.rose{--accent:var(--rose)}
+  .kpi.orange{--accent:var(--orange)} .kpi.teal{--accent:var(--teal)} .kpi.violet{--accent:var(--violet)}
+  section{padding:52px 0 10px; scroll-margin-top:78px}
+  .sec-head{display:flex; align-items:flex-end; justify-content:space-between; gap:30px; margin-bottom:22px}
+  .sec-head .left{display:flex; align-items:baseline; gap:14px; min-width:0}
+  .sec-num{font-size:11px; letter-spacing:.2em; color:var(--gold); font-weight:700; white-space:nowrap}
+  h2{margin:0; font-size:clamp(23px,2.2vw,30px); letter-spacing:-.02em; line-height:1.25}
+  .sec-head p{max-width:620px; margin:0; color:var(--muted); font-size:12.5px; line-height:1.85; text-align:right}
+  .card{
+    position:relative; border:1px solid var(--line); border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(15,26,44,.92), rgba(9,17,30,.92));
+    padding:20px; overflow:hidden;
+  }
+  .card::before{
+    content:""; position:absolute; top:0; left:12%; right:12%; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(214,179,106,.28),transparent);
+  }
+  .card-head{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px}
+  .card-head h3{margin:0; font-size:14.5px; letter-spacing:.01em; font-weight:650}
+  .card-head .kicker{font-size:10.5px; color:var(--dim); letter-spacing:.1em}
+  .grid-2{display:grid; grid-template-columns:1.35fr .9fr; gap:14px}
+  .grid-2.even{grid-template-columns:1fr 1fr}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  .hint{font-size:10.5px; color:var(--dim); margin-top:10px; line-height:1.6}
+  .treemap{height:520px; width:100%; position:relative}
+  .treemap svg{width:100%; height:100%; display:block; overflow:visible}
+  .tm-cell{cursor:pointer; transition:opacity .15s}
+  .tm-cell:hover{opacity:.92}
+  .tm-label{fill:#eff6ff; font-size:11px; font-weight:600; pointer-events:none; paint-order:stroke; stroke:rgba(3,8,16,.55); stroke-width:2.4px; stroke-linejoin:round}
+  .tm-size{fill:rgba(226,238,252,.72); font-size:9.5px; pointer-events:none; paint-order:stroke; stroke:rgba(3,8,16,.5); stroke-width:2px}
+  .tm-group{font-size:10px; letter-spacing:.06em; fill:var(--gold-2); font-weight:700; pointer-events:none}
+  .legend{display:flex; flex-wrap:wrap; gap:7px 12px; justify-content:flex-end; max-width:70%}
+  .legend-item{display:flex; align-items:center; gap:6px; font-size:10.5px; color:var(--muted); white-space:nowrap}
+  .swatch{width:9px; height:9px; border-radius:3px; flex:0 0 auto}
+  .bars{display:flex; flex-direction:column; gap:9px}
+  .bar-row{display:grid; grid-template-columns:minmax(0,1fr) 78px; gap:10px; align-items:center}
+  .bar-label{font-size:11px; color:#c9d6e8; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .bar-label .muted{color:var(--dim); font-size:9.5px; margin-left:5px}
+  .bar-value{font-size:10.5px; color:var(--muted); text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .bar-track{grid-column:1/-1; height:6px; border-radius:999px; background:rgba(148,163,184,.09); overflow:hidden; margin-top:-3px}
+  .bar-fill{height:100%; border-radius:999px; background:var(--c,var(--blue)); opacity:.78}
+  .table-card{padding:0; margin-top:14px}
+  .table-card .card-head{padding:18px 20px 0; margin-bottom:12px}
+  .tabs{display:flex; gap:4px; background:rgba(148,163,184,.06); padding:3px; border-radius:9px; border:1px solid var(--line)}
+  .tab{
+    border:0; background:transparent; color:var(--muted); font-size:11px; padding:5px 10px;
+    border-radius:6px; cursor:pointer; font-family:inherit;
+  }
+  .tab.active{background:rgba(214,179,106,.14); color:var(--gold-2)}
+  .search{
+    width:220px; max-width:100%; border:1px solid var(--line); background:rgba(6,11,20,.55);
+    color:var(--text); border-radius:8px; padding:6px 10px; font-size:11px; outline:none; font-family:inherit;
+  }
+  .search:focus{border-color:rgba(214,179,106,.4)}
+  .table-wrap{max-height:410px; overflow:auto; border-top:1px solid var(--line)}
+  table{width:100%; border-collapse:collapse; font-size:11.5px}
+  thead th{
+    position:sticky; top:0; z-index:2; background:#0c1525; color:var(--dim);
+    font-size:10px; letter-spacing:.08em; text-transform:uppercase; text-align:left;
+    padding:9px 14px; border-bottom:1px solid var(--line); white-space:nowrap; font-weight:600;
+  }
+  tbody td{padding:9px 14px; border-bottom:1px solid rgba(148,163,184,.07); color:#c9d6e8; vertical-align:middle}
+  tbody tr:hover{background:rgba(76,201,240,.04)}
+  tbody tr:last-child td{border-bottom:0}
+  td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+  td.path{font-family:"Cascadia Code","Consolas",monospace; font-size:10.5px; color:#d6e4f3; max-width:520px}
+  td.path span{color:var(--dim)}
+  .rowbar{display:inline-block; height:4px; border-radius:999px; background:var(--gold); opacity:.55; vertical-align:middle; margin-left:8px}
+  .tag{display:inline-block; font-size:9.5px; padding:2px 7px; border-radius:999px; border:1px solid var(--line); color:var(--muted); white-space:nowrap}
+  .tag.blue{color:var(--blue); border-color:rgba(76,201,240,.24); background:rgba(76,201,240,.06)}
+  .tag.gold{color:var(--gold-2); border-color:rgba(214,179,106,.26); background:rgba(214,179,106,.06)}
+  .tag.rose{color:var(--rose); border-color:rgba(251,113,133,.24); background:rgba(251,113,133,.06)}
+  .tag.orange{color:var(--orange); border-color:rgba(251,146,60,.24); background:rgba(251,146,60,.06)}
+  .tag.teal{color:var(--teal); border-color:rgba(45,212,191,.24); background:rgba(45,212,191,.06)}
+  .donut-wrap{display:flex; align-items:center; gap:18px; min-height:330px}
+  .donut-svg{width:250px; height:250px; flex:0 0 250px}
+  .donut-center{fill:#f4f8ff; font-size:26px; font-weight:750; text-anchor:middle; font-variant-numeric:tabular-nums}
+  .donut-center-sub{fill:var(--muted); font-size:10px; letter-spacing:.1em; text-anchor:middle}
+  .donut-legend{display:flex; flex-direction:column; gap:6px; flex:1; min-width:0; max-height:300px; overflow:auto; padding-right:4px}
+  .dl-item{display:grid; grid-template-columns:10px minmax(0,1fr) 68px 44px; gap:8px; align-items:center; font-size:10.5px; color:var(--muted); cursor:default}
+  .dl-item b{color:#d7e4f4; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .dl-item .gb{text-align:right; font-variant-numeric:tabular-nums; color:#c8d7e9}
+  .dl-item .pc{text-align:right; font-variant-numeric:tabular-nums; color:var(--dim)}
+  .split-bars{display:flex; flex-direction:column; gap:16px; margin-top:8px}
+  .split-row .split-title{display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted); margin-bottom:6px}
+  .split-track{height:22px; border-radius:7px; overflow:hidden; display:flex; background:rgba(148,163,184,.07); border:1px solid rgba(148,163,184,.06)}
+  .split-seg{height:100%; display:flex; align-items:center; justify-content:center; font-size:9.5px; color:#03111f; font-weight:700; overflow:hidden; white-space:nowrap}
+  .inversion-note{display:flex; gap:14px; align-items:flex-start; margin-top:16px; padding:13px 14px; border:1px solid rgba(214,179,106,.18); border-radius:11px; background:rgba(214,179,106,.045)}
+  .inversion-note .big{font-size:24px; color:var(--gold-2); font-weight:750; line-height:1; white-space:nowrap}
+  .inversion-note p{margin:0; font-size:11.5px; color:var(--muted); line-height:1.75}
+  .heat-wrap{overflow-x:auto; padding-bottom:4px}
+  .heat-grid{display:grid; grid-template-columns:190px repeat(14,minmax(42px,1fr)) 72px; gap:3px; min-width:1020px; align-items:stretch}
+  .heat-h{font-size:9.5px; color:var(--dim); text-align:center; padding:5px 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .heat-row-label{font-family:"Cascadia Code","Consolas",monospace; font-size:9.5px; color:#c7d5e6; display:flex; align-items:center; padding-right:8px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .heat-cell{height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:9px; color:rgba(240,248,255,.82); font-variant-numeric:tabular-nums; cursor:default; border:1px solid rgba(148,163,184,.04)}
+  .heat-total{font-size:9.5px; color:var(--gold-2); display:flex; align-items:center; justify-content:flex-end; padding-right:4px; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .heat-legend{display:flex; align-items:center; gap:8px; justify-content:flex-end; margin-top:10px; font-size:9.5px; color:var(--dim)}
+  .heat-scale{width:120px; height:5px; border-radius:999px; background:linear-gradient(90deg,rgba(76,201,240,.12),rgba(76,201,240,.9))}
+  .route-bar{display:flex; height:42px; border-radius:10px; overflow:hidden; border:1px solid var(--line); background:rgba(148,163,184,.05)}
+  .route-seg{height:100%; display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:700; color:#04111f; overflow:hidden; white-space:nowrap; transition:.2s}
+  .route-seg:hover{filter:brightness(1.15)}
+  .route-cards{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px}
+  .route-card{border:1px solid var(--line); border-radius:10px; padding:10px 11px; background:rgba(148,163,184,.03)}
+  .route-card .rc-top{display:flex; align-items:center; gap:7px; font-size:10.5px; color:#d7e4f4}
+  .route-card .rc-gb{font-size:17px; font-weight:700; margin-top:5px; color:#f4f8ff; font-variant-numeric:tabular-nums}
+  .route-card .rc-desc{font-size:9.5px; color:var(--dim); line-height:1.5; margin-top:2px}
+  .site-split{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px}
+  .site-big{border:1px solid var(--line); border-radius:12px; padding:15px; background:rgba(76,201,240,.035)}
+  .site-big.off{background:rgba(100,116,139,.045)}
+  .site-big .k{font-size:10px; color:var(--dim); letter-spacing:.08em}
+  .site-big .v{font-size:29px; font-weight:750; line-height:1.2; margin-top:3px; letter-spacing:-.03em; color:var(--blue)}
+  .site-big.off .v{color:#a9b9cd}
+  .site-big .s{font-size:10px; color:var(--muted); margin-top:2px}
+  .mini-text{font-size:10.5px; color:var(--muted); line-height:1.8; margin:10px 0 0}
+  .mini-text b{color:#dbe7f5; font-weight:600}
+  .findings{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  .finding{
+    border:1px solid var(--line); border-radius:14px; padding:16px 16px 15px;
+    background:linear-gradient(180deg,rgba(16,28,48,.78),rgba(10,18,32,.78)); position:relative; overflow:hidden;
+  }
+  .finding .f-num{font-size:10px; color:var(--gold); letter-spacing:.12em}
+  .finding .f-big{font-size:25px; font-weight:750; line-height:1.15; margin:7px 0 5px; letter-spacing:-.02em; color:#f4f8ff}
+  .finding .f-big em{font-style:normal; color:var(--gold-2); font-size:15px; margin-left:3px}
+  .finding p{margin:0; font-size:11px; color:var(--muted); line-height:1.7}
+  .finding::after{content:""; position:absolute; right:-26px; bottom:-32px; width:110px; height:110px; border-radius:50%; background:radial-gradient(circle,rgba(76,201,240,.10),transparent 65%)}
+  .finding.gold::after{background:radial-gradient(circle,rgba(214,179,106,.14),transparent 65%)}
+  .finding.rose::after{background:radial-gradient(circle,rgba(251,113,133,.12),transparent 65%)}
+  .small-table{max-height:370px; overflow:auto}
+  .small-table table{font-size:10.5px}
+  .small-table tbody td{padding:7px 9px}
+  .small-table thead th{padding:7px 9px; font-size:9px}
+  .dup-bars{display:flex; flex-direction:column; gap:7px; margin-top:12px}
+  .dup-row{display:grid; grid-template-columns:46px 1fr 62px; gap:8px; align-items:center; font-size:10px; color:var(--muted)}
+  .dup-track{height:5px; background:rgba(251,113,133,.10); border-radius:999px; overflow:hidden}
+  .dup-fill{height:100%; background:linear-gradient(90deg,var(--rose),var(--orange)); border-radius:999px}
+  .timeline{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+  .phase{
+    border:1px solid var(--line); border-radius:14px; padding:15px 15px 13px; background:rgba(13,22,38,.72);
+    display:flex; flex-direction:column; gap:6px; min-height:172px;
+  }
+  .phase .ph-top{display:flex; align-items:center; justify-content:space-between; gap:8px}
+  .phase .ph-id{font-size:10px; letter-spacing:.14em; color:var(--gold); font-weight:700}
+  .phase .ph-size{font-size:9.5px; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:2px 7px; white-space:nowrap}
+  .phase h4{margin:2px 0 0; font-size:13px; font-weight:650; color:#e6eef9}
+  .phase p{margin:0; font-size:10.5px; color:var(--muted); line-height:1.65; flex:1}
+  .phase .ph-accept{font-size:9.5px; color:var(--teal); border-top:1px solid rgba(148,163,184,.09); padding-top:7px; line-height:1.5}
+  .phase .ph-accept b{color:#b9f3e8; font-weight:600}
+  .pipeline{display:grid; grid-template-columns:repeat(6,1fr); gap:8px}
+  .pipe-step{border:1px solid var(--line); border-radius:11px; padding:11px 12px; background:rgba(148,163,184,.025); min-height:104px}
+  .pipe-step .p-id{font-size:9.5px; color:var(--gold); letter-spacing:.14em; font-weight:700}
+  .pipe-step h5{margin:5px 0 4px; font-size:11.5px; color:#e5eef9; font-weight:600}
+  .pipe-step p{margin:0; font-size:9.5px; color:var(--muted); line-height:1.55}
+  .decision-card{margin-top:14px}
+  .decision-list{display:grid; grid-template-columns:1fr 1fr; gap:6px 22px; margin-top:6px}
+  .decision{display:flex; gap:10px; align-items:flex-start; padding:8px 0; border-bottom:1px dashed rgba(148,163,184,.10); font-size:11.5px; color:#c9d6e8}
+  .decision input{margin-top:3px; accent-color:var(--gold); width:13px; height:13px; flex:0 0 auto}
+  .decision span b{color:#f0f6ff; font-weight:600}
+  .decision .rec{font-size:9.5px; color:var(--gold-2); margin-left:4px; white-space:nowrap}
+  .callout{display:flex; gap:12px; align-items:flex-start; padding:14px 16px; border-radius:12px; border:1px solid rgba(251,146,60,.18); background:rgba(251,146,60,.045); margin-top:12px}
+  .callout .ico{width:22px; height:22px; border-radius:50%; display:grid; place-items:center; background:rgba(251,146,60,.16); color:var(--orange); font-size:12px; flex:0 0 auto; margin-top:1px}
+  .callout p{margin:0; font-size:11px; color:var(--muted); line-height:1.75}
+  .callout p b{color:#ffe0c2; font-weight:600}
+  .note{font-size:10px; color:var(--dim); line-height:1.7}
+  footer{border-top:1px solid var(--line); margin-top:56px; padding:26px 0 40px; color:var(--dim); font-size:10.5px}
+  .foot{display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap}
+  .foot b{color:var(--muted); font-weight:500}
+  .tooltip{
+    position:fixed; z-index:999; pointer-events:none; opacity:0; transform:translateY(4px);
+    transition:opacity .12s, transform .12s; max-width:380px;
+    background:rgba(9,17,30,.97); border:1px solid rgba(214,179,106,.26); border-radius:9px;
+    padding:9px 11px; box-shadow:0 18px 50px rgba(0,0,0,.5); font-size:11px; color:#dce8f7; line-height:1.55;
+  }
+  .tooltip.on{opacity:1; transform:translateY(0)}
+  .tooltip .tt-title{color:var(--gold-2); font-weight:600; margin-bottom:3px; word-break:break-all}
+  .tooltip .tt-row{color:var(--muted)}
+  .tooltip .tt-row b{color:#eaf2fd; font-weight:600}
+  ::-webkit-scrollbar{width:8px; height:8px}
+  ::-webkit-scrollbar-thumb{background:rgba(148,163,184,.18); border-radius:999px}
+  ::-webkit-scrollbar-track{background:transparent}
+  @media (max-width:1180px){
+    .kpis{grid-template-columns:repeat(3,1fr)}
+    .grid-2{grid-template-columns:1fr}
+    .findings{grid-template-columns:repeat(2,1fr)}
+    .timeline{grid-template-columns:repeat(2,1fr)}
+    .sec-head p{display:none}
+    .legend{max-width:100%}
+  }
+  @media (max-width:760px){
+    .wrap{width:calc(100% - 28px)}
+    .topbar-inner{height:auto; padding:10px 0; flex-wrap:wrap; justify-content:space-between}
+    nav{order:3; width:100%; justify-content:flex-start; overflow:auto; padding-bottom:4px}
+    .stamp{font-size:10px}
+    .hero{padding:48px 0 20px}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .kpi .value{font-size:25px}
+    .findings,.timeline,.decision-list,.route-cards,.site-split{grid-template-columns:1fr}
+    .donut-wrap{flex-direction:column; align-items:flex-start}
+    .donut-svg{width:220px; height:220px; flex-basis:220px}
+    .pipeline{grid-template-columns:1fr 1fr}
+    .treemap{height:420px}
+    .table-card .card-head{flex-wrap:wrap}
+    .search{width:100%}
+    .card{padding:15px}
+    .table-card{padding:0}
+    .table-card .card-head{padding:15px 15px 0}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">MB</div>
+      <div>
+        <div class="brand-name">MOBO · ASSET INTELLIGENCE</div>
+        <div class="brand-sub">CAPITAL × HOME / DUAL-SITE</div>
+      </div>
+    </div>
+    <nav id="nav">
+      <a href="#overview" class="active">总览</a>
+      <a href="#space">空间维度</a>
+      <a href="#type">类型维度</a>
+      <a href="#cross">交叉矩阵</a>
+      <a href="#routing">双站分流</a>
+      <a href="#launch">上线包</a>
+      <a href="#findings">关键发现</a>
+      <a href="#plan">整理路线</a>
+    </nav>
+    <div class="stamp"><span class="dot"></span>只读盘点 · <span id="stampDate">2026-10-22</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero" id="overview">
+    <div class="eyebrow">MoBo Dual-Site / Content Asset Audit</div>
+    <h1>内容资产<br>双维盘点</h1>
+    <p class="lede">
+      以 <strong>目录空间</strong> 为第一维、<strong>文件类型</strong> 为第二维，对莫伯双站系统当前全部零散文件夹与文档做一次只读盘点；
+      再按 <strong>莫伯资本（A 站）</strong> 与 <strong>莫伯之家（B 站）</strong> 的后期同步路径，给出“一份原件、两个站点视图”的整合方案。
+      本页不移动、不改名、不删除任何文件。
+    </p>
+    <div class="hero-meta">
+      <span class="pill">扫描口径 <b>全量递归</b></span>
+      <span class="pill">文件 <b id="heroFiles">44,814</b></span>
+      <span class="pill">总体量 <b id="heroSize">35.22 GB</b></span>
+      <span class="pill">精确哈希 <b>SHA-256</b></span>
+      <span class="pill gold">状态 <b>方案待拍板 · 未执行</b></span>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <section id="space">
+    <div class="sec-head">
+      <div class="left"><span class="sec-num">01 / SPACE</span><h2>维度 A · 空间分布</h2></div>
+      <p>按目录累计体量。面积代表 GB，颜色代表顶层目录；点击色块可筛选下方目录表。单位 GB = 1024 MB。</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-head">
+          <div><h3>目录 Treemap</h3><div class="kicker">TOP-LEVEL × SECOND-LEVEL</div></div>
+          <div class="legend" id="treemapLegend"></div>
+        </div>
+        <div class="treemap" id="treemap"></div>
+        <div class="hint">面积 = 目录累计体积；同一颜色 = 同一顶层目录。悬停查看路径 / 文件数 / 占比；点击筛选目录表。</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div><h3>二级目录体量 Top 12</h3><div class="kicker">CUMULATIVE SIZE</div></div>
+        </div>
+        <div class="bars" id="folderBars"></div>
+        <div class="hint">前 2 个目录占总体积 <b id="top2Share">—</b>；其中 15.80 GB 是 ITPM 课件视频，15.60 GB 是 Hermes 迁移包。</div>
+      </div>
+    </div>
+    <div class="card table-card">
+      <div class="card-head">
+        <div><h3>目录明细</h3><div class="kicker">CLICK A ROW TO COPY PATH</div></div>
+        <div class="tabs" id="folderTabs">
+          <button class="tab active" data-level="1">一级</button>
+          <button class="tab" data-level="2">二级</button>
+          <button class="tab" data-level="3">三级</button>
+        </div>
+        <input class="search" id="folderSearch" placeholder="搜索路径…">
+      </div>
+      <div class="table-wrap">
+        <table id="folderTable">
+          <thead><tr><th>目录</th><th class="num">文件数</th><th class="num">体积</th><th class="num">占比</th><th>体量条</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="type">
+    <div class="sec-head">
+      <div class="left"><span class="sec-num">02 / TYPE</span><h2>维度 B · 文件类型</h2></div>
+      <p>Word / PDF / 视频 / 图片 / 音频 / Markdown / 代码 / 数据库 / 压缩包 / 字体。体积占比与数量占比分开看，才能看清“什么值得上站”。</p>
+    </div>
+    <div class="grid-2 even">
+      <div class="card">
+        <div class="card-head"><div><h3>类型构成</h3><div class="kicker">BY SIZE</div></div><span class="tag gold" id="typeCountTag">—</span></div>
+        <div class="donut-wrap">
+          <svg class="donut-svg" id="donut" viewBox="0 0 250 250" role="img" aria-label="文件类型体积占比"></svg>
+          <div class="donut-legend" id="donutLegend"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>体积 / 数量双轴</h3><div class="kicker">INVERSION IS THE POINT</div></div></div>
+        <div class="split-bars" id="splitBars"></div>
+        <div class="inversion-note">
+          <div class="big" id="invBig">19,225</div>
+          <p><b style="color:#dbe7f5">Markdown 文件占数量 42.9%，只占体积 0.52%。</b><br>
+             视频只有 61 个文件（数量 0.14%），却占 43.3% 的体积。站点真正要同步的是“轻文本”，不是“重媒体”。</p>
+        </div>
+      </div>
+    </div>
+    <div class="card table-card">
+      <div class="card-head">
+        <div><h3>类型台账</h3><div class="kicker">14 CATEGORIES · 401 PDF / 742 WORD / 61 VIDEO / 14,036 IMAGE</div></div>
+      </div>
+      <div class="table-wrap">
+        <table id="typeTable">
+          <thead><tr><th>类型</th><th class="num">文件数</th><th class="num">数量占比</th><th class="num">体积</th><th class="num">体积占比</th><th>处置口径</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="cross">
+    <div class="sec-head">
+      <div class="left"><span class="sec-num">03 / MATRIX</span><h2>目录 × 类型交叉矩阵</h2></div>
+      <p>颜色越亮 = 该目录中该类型占比越高。它回答一个关键问题：某个大目录到底“重”在哪一类文件上，能不能直接上站。</p>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div><h3>类型重心</h3><div class="kicker">ROW SHARE · LOG SCALE</div></div>
+        <span class="tag blue">TOP 10 内容目录</span>
+      </div>
+      <div class="heat-wrap"><div class="heat-grid" id="heatmap"></div></div>
+      <div class="heat-legend"><span>低</span><span class="heat-scale"></span><span>高（行内占比）</span></div>
+    </div>
+  </section>
+
+  <section id="routing">
+    <div class="sec-head">
+      <div class="left"><span class="sec-num">04 / ROUTING</span><h2>双站分流：一份原件，两个视图</h2></div>
+      <p>按目录规则估算的“后期同步去向”，不是逐文件发布判定。A/B 候选仍须 HITL、脱敏与版权复核；People 存档按你的决定暂不上站。</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-head"><div><h3>全量去向</h3><div class="kicker">DIRECTORY-LEVEL ESTIMATE</div></div><span class="tag orange">未执行</span></div>
+        <div class="route-bar" id="routeBar"></div>
+        <div class="route-cards" id="routeCards"></div>
+        <div class="callout">
+          <div class="ico">!</div>
+          <p><b>不要按站点复制两套媒体。</b> 同一份封面 / 图片 / 视频只保留一个金库原件，用 <code>SITE-ROUTING.csv</code> 的 <b>site</b> 字段派生两个站点的导出清单；否则 OSS 会按两倍计费，且版本很快分叉。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>上站候选 vs 冷存档</h3><div class="kicker">WHAT ACTUALLY GOES ONLINE</div></div></div>
+        <div class="site-split">
+          <div class="site-big">
+            <div class="k">上站候选（A + B）</div>
+            <div class="v" id="candidateGb">1.54 GB</div>
+            <div class="s" id="candidatePct">4.4% of 35.22 GB</div>
+          </div>
+          <div class="site-big off">
+            <div class="k">不上站 / 冷存 / 备份</div>
+            <div class="v" id="offlineGb">33.68 GB</div>
+            <div class="s" id="offlinePct">95.6%</div>
+          </div>
+        </div>
+        <div class="split-bars" id="siteTypeBars"></div>
+        <p class="mini-text" id="siteTextNote"></p>
+        <div class="hint">A 站候选里大部分是封面与 Word 衍生稿；真正可直接入库的 Markdown 只有约 9 MB。先把文本层跑通，再谈 15 GB 视频。</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="launch">
+    <div class="sec-head">
+      <div class="left"><span class="sec-num">05 / LAUNCH</span><h2>原件保全与同步：不合并不转换</h2></div>
+      <p>按你的最新口径：Word/PDF/Markdown/Excel 原件保留、不合并、不转换，图片保留原件；MoBoBrain 与 01-影视库 本地只读；其余 4.93 GB 原件同步。</p>
+    </div>
+    <div class="kpis" id="launchKpis" style="grid-template-columns:repeat(4,1fr)"></div>
+    <div class="grid-2" style="margin-top:14px">
+      <div class="card">
+        <div class="card-head"><div><h3>排除 / 本地只读 / 同步</h3><div class="kicker">THREE-WAY SPLIT</div></div><span class="tag gold">v5 口径</span></div>
+        <div class="route-bar" id="launchBar"></div>
+        <div class="route-cards" id="launchCards"></div>
+        <div class="callout" style="border-color:rgba(76,201,240,.18);background:rgba(76,201,240,.035)">
+          <div class="ico" style="background:rgba(76,201,240,.14);color:var(--blue)">i</div>
+          <p><b>Word/PDF/MD/Excel 字节不变。</b> 不合并、不转 Markdown、不改文件名；只做复制、SHA-256、MANIFEST 索引。图片也保留原件，缩略图只是额外衍生文件。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>同步原件构成</h3><div class="kicker">4.93 GB · ORIGINALS ONLY</div></div></div>
+        <div class="bars" id="launchBars"></div>
+        <div class="hint">同步原件 4.93 GB 字节不变；公开展示层只生成缩略图与 JSON 索引，约 0.1–0.2 GB。</div>
+      </div>
+    </div>
+    <div class="card table-card">
+      <div class="card-head">
+        <div><h3>资产分区与落点</h3><div class="kicker">EXCLUDED · LOCAL · SYNC</div></div>
+        <span class="tag blue">待批准</span>
+      </div>
+      <div class="table-wrap">
+        <table id="launchTable">
+          <thead><tr><th>分区</th><th class="num">体量</th><th class="num">处理</th><th>服务器落点</th><th>可见性</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-head"><div><h3>上线流程</h3><div class="kicker">HASH → COPY → MANIFEST → UPLOAD → ATOMIC SWAP</div></div></div>
+      <div class="pipeline" id="pipeline"></div>
+    </div>
+  </section>
+
+  <section id="findings">
+    <div class="sec-head">
+      <div class="left"><span class="sec-num">06 / FINDINGS</span><h2>关键发现</h2></div>
+      <p>六个数字，决定整理顺序：先挖重复与备份，再分文本，最后才搬 15 GB 视频。</p>
+    </div>
+    <div class="findings" id="findingsGrid"></div>
+    <div class="grid-2 even" style="margin-top:14px">
+      <div class="card">
+        <div class="card-head"><div><h3>最大文件 Top 10</h3><div class="kicker">WHERE THE BYTES ARE</div></div></div>
+        <div class="small-table">
+          <table><thead><tr><th>文件</th><th>类型</th><th class="num">体积</th></tr></thead><tbody id="topFiles"></tbody></table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>精确重复 Top 10 组</h3><div class="kicker">SHA-256 · KEEP ONE</div></div></div>
+        <div class="small-table">
+          <table><thead><tr><th>类型</th><th class="num">份数</th><th class="num">可回收</th><th>保留样本</th></tr></thead><tbody id="dupTable"></tbody></table>
+        </div>
+        <div class="dup-bars" id="dupBars"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plan">
+    <div class="sec-head">
+      <div class="left"><span class="sec-num">07 / PLAN</span><h2>整理路线（待批准后执行）</h2></div>
+      <p>通用动作：COPY → SHA-256 → 登记 MANIFEST → 抽样校验 → 保留源。本轮不移动、不删除任何源文件。</p>
+    </div>
+    <div class="timeline" id="timeline"></div>
+    <div class="card decision-card">
+      <div class="card-head"><div><h3>需要你拍板的 8 个开关</h3><div class="kicker">BEFORE EXECUTION</div></div><span class="tag gold">方案 v3</span></div>
+      <div class="decision-list" id="decisions"></div>
+      <div class="callout" style="border-color:rgba(76,201,240,.18);background:rgba(76,201,240,.035)">
+        <div class="ico" style="background:rgba(76,201,240,.14);color:var(--blue)">i</div>
+        <p><b>本页只是“盘点 + 方案”。</b> 你确认后，我再按 v3 的 P0–P7（金库/去重）与 v5 的 V0–V7（原件保全/同步）分批执行；每批产出 MANIFEST 增量、CHANGELOG 与验收报告。完整文字方案见同目录 <a href="./莫伯双站内容资产双维分析与整合方案-v3.md" style="color:var(--gold-2);border-bottom:1px dashed rgba(214,179,106,.4)">《盘点与金库 v3》</a> · <a href="./莫伯双站原件保全与双站同步方案-v5.md" style="color:var(--gold-2);border-bottom:1px dashed rgba(214,179,106,.4)">《原件保全与同步 v5》</a>。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot">
+      <div>
+        <b>数据源</b>：本机全量递归扫描 2026-10-22 · 44,814 文件 · 35.22 GB · SHA-256 精确去重<br>
+        <b>生成脚本</b>：docs/07-原始资料/资产盘点数据-2026-10-22/ · <span class="mono">build_analysis.py</span> / <span class="mono">build_duplicates.py</span> / <span class="mono">build_dashboard.py</span>
+      </div>
+      <div style="text-align:right">
+        莫伯双站系统 · 内容资产盘点 v3<br>
+        <span style="color:var(--dim)">只读分析 · 未移动 / 未删除任何文件</span>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const DATA = /*__DATA__*/;
+const CAT_COLORS = {
+  "视频":"#fb923c","图片":"#4cc9f0","数据库/状态快照":"#a78bfa","版本库对象":"#64748b",
+  "PDF":"#fb7185","Word":"#2dd4bf","压缩包":"#facc15","音频":"#f472b6",
+  "Markdown":"#34d399","代码/配置":"#818cf8","演示/表格":"#fbbf24","文本":"#94a3b8",
+  "字体":"#d6b36a","其他/无扩展名":"#475569"
+};
+const TOP_COLORS = ["#4cc9f0","#d6b36a","#2dd4bf","#fb7185","#a78bfa","#fb923c","#34d399","#f472b6","#60a5fa","#facc15","#22d3ee","#c084fc","#94a3b8","#fda4af","#86efac","#fde68a"];
+const DEST_META = {
+  "A站内容源":{c:"#4cc9f0",badge:"上站候选",desc:"Memo / 策略 / 精读 / 封面"},
+  "B站内容源":{c:"#2dd4bf",badge:"上站候选",desc:"阅读 / 职场 / 生活"},
+  "People存档（暂不上站）":{c:"#a78bfa",badge:"暂存",desc:"影视 / 人物 / 双语 / 规划"},
+  "冷存档/待去重":{c:"#fb923c",badge:"冷存",desc:"课件视频 / PDF / 数据"},
+  "版本库与备份":{c:"#64748b",badge:"不迁",desc:"25 份 Hermes 备份 + .git"},
+  "工程与治理":{c:"#94a3b8",badge:"工程",desc:"docs / deploy / services / sites"},
+  "运维/内部":{c:"#f472b6",badge:"内部",desc:"成本看板 / 字体 / 报告"},
+  "待清理/临时":{c:"#475569",badge:"清理",desc:"~$ / ._ / 缓存残留"}
+};
+const CAT_SHORT = {"视频":"视频","图片":"图片","数据库/状态快照":"数据库","版本库对象":"Git 对象","PDF":"PDF","Word":"Word","压缩包":"压缩包","音频":"音频","Markdown":"MD","代码/配置":"代码","演示/表格":"表格","文本":"文本","字体":"字体","其他/无扩展名":"其他"};
+const TEXT_CATS = new Set(["Markdown","Word","PDF","文本","演示/表格","代码/配置"]);
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtGB = v => {
+  const n = Number(v) || 0;
+  if (n >= 1) return n.toFixed(2) + " GB";
+  if (n >= 0.01) return n.toFixed(3) + " GB";
+  return (n * 1024).toFixed(1) + " MB";
+};
+const fmtPct = v => (Number(v)||0).toFixed(1) + "%";
+const shortPath = (p, n=2) => {
+  const parts = String(p).split("\\");
+  return parts.length > n ? parts.slice(-n).join("\\") : String(p);
+};
+const sum = (arr, f) => arr.reduce((s,x)=>s+(f?f(x):x),0);
+
+// tooltip
+const tip = $("#tooltip");
+function showTip(html, e){
+  tip.innerHTML = html;
+  tip.classList.add("on");
+  moveTip(e);
+}
+function moveTip(e){
+  const pad = 14;
+  let x = e.clientX + pad, y = e.clientY + pad;
+  const r = tip.getBoundingClientRect();
+  if (x + r.width > innerWidth - 12) x = e.clientX - r.width - pad;
+  if (y + r.height > innerHeight - 12) y = e.clientY - r.height - pad;
+  tip.style.left = Math.max(8,x) + "px";
+  tip.style.top = Math.max(8,y) + "px";
+}
+function hideTip(){ tip.classList.remove("on"); }
+document.addEventListener("mousemove", e => { if (tip.classList.contains("on")) moveTip(e); });
+
+function copyText(text){
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(()=>{});
+}
+
+// ---------------------------------------------------------------- KPI
+function renderKPIs(){
+  const m = DATA.meta;
+  const site = sum(DATA.dest.filter(d=>d.dest==="A站内容源"||d.dest==="B站内容源"), d=>d.bytes) / 1024**3;
+  const cold = sum(DATA.dest.filter(d=>d.dest==="冷存档/待去重"), d=>d.bytes) / 1024**3;
+  const ver = sum(DATA.dest.filter(d=>d.dest==="版本库与备份"), d=>d.bytes) / 1024**3;
+  const people = sum(DATA.dest.filter(d=>d.dest.startsWith("People")), d=>d.bytes) / 1024**3;
+  const items = [
+    {cls:"blue", label:"总体量", value:m.total_gb.toFixed(2), unit:"GB", sub:`${m.total_files.toLocaleString()} 个文件 · 全量递归`},
+    {cls:"gold", label:"精确重复", value:DATA.duplicates.redundant_gb.toFixed(2), unit:"GB", sub:`${DATA.duplicates.redundant_files.toLocaleString()} 份冗余 · ${DATA.duplicates.groups.toLocaleString()} 组`},
+    {cls:"rose", label:"版本库 / 备份", value:ver.toFixed(2), unit:"GB", sub:`占 ${(ver/m.total_gb*100).toFixed(1)}% · ${m.backup.snapshots} 份 Hermes 快照`},
+    {cls:"orange", label:"冷存档", value:cold.toFixed(2), unit:"GB", sub:`占 ${(cold/m.total_gb*100).toFixed(1)}% · 课件 / 大媒体 / 数据`},
+    {cls:"violet", label:"People 存档", value:people.toFixed(2), unit:"GB", sub:"按决定暂不上站 / 不标引"},
+    {cls:"teal", label:"两站候选", value:site.toFixed(2), unit:"GB", sub:`占 ${(site/m.total_gb*100).toFixed(1)}% · A + B 合计`}
+  ];
+  $("#kpis").innerHTML = items.map(i=>`
+    <div class="kpi ${i.cls}">
+      <div class="label">${i.label}</div>
+      <div class="value">${i.value}<small>${i.unit}</small></div>
+      <div class="sub">${i.sub}</div>
+    </div>`).join("");
+  $("#heroFiles").textContent = m.total_files.toLocaleString();
+  $("#heroSize").textContent = m.total_gb.toFixed(2) + " GB";
+  $("#stampDate").textContent = m.date;
+}
+
+// ---------------------------------------------------------------- treemap
+function squarify(items, x, y, w, h){
+  const total = sum(items, d=>d.value);
+  if (!items.length || total <= 0 || w <= 0 || h <= 0) return [];
+  const scale = (w*h)/total;
+  const rects = [];
+  let remaining = items.slice().sort((a,b)=>b.value-a.value);
+  let rx=x, ry=y, rw=w, rh=h;
+  const worst = (row, side) => {
+    if (!row.length) return Infinity;
+    const areas = row.map(d=>Math.max(d.value*scale, 1e-6));
+    const s = sum(areas);
+    const mx = Math.max(...areas), mn = Math.min(...areas);
+    return Math.max((side*side*mx)/(s*s), (s*s)/(side*side*mn));
+  };
+  while (remaining.length){
+    const short = Math.min(rw,rh);
+    const row = [];
+    while (remaining.length){
+      const cand = remaining[0];
+      if (!row.length || worst(row.concat([cand]), short) <= worst(row, short)) row.push(remaining.shift());
+      else break;
+    }
+    const rowArea = sum(row, d=>d.value)*scale;
+    if (rw >= rh){
+      const colW = Math.min(rw, rowArea/rh);
+      let cy = ry;
+      row.forEach(d=>{
+        const hh = (d.value*scale)/colW;
+        rects.push({...d, x:rx, y:cy, w:colW, h:Math.min(hh, ry+rh-cy)});
+        cy += hh;
+      });
+      rx += colW; rw -= colW;
+    } else {
+      const rowH = Math.min(rh, rowArea/rw);
+      let cx = rx;
+      row.forEach(d=>{
+        const ww = (d.value*scale)/rowH;
+        rects.push({...d, x:cx, y:ry, w:Math.min(ww, rx+rw-cx), h:rowH});
+        cx += ww;
+      });
+      ry += rowH; rh -= rowH;
+    }
+  }
+  return rects;
+}
+
+function buildTree(){
+  const groups = [];
+  const tops = DATA.top.filter(t=>t.path!=="(root)" && t.gb >= 0.001).sort((a,b)=>b.bytes-a.bytes);
+  tops.forEach((t, idx)=>{
+    let children = DATA.p2
+      .filter(p=>p.path===t.path || p.path.startsWith(t.path+"\\"))
+      .map(p=>({name: p.path===t.path ? "直属文件" : p.path.slice(t.path.length+1), value:p.bytes, files:p.files, path:p.path}))
+      .sort((a,b)=>b.value-a.value);
+    const childSum = sum(children, c=>c.value);
+    const rest = t.bytes - childSum;
+    if (rest > 1024*1024) children.push({name:"其他", value:rest, files:0, path:t.path+"\\其他"});
+    groups.push({name:t.path, value:t.bytes, files:t.files, color:TOP_COLORS[idx % TOP_COLORS.length], children});
+  });
+  const root = DATA.top.find(t=>t.path==="(root)");
+  if (root && root.gb > 0.0001){
+    groups.push({name:"根目录散落文件", value:root.bytes, files:root.files, color:"#94a3b8", children:[]});
+  }
+  return groups;
+}
+
+let treemapGroups = [];
+let selectedTop = null;
+function renderTreemap(){
+  const host = $("#treemap");
+  const W = Math.max(host.clientWidth, 420), H = Math.max(host.clientHeight, 360);
+  const groups = buildTree();
+  treemapGroups = groups;
+  const svg = [];
+  svg.push(`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="目录体积 Treemap">`);
+  const outer = squarify(groups, 0, 0, W, H);
+  outer.forEach(g=>{
+    const color = g.color;
+    svg.push(`<g class="tm-group-wrap" data-top="${esc(g.name)}">`);
+    svg.push(`<rect x="${g.x}" y="${g.y}" width="${Math.max(0,g.w-2)}" height="${Math.max(0,g.h-2)}" rx="6" fill="${color}" fill-opacity=".10" stroke="${color}" stroke-opacity=".42" stroke-width="1"/>`);
+    const header = g.h > 54 && g.w > 96 ? 20 : 0;
+    if (header){
+      svg.push(`<text class="tm-group" x="${g.x+7}" y="${g.y+14}" data-tip="${esc(g.name)}">${esc(shortPath(g.name,1))} · ${fmtGB(g.value/1024**3)}</text>`);
+    }
+    if (g.children && g.children.length){
+      const inner = squarify(g.children, g.x+2, g.y+2+header, Math.max(1,g.w-4), Math.max(1,g.h-4-header));
+      inner.forEach(c=>{
+        const label = c.w > 78 && c.h > 32;
+        const area = c.w * c.h;
+        svg.push(`<g class="tm-cell" data-top="${esc(g.name)}" data-path="${esc(c.path)}" data-tip="${esc(c.path)}">`);
+        svg.push(`<rect x="${c.x}" y="${c.y}" width="${Math.max(0,c.w-2)}" height="${Math.max(0,c.h-2)}" rx="3" fill="${color}" fill-opacity="${selectedTop && selectedTop!==g.name ? ".18" : ".52"}" stroke="rgba(4,10,18,.45)" stroke-width=".6"/>`);
+        if (label){
+          const sizeTxt = fmtGB(c.value/1024**3);
+          const nameTxt = c.name.length > 18 ? c.name.slice(0,17)+"…" : c.name;
+          svg.push(`<text class="tm-label" x="${c.x+6}" y="${c.y+16}">${esc(nameTxt)}</text>`);
+          if (c.h > 48) svg.push(`<text class="tm-size" x="${c.x+6}" y="${c.y+29}">${sizeTxt}</text>`);
+        }
+        svg.push(`</g>`);
+      });
+    } else {
+      svg.push(`<g class="tm-cell" data-top="${esc(g.name)}" data-path="${esc(g.name)}" data-tip="${esc(g.name)}">`);
+      svg.push(`<rect x="${g.x+2}" y="${g.y+2}" width="${Math.max(0,g.w-4)}" height="${Math.max(0,g.h-4)}" rx="3" fill="${color}" fill-opacity=".50" stroke="none"/>`);
+      if (g.w > 90 && g.h > 40) svg.push(`<text class="tm-label" x="${g.x+7}" y="${g.y+18}">${esc(shortPath(g.name,1))}</text>`);
+      svg.push(`</g>`);
+    }
+    svg.push(`</g>`);
+  });
+  svg.push(`</svg>`);
+  host.innerHTML = svg.join("");
+  host.querySelectorAll(".tm-cell").forEach(el=>{
+    el.addEventListener("mousemove", e=>{
+      const p = el.dataset.path || el.dataset.top;
+      const item = DATA.p2.find(x=>x.path===p);
+      const files = item ? item.files : "";
+      const gb = item ? item.gb : (DATA.top.find(x=>x.path===p)||{}).gb;
+      const share = item ? item.share : (DATA.top.find(x=>x.path===p)||{}).share;
+      showTip(`<div class="tt-title">${esc(p)}</div><div class="tt-row">体积 <b>${fmtGB(gb)}</b> · 文件 <b>${Number(files||0).toLocaleString()}</b> · 占比 <b>${fmtPct(share)}</b></div>`, e);
+    });
+    el.addEventListener("mouseleave", hideTip);
+    el.addEventListener("click", ()=>{
+      const top = el.dataset.top;
+      selectedTop = selectedTop === top ? null : top;
+      renderTreemap();
+      renderFolderBars();
+      const table = $("#folderTable");
+      table.closest(".table-card").scrollIntoView({behavior:"smooth", block:"center"});
+    });
+  });
+  // legend
+  $("#treemapLegend").innerHTML = groups.slice(0,8).map(g=>`<span class="legend-item"><i class="swatch" style="background:${g.color}"></i>${esc(shortPath(g.name,1))}</span>`).join("");
+}
+
+function renderFolderBars(){
+  const host = $("#folderBars");
+  const rows = DATA.p2
+    .filter(p=>p.path!=="(root)")
+    .filter(p=>!selectedTop || p.path===selectedTop || p.path.startsWith(selectedTop+"\\"))
+    .slice(0,12);
+  const max = Math.max(...rows.map(r=>r.bytes), 1);
+  host.innerHTML = rows.map(r=>`
+    <div class="bar-row">
+      <div class="bar-label" title="${esc(r.path)}">${esc(shortPath(r.path,2))}<span class="muted">${Number(r.files).toLocaleString()} 文件</span></div>
+      <div class="bar-value">${fmtGB(r.gb)} · ${fmtPct(r.share)}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(r.bytes/max*100).toFixed(1)}%;--c:var(--blue)"></div></div>
+    </div>`).join("");
+  const top2 = DATA.top.filter(t=>t.path!=="(root)").slice(0,2);
+  $("#top2Share").textContent = fmtPct(sum(top2,t=>t.share));
+}
+
+// ---------------------------------------------------------------- folder table
+let folderLevel = 1;
+function renderFolderTable(){
+  const q = ($("#folderSearch").value || "").trim().toLowerCase();
+  let rows;
+  if (folderLevel === 1) rows = DATA.top;
+  else if (folderLevel === 2) rows = DATA.p2;
+  else rows = DATA.p3;
+  if (q) rows = rows.filter(r=>r.path.toLowerCase().includes(q));
+  const max = Math.max(...rows.map(r=>r.bytes),1);
+  $("#folderTable tbody").innerHTML = rows.map(r=>`
+    <tr data-path="${esc(r.path)}">
+      <td class="path" title="${esc(r.path)}">${esc(r.path)}</td>
+      <td class="num">${Number(r.files).toLocaleString()}</td>
+      <td class="num">${fmtGB(r.gb)}</td>
+      <td class="num">${fmtPct(r.share)}</td>
+      <td><span class="rowbar" style="width:${Math.max(2,r.bytes/max*100).toFixed(1)}%"></span></td>
+    </tr>`).join("");
+  $$("#folderTable tbody tr").forEach(tr=>tr.addEventListener("click",()=>{
+    copyText(tr.dataset.path);
+    showTip(`<div class="tt-title">已复制路径</div><div class="tt-row">${esc(tr.dataset.path)}</div>`, {clientX:innerWidth/2,clientY:120});
+    setTimeout(hideTip, 1200);
+  }));
+}
+
+// ---------------------------------------------------------------- donut / types
+function renderDonut(){
+  const cats = DATA.categories.slice().sort((a,b)=>b.bytes-a.bytes);
+  const total = sum(cats,c=>c.bytes);
+  const cx=125, cy=125, r=88, sw=26, C=2*Math.PI*r;
+  let off=0;
+  let svg = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(148,163,184,.08)" stroke-width="${sw}"/>`;
+  cats.forEach(c=>{
+    const frac = c.bytes/total;
+    const dash = Math.max(0.4, frac*C);
+    const color = CAT_COLORS[c.category] || "#94a3b8";
+    svg += `<circle class="donut-seg" data-cat="${esc(c.category)}" cx="${cx}" cy="${cy}" r="${r}" fill="none"
+      stroke="${color}" stroke-width="${sw}" stroke-dasharray="${dash.toFixed(2)} ${(C-dash).toFixed(2)}"
+      stroke-dashoffset="${(-off*C).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"
+      style="cursor:pointer;transition:stroke-width .15s" />`;
+    off += frac;
+  });
+  svg += `<text class="donut-center" x="${cx}" y="${cy-2}">${DATA.meta.total_gb.toFixed(1)}</text>`;
+  svg += `<text class="donut-center-sub" x="${cx}" y="${cy+18}">GB TOTAL</text>`;
+  $("#donut").innerHTML = svg;
+  $("#typeCountTag").textContent = `${cats.length} 类 · ${DATA.meta.total_files.toLocaleString()} 文件`;
+  $("#donutLegend").innerHTML = cats.map(c=>`
+    <div class="dl-item" data-cat="${esc(c.category)}">
+      <i class="swatch" style="background:${CAT_COLORS[c.category]||"#94a3b8"}"></i>
+      <b title="${esc(c.category)}">${esc(c.category)}</b>
+      <span class="gb">${fmtGB(c.gb)}</span>
+      <span class="pc">${fmtPct(c.share)}</span>
+    </div>`).join("");
+  $$("#donut .donut-seg").forEach((seg,i)=>{
+    seg.addEventListener("mousemove",e=>{
+      const c = cats[i];
+      showTip(`<div class="tt-title">${esc(c.category)}</div><div class="tt-row">体积 <b>${fmtGB(c.gb)}</b> · ${fmtPct(c.share)} · 文件 <b>${Number(c.files).toLocaleString()}</b></div>`, e);
+      seg.setAttribute("stroke-width", 33);
+    });
+    seg.addEventListener("mouseleave",()=>{ hideTip(); seg.setAttribute("stroke-width", 26); });
+  });
+}
+
+function renderSplitBars(){
+  const cats = DATA.categories.slice().sort((a,b)=>b.bytes-a.bytes);
+  const top = cats.slice(0,6);
+  const rest = cats.slice(6);
+  const restBytes = sum(rest,c=>c.bytes), restFiles = sum(rest,c=>c.files);
+  const rows = top.concat([{category:"其他",bytes:restBytes,files:restFiles,share:restBytes/DATA.meta.total_bytes*100,files_share:restFiles/DATA.meta.total_files*100}]);
+  const totalB = sum(rows,r=>r.bytes), totalF = sum(rows,r=>r.files);
+  const segs = rows.map(r=>{
+    const color = CAT_COLORS[r.category]||"#64748b";
+    return {name:r.category, color, bp:r.bytes/totalB*100, fp:r.files/totalF*100, bytes:r.bytes, files:r.files};
+  });
+  const bar = (key,label) => `<div class="split-row">
+    <div class="split-title"><span>${label}</span><span>${key==="bp"?"按体积":"按数量"}</span></div>
+    <div class="split-track">${segs.map(s=>`<div class="split-seg" style="width:${s[key].toFixed(3)}%;background:${s.color}" title="${esc(s.name)}">${s[key]>=5?esc(s.name):""}</div>`).join("")}</div>
+  </div>`;
+  $("#splitBars").innerHTML = bar("bp","文件类型 · 体积占比") + bar("fp","文件类型 · 数量占比");
+  $("#invBig").textContent = Number(DATA.categories.find(c=>c.category==="Markdown").files).toLocaleString();
+}
+
+function renderTypeTable(){
+  const action = {
+    "视频":"冷存 / OSS video，不上公域",
+    "图片":"缩略图上站，原图冷存",
+    "数据库/状态快照":"备份，不迁金库",
+    "版本库对象":"Git 历史，不迁金库",
+    "PDF":"课件/研报冷存，元数据入库",
+    "Word":"按用途分流，正文以 MD 为准",
+    "压缩包":"冷存，优先拆解",
+    "音频":"与精读 MD 挂接，冷存",
+    "Markdown":"唯一值得入库的文本层",
+    "代码/配置":"工程仓 / 工具，抽留",
+    "演示/表格":"职场私有档案",
+    "文本":"随所属文档归位",
+    "字体":"授权未核，禁用",
+    "其他/无扩展名":"临时/系统残留，清理"
+  };
+  $("#typeTable tbody").innerHTML = DATA.categories.map(c=>`
+    <tr>
+      <td><span class="swatch" style="display:inline-block;margin-right:7px;background:${CAT_COLORS[c.category]||"#94a3b8"}"></span>${esc(c.category)}</td>
+      <td class="num">${Number(c.files).toLocaleString()}</td>
+      <td class="num">${fmtPct(c.files_share)}</td>
+      <td class="num">${fmtGB(c.gb)}</td>
+      <td class="num">${fmtPct(c.share)}</td>
+      <td>${esc(action[c.category]||"—")}</td>
+    </tr>`).join("");
+}
+
+// ---------------------------------------------------------------- heatmap
+function renderHeatmap(){
+  const cats = DATA.category_order || DATA.categories.map(c=>c.category);
+  const rows = DATA.cross;
+  const values = [];
+  rows.forEach(r=>cats.forEach(c=>values.push(Number(r[c])||0)));
+  const max = Math.max(...values,1);
+  const grid = [];
+  grid.push(`<div class="heat-h" style="text-align:left">目录</div>`);
+  cats.forEach(c=>grid.push(`<div class="heat-h" title="${esc(c)}">${esc(CAT_SHORT[c]||c)}</div>`));
+  grid.push(`<div class="heat-h" style="text-align:right">合计</div>`);
+  rows.forEach(r=>{
+    grid.push(`<div class="heat-row-label" title="${esc(r.path)}">${esc(shortPath(r.path,2))}</div>`);
+    cats.forEach(c=>{
+      const v = Number(r[c])||0;
+      const share = r.total ? v/r.total : 0;
+      const alpha = 0.04 + 0.86 * (Math.log10(v+1)/Math.log10(max+1));
+      const bg = v>0 ? `rgba(76,201,240,${alpha.toFixed(3)})` : "rgba(148,163,184,.045)";
+      const show = share >= 0.08 && v>0;
+      grid.push(`<div class="heat-cell" style="background:${bg}" data-tip="${esc(r.path)}|${esc(c)}|${v}|${share}">${show?fmtPct(share*100).replace(".0",""):""}</div>`);
+    });
+    grid.push(`<div class="heat-total">${fmtGB(r.total/1024**3)}</div>`);
+  });
+  $("#heatmap").innerHTML = grid.join("");
+  $$("#heatmap .heat-cell").forEach(el=>{
+    el.addEventListener("mousemove",e=>{
+      const [p,c,v,share] = el.dataset.tip.split("|");
+      showTip(`<div class="tt-title">${esc(p)}</div><div class="tt-row">${esc(c)} · <b>${fmtGB(Number(v)/1024**3)}</b> · 行内 ${fmtPct(Number(share)*100)}</div>`, e);
+    });
+    el.addEventListener("mouseleave", hideTip);
+  });
+}
+
+// ---------------------------------------------------------------- routing
+function destBytes(name){
+  return sum(DATA.dest.filter(d=>d.dest===name), d=>d.bytes);
+}
+function catBytes(dest, cats){
+  return sum(DATA.dest_categories.filter(d=>d.dest===dest && cats.has(d.category)), d=>d.bytes);
+}
+function renderRouting(){
+  const order = ["A站内容源","B站内容源","People存档（暂不上站）","冷存档/待去重","版本库与备份","工程与治理","运维/内部","待清理/临时"];
+  const total = DATA.meta.total_bytes;
+  const segs = order.map(name=>{
+    const b = destBytes(name);
+    const meta = DEST_META[name] || {c:"#64748b",badge:"",desc:""};
+    return {name,b,meta,share:b/total*100};
+  }).filter(x=>x.b>0);
+  $("#routeBar").innerHTML = segs.map(s=>`<div class="route-seg" style="width:${s.share.toFixed(3)}%;background:${s.meta.c}" data-name="${esc(s.name)}" data-share="${s.share}" data-gb="${(s.b/1024**3).toFixed(3)}">${s.share>=5?fmtPct(s.share):""}</div>`).join("");
+  $$("#routeBar .route-seg").forEach(el=>{
+    el.addEventListener("mousemove",e=>showTip(`<div class="tt-title">${esc(el.dataset.name)}</div><div class="tt-row">体积 <b>${fmtGB(Number(el.dataset.gb))}</b> · 占 <b>${fmtPct(Number(el.dataset.share))}</b></div>`,e));
+    el.addEventListener("mouseleave", hideTip);
+  });
+  const cards = ["A站内容源","B站内容源","冷存档/待去重","版本库与备份","People存档（暂不上站）","工程与治理"].map(name=>{
+    const s = segs.find(x=>x.name===name);
+    if (!s) return "";
+    return `<div class="route-card">
+      <div class="rc-top"><span class="swatch" style="background:${s.meta.c}"></span>${esc(name)} <span class="tag" style="margin-left:auto">${esc(s.meta.badge)}</span></div>
+      <div class="rc-gb">${fmtGB(s.b/1024**3)}</div>
+      <div class="rc-desc">${esc(s.meta.desc)}</div>
+    </div>`;
+  }).join("");
+  $("#routeCards").innerHTML = cards;
+
+  const aB = destBytes("A站内容源"), bB = destBytes("B站内容源");
+  const cand = aB+bB;
+  const aText = catBytes("A站内容源", TEXT_CATS), bText = catBytes("B站内容源", TEXT_CATS);
+  const text = aText+bText, media = cand-text;
+  $("#candidateGb").textContent = fmtGB(cand/1024**3);
+  $("#candidatePct").textContent = `${fmtPct(cand/total*100)} of ${DATA.meta.total_gb.toFixed(2)} GB · 真正文本层 ${fmtGB(text/1024**3)}`;
+  $("#offlineGb").textContent = fmtGB((total-cand)/1024**3);
+  $("#offlinePct").textContent = `${fmtPct((total-cand)/total*100)} · 冷存 / 备份 / 存档`;
+  const md = sum(DATA.dest_categories.filter(d=>(d.dest==="A站内容源"||d.dest==="B站内容源") && d.category==="Markdown"),d=>d.bytes);
+  $("#siteTextNote").innerHTML = `A 站 <b>${fmtGB(aB/1024**3)}</b> = 文本层 <b>${fmtGB(aText/1024**3)}</b> + 媒体/衍生 <b>${fmtGB((aB-aText)/1024**3)}</b>；B 站 <b>${fmtGB(bB/1024**3)}</b> = 文本层 <b>${fmtGB(bText/1024**3)}</b> + 媒体 <b>${fmtGB((bB-bText)/1024**3)}</b>。两站可直接入库的 Markdown 合计 <b>${fmtGB(md/1024**3)}</b>。`;
+
+  $("#siteTypeBars").innerHTML = [
+    {name:"A 站 · 文本层",v:aText,c:"#4cc9f0"},
+    {name:"A 站 · 媒体/衍生",v:aB-aText,c:"#38bdf8"},
+    {name:"B 站 · 文本层",v:bText,c:"#2dd4bf"},
+    {name:"B 站 · 媒体/衍生",v:bB-bText,c:"#14b8a6"}
+  ].map(x=>{
+    const w = cand?x.v/cand*100:0;
+    return `<div class="bar-row">
+      <div class="bar-label">${x.name}</div>
+      <div class="bar-value">${fmtGB(x.v/1024**3)} · ${fmtPct(w)}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${w.toFixed(2)}%;--c:${x.c}"></div></div>
+    </div>`;
+  }).join("");
+}
+
+// ---------------------------------------------------------------- launch packages
+function renderLaunch(){
+  const L = DATA.launch;
+  if (!L) return;
+  const E = L.excluded, R = L.remaining;
+  const hot = 0.27, cold = 7.25;
+  $("#launchKpis").innerHTML = [
+    {cls:"rose", label:"排除项", value:E.gb.toFixed(2), unit:"GB", sub:`${fmtPct(E.share)} · 视频 / 音频 / Git / 快照`},
+    {cls:"orange", label:"保留待加工", value:R.gb.toFixed(2), unit:"GB", sub:`${fmtPct(R.share)} · ${Number(R.files).toLocaleString()} 文件`},
+    {cls:"teal", label:"服务器热包（目标）", value:hot.toFixed(2), unit:"GB", sub:"文本 / JSON / WebP 缩略图"},
+    {cls:"blue", label:"冷存原件（估算）", value:cold.toFixed(2), unit:"GB", sub:"People / 课件 PDF / Word 原件"}
+  ].map(i=>`
+    <div class="kpi ${i.cls}">
+      <div class="label">${i.label}</div>
+      <div class="value">${i.value}<small>${i.unit}</small></div>
+      <div class="sub">${i.sub}</div>
+    </div>`).join("");
+
+  const reasonColor = {
+    "视频（用户明确排除）":"#fb923c",
+    "音频（用户明确排除）":"#f472b6",
+    "Git 版本库（用户明确排除）":"#64748b",
+    "GitHub/Hermes 状态快照（用户明确排除）":"#a78bfa"
+  };
+  const segs = (E.reasons || []).map(x=>({name:x.exclude_reason || x.reason, gb:x.gb, share:x.share_total, c:reasonColor[x.exclude_reason || x.reason] || "#64748b"}));
+  segs.push({name:"保留待加工", gb:R.gb, share:R.share, c:"#2dd4bf"});
+  $("#launchBar").innerHTML = segs.map(s=>`<div class="route-seg" style="width:${s.share.toFixed(3)}%;background:${s.c}" data-n="${esc(s.name)}" data-g="${s.gb}" data-s="${s.share}">${s.share>=5?fmtPct(s.share):""}</div>`).join("");
+  $$("#launchBar .route-seg").forEach(el=>{
+    el.addEventListener("mousemove",e=>showTip(`<div class="tt-title">${esc(el.dataset.n)}</div><div class="tt-row">体量 <b>${fmtGB(Number(el.dataset.g))}</b> · 占 <b>${fmtPct(Number(el.dataset.s))}</b></div>`,e));
+    el.addEventListener("mouseleave", hideTip);
+  });
+  const cards = [
+    {n:"视频", gb:15.259, d:"58 个 ITPM 课件 + 3 个短视频；本地冷存"},
+    {n:"Git", gb:4.434, d:"根 .git + 嵌套 .git；不迁金库"},
+    {n:"状态快照", gb:6.600, d:"25 份 Hermes 备份；保留 3+1 份"},
+    {n:"服务器热包", gb:0.27, d:"加工后文本 + JSON + 缩略图"}
+  ];
+  $("#launchCards").innerHTML = cards.map(x=>`
+    <div class="route-card">
+      <div class="rc-top"><span class="swatch" style="background:${x.n==='服务器热包'?'#2dd4bf':'#fb924c'}"></span>${x.n}</div>
+      <div class="rc-gb">${fmtGB(x.gb)}</div>
+      <div class="rc-desc">${x.d}</div>
+    </div>`).join("");
+
+  const target = {
+    "A-public":"50–70 MB",
+    "A-internal":"60–100 MB",
+    "B-public":"2–5 MB",
+    "B-private":"60–70 MB",
+    "People-archive":"50–80 MB（元数据/缩略图）",
+    "99-原始归档（不上服务器）":"0（仅索引 50–100 MB）",
+    "90-工程仓（Git 部署）":"0（Git 部署）",
+    "00-清理/临时":"0（隔离/清理）"
+  };
+  const server = {
+    "A-public":"/srv/sites/mobocapital/data + media",
+    "A-internal":"/srv/sites/mobocapital/internal",
+    "B-public":"/srv/sites/mobohome/data + media",
+    "B-private":"/srv/sites/mobohome/internal",
+    "People-archive":"OSS 私有 / 本地冷存；ECS 只存元数据",
+    "99-原始归档（不上服务器）":"OSS 私有 / 本地冷存；ECS 只存索引",
+    "90-工程仓（Git 部署）":"Git 部署，不经内容包",
+    "00-清理/临时":"不进服务器"
+  };
+  const vis = {
+    "A-public":"PUBLIC",
+    "A-internal":"INTERNAL / LP",
+    "B-public":"PUBLIC",
+    "B-private":"PRIVATE",
+    "People-archive":"ARCHIVE",
+    "99-原始归档（不上服务器）":"INTERNAL / COLD",
+    "90-工程仓（Git 部署）":"OPS",
+    "00-清理/临时":"CLEANUP"
+  };
+  const rows = (R.packages || []).slice().sort((a,b)=>b.gb-a.gb);
+  $("#launchTable tbody").innerHTML = rows.map(x=>`
+    <tr>
+      <td>${esc(x.package)}</td>
+      <td class="num">${fmtGB(x.gb)}</td>
+      <td class="num">${esc(target[x.package]||"—")}</td>
+      <td class="path" title="${esc(server[x.package]||"")}">${esc(server[x.package]||"—")}</td>
+      <td><span class="tag ${vis[x.package]==='PUBLIC'?'teal':vis[x.package]==='PRIVATE'?'rose':'gold'}">${esc(vis[x.package]||"—")}</span></td>
+    </tr>`).join("");
+  const max = Math.max(...rows.map(x=>x.gb), 1);
+  $("#launchBars").innerHTML = rows.filter(x=>x.gb>0).slice(0,7).map(x=>`
+    <div class="bar-row">
+      <div class="bar-label" title="${esc(x.package)}">${esc(x.package)}<span class="muted">${Number(x.files).toLocaleString()} 文件</span></div>
+      <div class="bar-value">${fmtGB(x.gb)} → ${esc(target[x.package]||"—")}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(x.gb/max*100).toFixed(1)}%;--c:${x.package==='People-archive'?'#a78bfa':x.package.startsWith('A-')?'#4cc9f0':'#fb923c'}"></div></div>
+    </div>`).join("");
+
+  const steps = [
+    ["S1","归类冻结","排除视频/音频/Git/快照；锁定版本与哈希"],
+    ["S2","转换清洗","Word/PDF → MD/HTML；统一 YAML 与 slug"],
+    ["S3","媒体加工","WebP 三档缩略图；去 EXIF；原图冷存"],
+    ["S4","构建校验","生成 public/internal JSON + MANIFEST + SHA256"],
+    ["S5","上传切换","rsync 内容寻址媒体；JSON 原子 mv"],
+    ["S6","冒烟回滚","200/401/JSON/链接；保留上一版 JSON"]
+  ];
+  $("#pipeline").innerHTML = steps.map(s=>`
+    <div class="pipe-step">
+      <div class="p-id">${s[0]}</div>
+      <h5>${s[1]}</h5>
+      <p>${s[2]}</p>
+    </div>`).join("");
+}
+
+// ---------------------------------------------------------------- launch v5 (originals preserved)
+function renderLaunchV5(){
+  const S = DATA.syncv5;
+  if (!S) return;
+  const total = S.total.gb;
+  const mbrain = (S.local_only.folders || []).find(x=>String(x.local_reason).includes("MoBoBrain"));
+  const film = (S.local_only.folders || []).find(x=>String(x.local_reason).includes("01-影视库"));
+  const pub = 0.15;
+  $("#launchKpis").innerHTML = [
+    {cls:"rose", label:"排除", value:S.excluded.gb.toFixed(2), unit:"GB", sub:`${fmtPct(S.excluded.gb/total*100)} · 视频/音频/Git/快照`},
+    {cls:"gold", label:"本地只读", value:S.local_only.gb.toFixed(2), unit:"GB", sub:`${fmtPct(S.local_only.gb/total*100)} · MoBoBrain + 01-影视库`},
+    {cls:"teal", label:"同步原件", value:S.sync.gb.toFixed(2), unit:"GB", sub:`${fmtPct(S.sync.gb/total*100)} · 字节不变，不转换`},
+    {cls:"blue", label:"公开展示层", value:pub.toFixed(2), unit:"GB", sub:"仅缩略图 + JSON 索引（衍生）"}
+  ].map(i=>`
+    <div class="kpi ${i.cls}">
+      <div class="label">${i.label}</div>
+      <div class="value">${i.value}<small>${i.unit}</small></div>
+      <div class="sub">${i.sub}</div>
+    </div>`).join("");
+
+  const segs = [
+    {n:"视频", g:S.excluded.reasons.find(x=>x.exclude_reason.includes("视频"))?.gb || 15.22, c:"#fb923c"},
+    {n:"状态快照", g:S.excluded.reasons.find(x=>x.exclude_reason.includes("快照"))?.gb || 6.60, c:"#a78bfa"},
+    {n:"Git", g:S.excluded.reasons.find(x=>x.exclude_reason.includes("Git"))?.gb || 4.43, c:"#64748b"},
+    {n:"音频", g:S.excluded.reasons.find(x=>x.exclude_reason.includes("音频"))?.gb || 0.19, c:"#f472b6"},
+    {n:"本地只读", g:S.local_only.gb, c:"#d6b36a"},
+    {n:"同步原件", g:S.sync.gb, c:"#2dd4bf"},
+    {n:"清理", g:S.cleanup.gb, c:"#475569"}
+  ];
+  const segTotal = segs.reduce((a,x)=>a+x.g,0);
+  $("#launchBar").innerHTML = segs.map(s=>{
+    const p=s.g/segTotal*100;
+    return `<div class="route-seg" style="width:${p.toFixed(3)}%;background:${s.c}" data-n="${s.n}" data-g="${s.g}" data-p="${p}">${p>=5?fmtPct(p):""}</div>`;
+  }).join("");
+  $$("#launchBar .route-seg").forEach(el=>{
+    el.addEventListener("mousemove",e=>showTip(`<div class="tt-title">${esc(el.dataset.n)}</div><div class="tt-row">体量 <b>${fmtGB(Number(el.dataset.g))}</b> · 占 <b>${fmtPct(Number(el.dataset.p))}</b></div>`,e));
+    el.addEventListener("mouseleave", hideTip);
+  });
+  const cards = [
+    {n:"视频", g:15.22, d:"58 个 ITPM 课件；本地冷存，不上传"},
+    {n:"Git + 快照", g:11.03, d:"版本库 + 25 份 Hermes 快照；不迁"},
+    {n:"本地只读", g:S.local_only.gb, d:"MoBoBrain 完整原件 + 01-影视库"},
+    {n:"同步原件", g:S.sync.gb, d:"Word/PDF/MD/Excel/图片原样同步"}
+  ];
+  $("#launchCards").innerHTML = cards.map(x=>`
+    <div class="route-card">
+      <div class="rc-top"><span class="swatch" style="background:${x.n==='同步原件'?'#2dd4bf':x.n==='本地只读'?'#d6b36a':'#fb924c'}"></span>${x.n}</div>
+      <div class="rc-gb">${fmtGB(x.g)}</div>
+      <div class="rc-desc">${x.d}</div>
+    </div>`).join("");
+
+  const rows = [
+    {n:"同步原件（含 Goals 02-07）", g:S.sync.gb, f:S.sync.files, a:"原样复制 + SHA-256", sv:"ECS /private 或 OSS 私有", v:"PRIVATE / INTERNAL"},
+    {n:"本地只读：MoBoBrain-ITPM-Archive", g:mbrain?.gb || 0.661, f:mbrain?.files || 1378, a:"完整保留，不改内容", sv:"仅本地", v:"LOCAL"},
+    {n:"本地只读：01-影视库", g:film?.gb || 3.093, f:film?.files || 12153, a:"完整保留，不同步", sv:"仅本地", v:"LOCAL"},
+    {n:"排除：视频/音频/Git/快照", g:S.excluded.gb, f:S.excluded.files, a:"不上传", sv:"本地 / 备份", v:"—"},
+    {n:"清理/临时", g:S.cleanup.gb, f:S.cleanup.files, a:"quarantine", sv:"不进服务器", v:"CLEANUP"},
+    {n:"公开展示层（衍生）", g:pub, f:"—", a:"缩略图 + JSON（不改原件）", sv:"/srv/sites/*/data + media", v:"PUBLIC"}
+  ];
+  $("#launchTable tbody").innerHTML = rows.map(x=>`
+    <tr>
+      <td>${esc(x.n)}</td>
+      <td class="num">${fmtGB(x.g)}</td>
+      <td class="num">${esc(x.a)}</td>
+      <td class="path" title="${esc(x.sv)}">${esc(x.sv)}</td>
+      <td><span class="tag ${x.v==='PUBLIC'?'teal':x.v==='LOCAL'?'gold':x.v==='PRIVATE / INTERNAL'?'rose':'gold'}">${esc(x.v)}</span></td>
+    </tr>`).join("");
+
+  const cats = (S.sync.categories || []).slice(0,7);
+  const max = Math.max(...cats.map(x=>x.gb),1);
+  $("#launchBars").innerHTML = cats.map(x=>`
+    <div class="bar-row">
+      <div class="bar-label">${esc(x.category)}<span class="muted">${Number(x.files).toLocaleString()} 文件</span></div>
+      <div class="bar-value">${fmtGB(x.gb)} · 原样</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(x.gb/max*100).toFixed(1)}%;--c:${x.category==='图片'?'#4cc9f0':x.category==='PDF'?'#fb7185':'#2dd4bf'}"></div></div>
+    </div>`).join("") + `<div class="hint">另：MoBo-Capital-Goals 02-07 约 ${fmtGB(0.535)}，已包含在同步原件内；01-影视库 3.09 GB 只本地保留。</div>`;
+
+  const steps = [
+    ["S1","冻结与哈希","全量清单 + SHA-256；不改任何文件"],
+    ["S2","只读归档","MoBoBrain 与 01-影视库 原样保留"],
+    ["S3","原件复制","MD/Word/PDF/Excel/图片按类型落盘"],
+    ["S4","索引与缩略图","MANIFEST + 图片缩略图；不动原件"],
+    ["S5","上传切换","原件→private/OSS；JSON/缩略图→public"],
+    ["S6","冒烟与回滚","200/401/哈希一致；保留上一版"]
+  ];
+  $("#pipeline").innerHTML = steps.map(s=>`
+    <div class="pipe-step">
+      <div class="p-id">${s[0]}</div>
+      <h5>${s[1]}</h5>
+      <p>${s[2]}</p>
+    </div>`).join("");
+}
+
+// ---------------------------------------------------------------- findings
+function renderFindings(){
+  const top2 = DATA.top.filter(t=>t.path!=="(root)").slice(0,2);
+  const top2B = sum(top2,t=>t.bytes);
+  const video = DATA.categories.find(c=>c.category==="视频");
+  const md = DATA.categories.find(c=>c.category==="Markdown");
+  const img = DATA.categories.find(c=>c.category==="图片");
+  const db = DATA.categories.find(c=>c.category==="数据库/状态快照");
+  const git = DATA.categories.find(c=>c.category==="版本库对象");
+  const dups = DATA.duplicates;
+  const ver = destBytes("版本库与备份");
+  const cand = destBytes("A站内容源")+destBytes("B站内容源");
+  const items = [
+    {cls:"gold",n:"01",big:fmtPct(top2B/DATA.meta.total_bytes*100),small:"集中在两个目录",p:`01-工作与项目 18.23 GB + hermes-migration 16.22 GB，合计 ${fmtGB(top2B/1024**3)}。整理顺序应先拆这两个，而不是全仓平均用力。`},
+    {cls:"",n:"02",big:fmtGB(video.gb),small:"视频，仅 61 个文件",p:`58 个 ITPM 播客视频 15.22 GB，占全部体积 43.3%。它们只应进本地冷存 / OSS video，不进 ECS、不进 Git。`},
+    {cls:"",n:"03",big:Number(md.files).toLocaleString(),small:"份 Markdown，仅 0.52%",p:`数量占 42.9%，体积 0.18 GB。站点真正的“内容”在这一层；先同步文本，媒体走缩略图与冷链接。`},
+    {cls:"rose",n:"04",big:fmtGB(dups.redundant_gb),small:"精确重复",p:`${dups.redundant_files.toLocaleString()} 份冗余、${dups.groups.toLocaleString()} 组。PDF 1.52 GB、PNG 0.62 GB；主要来自课件三副本与封面双份。`},
+    {cls:"rose",n:"05",big:fmtGB(ver/1024**3),small:"版本库 + 备份",p:`${DATA.meta.backup.snapshots} 份 Hermes 快照 6.60 GB + .git 4.43 GB。它们不是内容资产，迁金库前应整体排除。`},
+    {cls:"gold",n:"06",big:fmtPct(cand/DATA.meta.total_bytes*100),small:"两站候选占比",p:`仅 ${fmtGB(cand/1024**3)} 按目录规则可进入 A/B 站；其中文本层不到 0.11 GB。95% 以上是冷存档、People 存档与备份。`}
+  ];
+  $("#findingsGrid").innerHTML = items.map(i=>`
+    <div class="finding ${i.cls}">
+      <div class="f-num">FINDING ${i.n}</div>
+      <div class="f-big">${i.big}<em>${i.small}</em></div>
+      <p>${i.p}</p>
+    </div>`).join("");
+}
+
+function renderTopFiles(){
+  const rows = DATA.top_files.slice(0,10);
+  $("#topFiles").innerHTML = rows.map(f=>`
+    <tr>
+      <td class="path" title="${esc(f.path)}">${esc(shortPath(f.path,2))}</td>
+      <td><span class="tag blue">${esc(f.category)}</span></td>
+      <td class="num">${fmtGB(f.size/1024**3)}</td>
+    </tr>`).join("");
+}
+
+function renderDuplicates(){
+  const rows = DATA.duplicates.top_groups.slice(0,10);
+  $("#dupTable").innerHTML = rows.map(g=>`
+    <tr>
+      <td><span class="tag rose">${esc(g.ext||"—")}</span></td>
+      <td class="num">${g.copies}</td>
+      <td class="num">${fmtGB(g.redundant_bytes/1024**3)}</td>
+      <td class="path" title="${esc(g.canonical)}">${esc(shortPath(g.canonical,2))}</td>
+    </tr>`).join("");
+  const byExt = DATA.duplicates.by_ext.slice(0,6);
+  const max = Math.max(...byExt.map(x=>x.bytes),1);
+  $("#dupBars").innerHTML = byExt.map(x=>`
+    <div class="dup-row">
+      <span>${esc(x.ext||"—")}</span>
+      <div class="dup-track"><div class="dup-fill" style="width:${(x.bytes/max*100).toFixed(1)}%"></div></div>
+      <span style="text-align:right">${fmtGB(x.gb)}</span>
+    </div>`).join("");
+}
+
+// ---------------------------------------------------------------- plan
+function renderPlan(){
+  const phases = [
+    {id:"P0",size:"8 个文件",title:"安全隔离",p:"明文凭据 → MoBo-Secrets，轮换后删除工作区明文；gitleaks 复扫。",a:"gitleaks 0 命中"},
+    {id:"P1",size:"0 GB",title:"建金库骨架",p:"00-INDEX 五台账 + 10-text / 20-media / 30-word / 40-archive / 90-archive。",a:"目录树与方案一致"},
+    {id:"P2",size:"~0.11 GB",title:"文本层先行",p:"A 站 Memo / 策略 / 精读 / 提示词；B 站阅读 / 生活 / 职场。YAML 头齐全。",a:"抽检 10 篇可开 + YAML 校验"},
+    {id:"P3",size:"~3.5 GB",title:"Word / PDF / 图片 / 音频",p:"按用途分流 Word；课件 PDF 去重；封面与缩略图分离；音频挂精读。",a:"MANIFEST 覆盖 + 哈希抽验"},
+    {id:"P4",size:"~15.2 GB",title:"视频冷存",p:"61 个 mp4 逐片登记 sha256 / 时长 / 主题，只冷存，不上公域。",a:"61/61 在册"},
+    {id:"P5",size:"~3.59 GB",title:"People 存档",p:"按决定整包复制到 90-archive/peoples，不标引、不上站、不接流水线。",a:"7 条产线全在册"},
+    {id:"P6",size:"~2.45 GB",title:"去重与隔离",p:"精确重复组保留 canonical，其余进 _quarantine；14 天内不删除。",a:"DUPLICATES 每组有 keep / drop 决定"},
+    {id:"P7",size:"≤0.2 GB",title:"双站同步 / HITL",p:"生成 public-data.json 与 public-home-data.json，0 私有字段、0 INTERNAL，人工终审。",a:"exporters 审计 0 命中"}
+  ];
+  $("#timeline").innerHTML = phases.map(p=>`
+    <div class="phase">
+      <div class="ph-top"><span class="ph-id">${p.id}</span><span class="ph-size">${p.size}</span></div>
+      <h4>${p.title}</h4>
+      <p>${p.p}</p>
+      <div class="ph-accept">验收：<b>${p.a}</b></div>
+    </div>`).join("");
+  const decisions = [
+    ["金库路径","E:\\01-文档资料\\报告与规划\\MoBo-Content-Vault（与仓并列）","建议"],
+    ["目录树口径","文本按 A/B 分；媒体按类型分；一份原件两个视图","建议"],
+    ["People 存档","独立 90-archive，不标引、不上站","建议"],
+    ["备份保留","保留最近 3 份 + 每月 1 份，其余隔离","建议"],
+    ["重复文件","先隔离 14 天，不立即删除","建议"],
+    ["字体授权","5 个 ttf 授权未核前禁止上站/渲染","必须"],
+    ["视频同步","先本地冷存，服务器到位后再 OSS","建议"],
+    ["缩略图","本轮只出候选清单，不生成全量","可选"]
+  ];
+  $("#decisions").innerHTML = decisions.map((d,i)=>`
+    <label class="decision"><input type="checkbox"><span><b>${d[0]}</b>：${d[1]}<span class="rec">· ${d[2]}</span></span></label>`).join("");
+}
+
+// ---------------------------------------------------------------- nav
+function initNav(){
+  const links = $$("#nav a");
+  const secs = links.map(a=>$(a.getAttribute("href"))).filter(Boolean);
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting){
+        links.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+e.target.id));
+      }
+    });
+  }, {rootMargin:"-20% 0px -65% 0px", threshold:0});
+  secs.forEach(s=>io.observe(s));
+}
+
+function init(){
+  renderKPIs();
+  renderTreemap();
+  renderFolderBars();
+  renderFolderTable();
+  renderDonut();
+  renderSplitBars();
+  renderTypeTable();
+  renderHeatmap();
+  renderRouting();
+  renderLaunchV5();
+  renderFindings();
+  renderTopFiles();
+  renderDuplicates();
+  renderPlan();
+  initNav();
+  $$("#folderTabs .tab").forEach(btn=>btn.addEventListener("click",()=>{
+    $$("#folderTabs .tab").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    folderLevel = Number(btn.dataset.level);
+    renderFolderTable();
+  }));
+  $("#folderSearch").addEventListener("input", renderFolderTable);
+  let resizeTimer;
+  addEventListener("resize",()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderTreemap, 180);
+  });
+}
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

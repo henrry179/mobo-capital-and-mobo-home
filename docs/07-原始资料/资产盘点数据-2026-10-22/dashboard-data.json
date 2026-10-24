@@ -1,0 +1,4141 @@
+{
+  "meta": {
+    "date": "2026-10-22",
+    "total_gb": 35.2171,
+    "total_bytes": 37814088408,
+    "total_files": 44814,
+    "effective_gb": 24.1677,
+    "effective_share": 68.62,
+    "temp_files": 75,
+    "git_gb": 4.4342,
+    "backup": {
+      "files": 14536,
+      "bytes": 7086870642,
+      "gb": 6.6002,
+      "snapshots": 25
+    }
+  },
+  "top": [
+    {
+      "path": "01-工作与项目",
+      "files": 2497,
+      "bytes": 19572689081,
+      "gb": 18.228,
+      "share": 51.76
+    },
+    {
+      "path": "hermes-migration",
+      "files": 41727,
+      "bytes": 17419496819,
+      "gb": 16.223,
+      "share": 46.07
+    },
+    {
+      "path": "ITPM原稿内容",
+      "files": 82,
+      "bytes": 812097589,
+      "gb": 0.756,
+      "share": 2.15
+    },
+    {
+      "path": ".git",
+      "files": 253,
+      "bytes": 3110662,
+      "gb": 0.003,
+      "share": 0.01
+    },
+    {
+      "path": "ReadingBooks",
+      "files": 2,
+      "bytes": 2503162,
+      "gb": 0.002,
+      "share": 0.01
+    },
+    {
+      "path": "AIGC原稿",
+      "files": 10,
+      "bytes": 1358163,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": "docs",
+      "files": 84,
+      "bytes": 1060910,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": "services",
+      "files": 68,
+      "bytes": 529891,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "sites",
+      "files": 12,
+      "bytes": 417540,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "(root)",
+      "files": 15,
+      "bytes": 315288,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy",
+      "files": 29,
+      "bytes": 304918,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tools",
+      "files": 19,
+      "bytes": 139046,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "workflows",
+      "files": 7,
+      "bytes": 29298,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "seeds",
+      "files": 2,
+      "bytes": 17536,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tests",
+      "files": 3,
+      "bytes": 11382,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "migrations",
+      "files": 4,
+      "bytes": 7123,
+      "gb": 0.0,
+      "share": 0.0
+    }
+  ],
+  "p2": [
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks",
+      "files": 221,
+      "bytes": 16964912796,
+      "level": 2,
+      "gb": 15.8,
+      "share": 44.86
+    },
+    {
+      "path": "hermes-migration\\henrry-push",
+      "files": 41118,
+      "bytes": 16745270041,
+      "level": 2,
+      "gb": 15.595,
+      "share": 44.28
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles",
+      "files": 2037,
+      "bytes": 1756981994,
+      "level": 2,
+      "gb": 1.636,
+      "share": 4.65
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo",
+      "files": 239,
+      "bytes": 850794291,
+      "level": 2,
+      "gb": 0.792,
+      "share": 2.25
+    },
+    {
+      "path": "hermes-migration\\mobobrain-assets",
+      "files": 602,
+      "bytes": 673918073,
+      "level": 2,
+      "gb": 0.628,
+      "share": 1.78
+    },
+    {
+      "path": "ITPM原稿内容\\PTM2-20260320",
+      "files": 41,
+      "bytes": 470971455,
+      "level": 2,
+      "gb": 0.439,
+      "share": 1.25
+    },
+    {
+      "path": "ITPM原稿内容\\POTM2-20260320",
+      "files": 31,
+      "bytes": 303118976,
+      "level": 2,
+      "gb": 0.282,
+      "share": 0.8
+    },
+    {
+      "path": "ITPM原稿内容",
+      "files": 10,
+      "bytes": 38007158,
+      "level": 2,
+      "gb": 0.035,
+      "share": 0.1
+    },
+    {
+      "path": "ReadingBooks",
+      "files": 2,
+      "bytes": 2503162,
+      "level": 2,
+      "gb": 0.002,
+      "share": 0.01
+    },
+    {
+      "path": ".git\\cursor",
+      "files": 3,
+      "bytes": 1847861,
+      "level": 2,
+      "gb": 0.002,
+      "share": 0.0
+    },
+    {
+      "path": "AIGC原稿",
+      "files": 8,
+      "bytes": 1353714,
+      "level": 2,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects",
+      "files": 226,
+      "bytes": 1205190,
+      "level": 2,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\07-原始资料",
+      "files": 31,
+      "bytes": 609658,
+      "level": 2,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": "services\\mobo-cli",
+      "files": 47,
+      "bytes": 394747,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "(root)",
+      "files": 15,
+      "bytes": 315288,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\skills",
+      "files": 7,
+      "bytes": 308705,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "sites\\mobohome",
+      "files": 6,
+      "bytes": 299213,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\scripts",
+      "files": 6,
+      "bytes": 187815,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\00-总册",
+      "files": 5,
+      "bytes": 126161,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "sites\\mobocapital",
+      "files": 6,
+      "bytes": 118327,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\postgres",
+      "files": 9,
+      "bytes": 84485,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\05-运维与灾备",
+      "files": 9,
+      "bytes": 82969,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\01-项目治理",
+      "files": 17,
+      "bytes": 77907,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\archive-dashboard",
+      "files": 13,
+      "bytes": 69677,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\console",
+      "files": 8,
+      "bytes": 65467,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tools\\local-preview",
+      "files": 6,
+      "bytes": 64052,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\06-合规与成本",
+      "files": 6,
+      "bytes": 57908,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\04-数据库设计",
+      "files": 6,
+      "bytes": 56218,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tools\\wsl",
+      "files": 12,
+      "bytes": 47069,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\03-架构设计",
+      "files": 6,
+      "bytes": 31695,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tools\\doc-builder",
+      "files": 1,
+      "bytes": 27925,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\hooks",
+      "files": 14,
+      "bytes": 26788,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "workflows",
+      "files": 5,
+      "bytes": 26083,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git",
+      "files": 5,
+      "bytes": 23855,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\backup",
+      "files": 5,
+      "bytes": 22795,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\02-需求与验收",
+      "files": 4,
+      "bytes": 18394,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "seeds",
+      "files": 2,
+      "bytes": 17536,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\caddy",
+      "files": 2,
+      "bytes": 9823,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tests\\sql",
+      "files": 2,
+      "bytes": 9575,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "migrations",
+      "files": 4,
+      "bytes": 7123,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\logs",
+      "files": 2,
+      "bytes": 6630,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "AIGC原稿\\.codebuddy",
+      "files": 2,
+      "bytes": 4449,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "workflows\\prompts",
+      "files": 1,
+      "bytes": 2248,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tests",
+      "files": 1,
+      "bytes": 1807,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "workflows\\nodes",
+      "files": 1,
+      "bytes": 967,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\info",
+      "files": 2,
+      "bytes": 297,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\refs",
+      "files": 1,
+      "bytes": 41,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\volumes",
+      "files": 7,
+      "bytes": 0,
+      "level": 2,
+      "gb": 0.0,
+      "share": 0.0
+    }
+  ],
+  "p3": [
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks",
+      "files": 58,
+      "bytes": 16346055574,
+      "level": 3,
+      "gb": 15.223,
+      "share": 43.23
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\hermes",
+      "files": 15342,
+      "bytes": 7103506784,
+      "level": 3,
+      "gb": 6.616,
+      "share": 18.79
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\MoBoBrain-ITPM-Archive",
+      "files": 25559,
+      "bytes": 4880718162,
+      "level": 3,
+      "gb": 4.546,
+      "share": 12.91
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\.git",
+      "files": 142,
+      "bytes": 4757821936,
+      "level": 3,
+      "gb": 4.431,
+      "share": 12.58
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\data",
+      "files": 1078,
+      "bytes": 1135436608,
+      "level": 3,
+      "gb": 1.057,
+      "share": 3.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档",
+      "files": 113,
+      "bytes": 842032182,
+      "level": 3,
+      "gb": 0.784,
+      "share": 2.23
+    },
+    {
+      "path": "hermes-migration\\mobobrain-assets\\covers",
+      "files": 597,
+      "bytes": 604160845,
+      "level": 3,
+      "gb": 0.563,
+      "share": 1.6
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\potm-2.0",
+      "files": 45,
+      "bytes": 544575173,
+      "level": 3,
+      "gb": 0.507,
+      "share": 1.44
+    },
+    {
+      "path": "ITPM原稿内容\\PTM2-20260320",
+      "files": 41,
+      "bytes": 470971455,
+      "level": 3,
+      "gb": 0.439,
+      "share": 1.25
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\Zipfiles",
+      "files": 13,
+      "bytes": 469696104,
+      "level": 3,
+      "gb": 0.437,
+      "share": 1.24
+    },
+    {
+      "path": "ITPM原稿内容\\POTM2-20260320",
+      "files": 31,
+      "bytes": 303118976,
+      "level": 3,
+      "gb": 0.282,
+      "share": 0.8
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\交易访谈和原则-2017",
+      "files": 118,
+      "bytes": 74282049,
+      "level": 3,
+      "gb": 0.069,
+      "share": 0.2
+    },
+    {
+      "path": "hermes-migration\\mobobrain-assets\\fonts",
+      "files": 5,
+      "bytes": 69757228,
+      "level": 3,
+      "gb": 0.065,
+      "share": 0.18
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\ITPM-Training-0716",
+      "files": 157,
+      "bytes": 64399984,
+      "level": 3,
+      "gb": 0.06,
+      "share": 0.17
+    },
+    {
+      "path": "ITPM原稿内容",
+      "files": 10,
+      "bytes": 38007158,
+      "level": 3,
+      "gb": 0.035,
+      "share": 0.1
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\financialdatas",
+      "files": 67,
+      "bytes": 26492380,
+      "level": 3,
+      "gb": 0.025,
+      "share": 0.07
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\周报模板",
+      "files": 40,
+      "bytes": 18980505,
+      "level": 3,
+      "gb": 0.018,
+      "share": 0.05
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\周报（交接）",
+      "files": 9,
+      "bytes": 11625523,
+      "level": 3,
+      "gb": 0.011,
+      "share": 0.03
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\CombinePythonConnectSQLDataSet",
+      "files": 91,
+      "bytes": 8137879,
+      "level": 3,
+      "gb": 0.008,
+      "share": 0.02
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\09_图片合集",
+      "files": 37,
+      "bytes": 7785774,
+      "level": 3,
+      "gb": 0.007,
+      "share": 0.02
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\PropmtLists",
+      "files": 395,
+      "bytes": 7570951,
+      "level": 3,
+      "gb": 0.007,
+      "share": 0.02
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\指标文件",
+      "files": 26,
+      "bytes": 5481829,
+      "level": 3,
+      "gb": 0.005,
+      "share": 0.01
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\DatasListVision",
+      "files": 26,
+      "bytes": 5481829,
+      "level": 3,
+      "gb": 0.005,
+      "share": 0.01
+    },
+    {
+      "path": "ReadingBooks",
+      "files": 2,
+      "bytes": 2503162,
+      "level": 3,
+      "gb": 0.002,
+      "share": 0.01
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\Claude code",
+      "files": 67,
+      "bytes": 1931089,
+      "level": 3,
+      "gb": 0.002,
+      "share": 0.01
+    },
+    {
+      "path": ".git\\cursor\\crepe",
+      "files": 3,
+      "bytes": 1847861,
+      "level": 3,
+      "gb": 0.002,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\reports",
+      "files": 27,
+      "bytes": 1484901,
+      "level": 3,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": "AIGC原稿",
+      "files": 8,
+      "bytes": 1353714,
+      "level": 3,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\报价单复盘",
+      "files": 15,
+      "bytes": 1263994,
+      "level": 3,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\WorkAnalysis",
+      "files": 25,
+      "bytes": 1230559,
+      "level": 3,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\pack",
+      "files": 4,
+      "bytes": 668215,
+      "level": 3,
+      "gb": 0.001,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\scripts",
+      "files": 16,
+      "bytes": 406323,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\010-分析报告",
+      "files": 9,
+      "bytes": 328810,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "(root)",
+      "files": 15,
+      "bytes": 315288,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "sites\\mobohome\\internal",
+      "files": 2,
+      "bytes": 250999,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\finance_translator",
+      "files": 16,
+      "bytes": 245821,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\03_内容生产",
+      "files": 20,
+      "bytes": 230168,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\07-原始资料\\归档-代码",
+      "files": 20,
+      "bytes": 224140,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\mobo-cli\\mobo_cli",
+      "files": 22,
+      "bytes": 223794,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\07-原始资料\\原始方案",
+      "files": 3,
+      "bytes": 183707,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\pdf-image-extractor",
+      "files": 20,
+      "bytes": 171256,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\scripts\\bootstrap",
+      "files": 1,
+      "bytes": 166363,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\skills\\mobobrain-cron",
+      "files": 1,
+      "bytes": 153840,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\07-原始资料",
+      "files": 6,
+      "bytes": 144976,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\大模型价格与能力综合报告_2026-03-17",
+      "files": 9,
+      "bytes": 134287,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\执行中",
+      "files": 34,
+      "bytes": 116739,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\00-总册",
+      "files": 4,
+      "bytes": 104059,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles\\.claude",
+      "files": 7,
+      "bytes": 99677,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\mobo-cli\\tests",
+      "files": 8,
+      "bytes": 95078,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\postgres\\initdb",
+      "files": 9,
+      "bytes": 84485,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\05-运维与灾备",
+      "files": 8,
+      "bytes": 81199,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\skills\\hermes-cron-diagnostics",
+      "files": 1,
+      "bytes": 66049,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\mobo-cli\\collectors",
+      "files": 4,
+      "bytes": 66049,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tools\\local-preview",
+      "files": 6,
+      "bytes": 64052,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\06-合规与成本",
+      "files": 6,
+      "bytes": 57908,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\02_策略体系",
+      "files": 3,
+      "bytes": 57587,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\07-原始资料\\外部项目档案",
+      "files": 2,
+      "bytes": 56835,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\04-数据库设计",
+      "files": 6,
+      "bytes": 56218,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\a9",
+      "files": 3,
+      "bytes": 54444,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\Memory",
+      "files": 14,
+      "bytes": 53205,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "sites\\mobocapital",
+      "files": 1,
+      "bytes": 47511,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\01-项目治理",
+      "files": 5,
+      "bytes": 46766,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tools\\wsl",
+      "files": 7,
+      "bytes": 42307,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\console\\assets",
+      "files": 2,
+      "bytes": 40267,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "sites\\mobohome",
+      "files": 1,
+      "bytes": 39010,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "sites\\mobocapital\\data",
+      "files": 3,
+      "bytes": 38923,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\skills\\persona-profile-generation",
+      "files": 1,
+      "bytes": 34429,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "sites\\mobocapital\\internal",
+      "files": 2,
+      "bytes": 31893,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\03-架构设计",
+      "files": 6,
+      "bytes": 31695,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\archive-dashboard",
+      "files": 5,
+      "bytes": 31263,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\01-项目治理\\决策记录",
+      "files": 12,
+      "bytes": 31141,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tools\\doc-builder",
+      "files": 1,
+      "bytes": 27925,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\hooks",
+      "files": 14,
+      "bytes": 26788,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "workflows",
+      "files": 5,
+      "bytes": 26083,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\skills\\global-news-aggregation",
+      "files": 1,
+      "bytes": 24171,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git",
+      "files": 5,
+      "bytes": 23855,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\archive-dashboard\\tests",
+      "files": 2,
+      "bytes": 22837,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\backup",
+      "files": 5,
+      "bytes": 22795,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\00-总册\\归档",
+      "files": 1,
+      "bytes": 22102,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\scripts",
+      "files": 5,
+      "bytes": 21452,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\07_商业化",
+      "files": 1,
+      "bytes": 20687,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\30",
+      "files": 4,
+      "bytes": 18409,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "docs\\02-需求与验收",
+      "files": 4,
+      "bytes": 18394,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "seeds",
+      "files": 2,
+      "bytes": 17536,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\卸载分析报告",
+      "files": 3,
+      "bytes": 17000,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\04_平台运营",
+      "files": 1,
+      "bytes": 16690,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\05_合规与风控",
+      "files": 1,
+      "bytes": 15327,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\06_数据分析",
+      "files": 1,
+      "bytes": 15076,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\24",
+      "files": 3,
+      "bytes": 15000,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\henrry-push",
+      "files": 3,
+      "bytes": 14736,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\archive-dashboard\\__pycache__",
+      "files": 1,
+      "bytes": 14300,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\f3",
+      "files": 1,
+      "bytes": 12663,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\5a",
+      "files": 2,
+      "bytes": 12625,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\skills\\hermes-web-search",
+      "files": 1,
+      "bytes": 12541,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\e3",
+      "files": 2,
+      "bytes": 12485,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo\\prompt-optimizer",
+      "files": 2,
+      "bytes": 12113,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\d6",
+      "files": 2,
+      "bytes": 12075,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\91",
+      "files": 3,
+      "bytes": 11707,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\ec",
+      "files": 1,
+      "bytes": 11383,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\3a",
+      "files": 2,
+      "bytes": 11213,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\dc",
+      "files": 4,
+      "bytes": 10943,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\34",
+      "files": 4,
+      "bytes": 10840,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\18",
+      "files": 2,
+      "bytes": 10452,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\skills\\system-discovery",
+      "files": 1,
+      "bytes": 9944,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "deploy\\caddy",
+      "files": 2,
+      "bytes": 9823,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\ca",
+      "files": 2,
+      "bytes": 9649,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "tests\\sql",
+      "files": 2,
+      "bytes": 9575,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\console",
+      "files": 2,
+      "bytes": 9511,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\01",
+      "files": 4,
+      "bytes": 9468,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\f0",
+      "files": 2,
+      "bytes": 9210,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\84",
+      "files": 2,
+      "bytes": 8965,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\27",
+      "files": 2,
+      "bytes": 8919,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\81",
+      "files": 3,
+      "bytes": 8871,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\15",
+      "files": 1,
+      "bytes": 8422,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\50",
+      "files": 3,
+      "bytes": 8385,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "services\\console\\tests",
+      "files": 1,
+      "bytes": 8355,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\a5",
+      "files": 2,
+      "bytes": 8334,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "sites\\mobohome\\data",
+      "files": 2,
+      "bytes": 8155,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": "hermes-migration\\skills\\monitoring-watchdog-patterns",
+      "files": 1,
+      "bytes": 7731,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    },
+    {
+      "path": ".git\\objects\\12",
+      "files": 2,
+      "bytes": 7397,
+      "level": 3,
+      "gb": 0.0,
+      "share": 0.0
+    }
+  ],
+  "categories": [
+    {
+      "category": "视频",
+      "files": 61,
+      "bytes": 16384482579,
+      "gb": 15.259,
+      "share": 43.33,
+      "files_share": 0.14
+    },
+    {
+      "category": "图片",
+      "files": 14036,
+      "bytes": 5358095864,
+      "gb": 4.99,
+      "share": 14.17,
+      "files_share": 31.32
+    },
+    {
+      "category": "数据库/状态快照",
+      "files": 30,
+      "bytes": 6779826711,
+      "gb": 6.314,
+      "share": 17.93,
+      "files_share": 0.07
+    },
+    {
+      "category": "版本库对象",
+      "files": 18,
+      "bytes": 4674245601,
+      "gb": 4.353,
+      "share": 12.36,
+      "files_share": 0.04
+    },
+    {
+      "category": "PDF",
+      "files": 401,
+      "bytes": 2499417260,
+      "gb": 2.328,
+      "share": 6.61,
+      "files_share": 0.89
+    },
+    {
+      "category": "Word",
+      "files": 742,
+      "bytes": 734026538,
+      "gb": 0.684,
+      "share": 1.94,
+      "files_share": 1.66
+    },
+    {
+      "category": "压缩包",
+      "files": 87,
+      "bytes": 631099643,
+      "gb": 0.588,
+      "share": 1.67,
+      "files_share": 0.19
+    },
+    {
+      "category": "音频",
+      "files": 13,
+      "bytes": 205781385,
+      "gb": 0.192,
+      "share": 0.54,
+      "files_share": 0.03
+    },
+    {
+      "category": "Markdown",
+      "files": 19225,
+      "bytes": 196542754,
+      "gb": 0.183,
+      "share": 0.52,
+      "files_share": 42.9
+    },
+    {
+      "category": "代码/配置",
+      "files": 8198,
+      "bytes": 126664239,
+      "gb": 0.118,
+      "share": 0.33,
+      "files_share": 18.29
+    },
+    {
+      "category": "演示/表格",
+      "files": 62,
+      "bytes": 45643378,
+      "gb": 0.043,
+      "share": 0.12,
+      "files_share": 0.14
+    },
+    {
+      "category": "文本",
+      "files": 224,
+      "bytes": 2503888,
+      "gb": 0.002,
+      "share": 0.01,
+      "files_share": 0.5
+    },
+    {
+      "category": "字体",
+      "files": 5,
+      "bytes": 69757228,
+      "gb": 0.065,
+      "share": 0.18,
+      "files_share": 0.01
+    },
+    {
+      "category": "其他/无扩展名",
+      "files": 1712,
+      "bytes": 106001340,
+      "gb": 0.099,
+      "share": 0.28,
+      "files_share": 3.82
+    }
+  ],
+  "category_order": [
+    "视频",
+    "图片",
+    "数据库/状态快照",
+    "版本库对象",
+    "PDF",
+    "Word",
+    "压缩包",
+    "音频",
+    "Markdown",
+    "代码/配置",
+    "演示/表格",
+    "文本",
+    "字体",
+    "其他/无扩展名"
+  ],
+  "dest": [
+    {
+      "dest": "冷存档/待去重",
+      "files": 2059,
+      "bytes": 20304561703,
+      "gb": 18.91,
+      "share": 53.7
+    },
+    {
+      "dest": "版本库与备份",
+      "files": 15745,
+      "bytes": 11864239450,
+      "gb": 11.049,
+      "share": 31.38
+    },
+    {
+      "dest": "People存档（暂不上站）",
+      "files": 21064,
+      "bytes": 3856006570,
+      "gb": 3.591,
+      "share": 10.2
+    },
+    {
+      "dest": "A站内容源",
+      "files": 2126,
+      "bytes": 1582329827,
+      "gb": 1.474,
+      "share": 4.18
+    },
+    {
+      "dest": "运维/内部",
+      "files": 108,
+      "bytes": 73769189,
+      "gb": 0.069,
+      "share": 0.2
+    },
+    {
+      "dest": "B站内容源",
+      "files": 218,
+      "bytes": 71212777,
+      "gb": 0.066,
+      "share": 0.19
+    },
+    {
+      "dest": "工程与治理",
+      "files": 3419,
+      "bytes": 61669224,
+      "gb": 0.057,
+      "share": 0.16
+    },
+    {
+      "dest": "待清理/临时",
+      "files": 75,
+      "bytes": 299668,
+      "gb": 0.0,
+      "share": 0.0
+    }
+  ],
+  "dest_categories": [
+    {
+      "dest": "A站内容源",
+      "category": "图片",
+      "files": 1301,
+      "bytes": 1275685410,
+      "gb": 1.1881
+    },
+    {
+      "dest": "A站内容源",
+      "category": "音频",
+      "files": 13,
+      "bytes": 205781385,
+      "gb": 0.1916
+    },
+    {
+      "dest": "A站内容源",
+      "category": "Word",
+      "files": 489,
+      "bytes": 46439358,
+      "gb": 0.0433
+    },
+    {
+      "dest": "A站内容源",
+      "category": "视频",
+      "files": 3,
+      "bytes": 38427005,
+      "gb": 0.0358
+    },
+    {
+      "dest": "A站内容源",
+      "category": "PDF",
+      "files": 24,
+      "bytes": 9365234,
+      "gb": 0.0087
+    },
+    {
+      "dest": "A站内容源",
+      "category": "Markdown",
+      "files": 241,
+      "bytes": 5466467,
+      "gb": 0.0051
+    },
+    {
+      "dest": "A站内容源",
+      "category": "代码/配置",
+      "files": 41,
+      "bytes": 1146768,
+      "gb": 0.0011
+    },
+    {
+      "dest": "A站内容源",
+      "category": "演示/表格",
+      "files": 12,
+      "bytes": 18105,
+      "gb": 0.0
+    },
+    {
+      "dest": "A站内容源",
+      "category": "其他/无扩展名",
+      "files": 1,
+      "bytes": 91,
+      "gb": 0.0
+    },
+    {
+      "dest": "A站内容源",
+      "category": "文本",
+      "files": 1,
+      "bytes": 4,
+      "gb": 0.0
+    },
+    {
+      "dest": "B站内容源",
+      "category": "PDF",
+      "files": 13,
+      "bytes": 23730817,
+      "gb": 0.0221
+    },
+    {
+      "dest": "B站内容源",
+      "category": "压缩包",
+      "files": 5,
+      "bytes": 17792133,
+      "gb": 0.0166
+    },
+    {
+      "dest": "B站内容源",
+      "category": "演示/表格",
+      "files": 25,
+      "bytes": 15788624,
+      "gb": 0.0147
+    },
+    {
+      "dest": "B站内容源",
+      "category": "图片",
+      "files": 6,
+      "bytes": 4847933,
+      "gb": 0.0045
+    },
+    {
+      "dest": "B站内容源",
+      "category": "Markdown",
+      "files": 78,
+      "bytes": 4621602,
+      "gb": 0.0043
+    },
+    {
+      "dest": "B站内容源",
+      "category": "代码/配置",
+      "files": 77,
+      "bytes": 3765137,
+      "gb": 0.0035
+    },
+    {
+      "dest": "B站内容源",
+      "category": "Word",
+      "files": 8,
+      "bytes": 513703,
+      "gb": 0.0005
+    },
+    {
+      "dest": "B站内容源",
+      "category": "数据库/状态快照",
+      "files": 1,
+      "bytes": 77824,
+      "gb": 0.0001
+    },
+    {
+      "dest": "B站内容源",
+      "category": "其他/无扩展名",
+      "files": 1,
+      "bytes": 70656,
+      "gb": 0.0001
+    },
+    {
+      "dest": "B站内容源",
+      "category": "文本",
+      "files": 4,
+      "bytes": 4348,
+      "gb": 0.0
+    },
+    {
+      "dest": "People存档（暂不上站）",
+      "category": "图片",
+      "files": 11674,
+      "bytes": 3685990656,
+      "gb": 3.4328
+    },
+    {
+      "dest": "People存档（暂不上站）",
+      "category": "Markdown",
+      "files": 7882,
+      "bytes": 76396146,
+      "gb": 0.0711
+    },
+    {
+      "dest": "People存档（暂不上站）",
+      "category": "Word",
+      "files": 173,
+      "bytes": 50451319,
+      "gb": 0.047
+    },
+    {
+      "dest": "People存档（暂不上站）",
+      "category": "代码/配置",
+      "files": 1187,
+      "bytes": 21335102,
+      "gb": 0.0199
+    },
+    {
+      "dest": "People存档（暂不上站）",
+      "category": "PDF",
+      "files": 21,
+      "bytes": 16346678,
+      "gb": 0.0152
+    },
+    {
+      "dest": "People存档（暂不上站）",
+      "category": "其他/无扩展名",
+      "files": 55,
+      "bytes": 3611611,
+      "gb": 0.0034
+    },
+    {
+      "dest": "People存档（暂不上站）",
+      "category": "演示/表格",
+      "files": 6,
+      "bytes": 1378121,
+      "gb": 0.0013
+    },
+    {
+      "dest": "People存档（暂不上站）",
+      "category": "文本",
+      "files": 66,
+      "bytes": 496937,
+      "gb": 0.0005
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "视频",
+      "files": 58,
+      "bytes": 16346055574,
+      "gb": 15.2235
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "PDF",
+      "files": 239,
+      "bytes": 2436468181,
+      "gb": 2.2691
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "Word",
+      "files": 61,
+      "bytes": 635984412,
+      "gb": 0.5923
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "压缩包",
+      "files": 8,
+      "bytes": 451903971,
+      "gb": 0.4209
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "图片",
+      "files": 1053,
+      "bytes": 391562492,
+      "gb": 0.3647
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "演示/表格",
+      "files": 9,
+      "bytes": 28294873,
+      "gb": 0.0264
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "Markdown",
+      "files": 287,
+      "bytes": 7507731,
+      "gb": 0.007
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "代码/配置",
+      "files": 283,
+      "bytes": 5206963,
+      "gb": 0.0048
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "文本",
+      "files": 17,
+      "bytes": 1121841,
+      "gb": 0.001
+    },
+    {
+      "dest": "冷存档/待去重",
+      "category": "其他/无扩展名",
+      "files": 44,
+      "bytes": 455665,
+      "gb": 0.0004
+    },
+    {
+      "dest": "工程与治理",
+      "category": "代码/配置",
+      "files": 2839,
+      "bytes": 55113306,
+      "gb": 0.0513
+    },
+    {
+      "dest": "工程与治理",
+      "category": "其他/无扩展名",
+      "files": 405,
+      "bytes": 4611913,
+      "gb": 0.0043
+    },
+    {
+      "dest": "工程与治理",
+      "category": "Markdown",
+      "files": 89,
+      "bytes": 1156322,
+      "gb": 0.0011
+    },
+    {
+      "dest": "工程与治理",
+      "category": "Word",
+      "files": 9,
+      "bytes": 548734,
+      "gb": 0.0005
+    },
+    {
+      "dest": "工程与治理",
+      "category": "文本",
+      "files": 74,
+      "bytes": 227767,
+      "gb": 0.0002
+    },
+    {
+      "dest": "工程与治理",
+      "category": "图片",
+      "files": 2,
+      "bytes": 9373,
+      "gb": 0.0
+    },
+    {
+      "dest": "工程与治理",
+      "category": "压缩包",
+      "files": 1,
+      "bytes": 1809,
+      "gb": 0.0
+    },
+    {
+      "dest": "待清理/临时",
+      "category": "其他/无扩展名",
+      "files": 75,
+      "bytes": 299668,
+      "gb": 0.0003
+    },
+    {
+      "dest": "版本库与备份",
+      "category": "数据库/状态快照",
+      "files": 29,
+      "bytes": 6779748887,
+      "gb": 6.3141
+    },
+    {
+      "dest": "版本库与备份",
+      "category": "版本库对象",
+      "files": 18,
+      "bytes": 4674245601,
+      "gb": 4.3532
+    },
+    {
+      "dest": "版本库与备份",
+      "category": "压缩包",
+      "files": 73,
+      "bytes": 161401730,
+      "gb": 0.1503
+    },
+    {
+      "dest": "版本库与备份",
+      "category": "Markdown",
+      "files": 10614,
+      "bytes": 100911521,
+      "gb": 0.094
+    },
+    {
+      "dest": "版本库与备份",
+      "category": "其他/无扩展名",
+      "files": 1130,
+      "bytes": 96950343,
+      "gb": 0.0903
+    },
+    {
+      "dest": "版本库与备份",
+      "category": "代码/配置",
+      "files": 3722,
+      "bytes": 37245738,
+      "gb": 0.0347
+    },
+    {
+      "dest": "版本库与备份",
+      "category": "PDF",
+      "files": 104,
+      "bytes": 13506350,
+      "gb": 0.0126
+    },
+    {
+      "dest": "版本库与备份",
+      "category": "文本",
+      "files": 55,
+      "bytes": 229280,
+      "gb": 0.0002
+    },
+    {
+      "dest": "运维/内部",
+      "category": "字体",
+      "files": 5,
+      "bytes": 69757228,
+      "gb": 0.065
+    },
+    {
+      "dest": "运维/内部",
+      "category": "代码/配置",
+      "files": 49,
+      "bytes": 2851225,
+      "gb": 0.0027
+    },
+    {
+      "dest": "运维/内部",
+      "category": "Markdown",
+      "files": 34,
+      "bytes": 482965,
+      "gb": 0.0004
+    },
+    {
+      "dest": "运维/内部",
+      "category": "文本",
+      "files": 7,
+      "bytes": 423711,
+      "gb": 0.0004
+    },
+    {
+      "dest": "运维/内部",
+      "category": "演示/表格",
+      "files": 10,
+      "bytes": 163655,
+      "gb": 0.0002
+    },
+    {
+      "dest": "运维/内部",
+      "category": "Word",
+      "files": 2,
+      "bytes": 89012,
+      "gb": 0.0001
+    },
+    {
+      "dest": "运维/内部",
+      "category": "其他/无扩展名",
+      "files": 1,
+      "bytes": 1393,
+      "gb": 0.0
+    }
+  ],
+  "cross": [
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks",
+      "total": 16964912796,
+      "视频": 16346055574,
+      "图片": 6660983,
+      "数据库/状态快照": 0,
+      "版本库对象": 0,
+      "PDF": 38013834,
+      "Word": 573539098,
+      "压缩包": 0,
+      "音频": 0,
+      "Markdown": 209099,
+      "代码/配置": 0,
+      "演示/表格": 155668,
+      "文本": 0,
+      "字体": 0,
+      "其他/无扩展名": 278540
+    },
+    {
+      "path": "hermes-migration\\henrry-push",
+      "total": 16745270041,
+      "视频": 38427005,
+      "图片": 4349737771,
+      "数据库/状态快照": 6777901056,
+      "版本库对象": 4673585834,
+      "PDF": 38019227,
+      "Word": 96877279,
+      "压缩包": 161403539,
+      "音频": 205781385,
+      "Markdown": 182576557,
+      "代码/配置": 113977140,
+      "演示/表格": 1531190,
+      "文本": 936838,
+      "字体": 0,
+      "其他/无扩展名": 104515220
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles",
+      "total": 1756981994,
+      "视频": 0,
+      "图片": 386899248,
+      "数据库/状态快照": 77824,
+      "版本库对象": 0,
+      "PDF": 797821248,
+      "Word": 33830127,
+      "压缩包": 469696104,
+      "音频": 0,
+      "Markdown": 12365177,
+      "代码/配置": 10692485,
+      "演示/表格": 43780671,
+      "文本": 1244507,
+      "字体": 0,
+      "其他/无扩展名": 574603
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo",
+      "total": 850794291,
+      "视频": 0,
+      "图片": 8132806,
+      "数据库/状态快照": 0,
+      "版本库对象": 0,
+      "PDF": 826486908,
+      "Word": 14927282,
+      "压缩包": 0,
+      "音频": 0,
+      "Markdown": 447715,
+      "代码/配置": 323667,
+      "演示/表格": 175029,
+      "文本": 300793,
+      "字体": 0,
+      "其他/无扩展名": 91
+    },
+    {
+      "path": "hermes-migration\\mobobrain-assets",
+      "total": 673918073,
+      "视频": 0,
+      "图片": 604160845,
+      "数据库/状态快照": 0,
+      "版本库对象": 0,
+      "PDF": 0,
+      "Word": 0,
+      "压缩包": 0,
+      "音频": 0,
+      "Markdown": 0,
+      "代码/配置": 0,
+      "演示/表格": 0,
+      "文本": 0,
+      "字体": 69757228,
+      "其他/无扩展名": 0
+    },
+    {
+      "path": "ITPM原稿内容\\PTM2-20260320",
+      "total": 470971455,
+      "视频": 0,
+      "图片": 0,
+      "数据库/状态快照": 0,
+      "版本库对象": 0,
+      "PDF": 470971455,
+      "Word": 0,
+      "压缩包": 0,
+      "音频": 0,
+      "Markdown": 0,
+      "代码/配置": 0,
+      "演示/表格": 0,
+      "文本": 0,
+      "字体": 0,
+      "其他/无扩展名": 0
+    },
+    {
+      "path": "ITPM原稿内容\\POTM2-20260320",
+      "total": 303118976,
+      "视频": 0,
+      "图片": 0,
+      "数据库/状态快照": 0,
+      "版本库对象": 0,
+      "PDF": 303118976,
+      "Word": 0,
+      "压缩包": 0,
+      "音频": 0,
+      "Markdown": 0,
+      "代码/配置": 0,
+      "演示/表格": 0,
+      "文本": 0,
+      "字体": 0,
+      "其他/无扩展名": 0
+    },
+    {
+      "path": "ITPM原稿内容",
+      "total": 38007158,
+      "视频": 0,
+      "图片": 0,
+      "数据库/状态快照": 0,
+      "版本库对象": 0,
+      "PDF": 23786577,
+      "Word": 14201608,
+      "压缩包": 0,
+      "音频": 0,
+      "Markdown": 18973,
+      "代码/配置": 0,
+      "演示/表格": 0,
+      "文本": 0,
+      "字体": 0,
+      "其他/无扩展名": 0
+    },
+    {
+      "path": "ReadingBooks",
+      "total": 2503162,
+      "视频": 0,
+      "图片": 2503162,
+      "数据库/状态快照": 0,
+      "版本库对象": 0,
+      "PDF": 0,
+      "Word": 0,
+      "压缩包": 0,
+      "音频": 0,
+      "Markdown": 0,
+      "代码/配置": 0,
+      "演示/表格": 0,
+      "文本": 0,
+      "字体": 0,
+      "其他/无扩展名": 0
+    },
+    {
+      "path": "AIGC原稿",
+      "total": 1353714,
+      "视频": 0,
+      "图片": 0,
+      "数据库/状态快照": 0,
+      "版本库对象": 0,
+      "PDF": 1199035,
+      "Word": 140526,
+      "压缩包": 0,
+      "音频": 0,
+      "Markdown": 1890,
+      "代码/配置": 11443,
+      "演示/表格": 820,
+      "文本": 0,
+      "字体": 0,
+      "其他/无扩展名": 0
+    }
+  ],
+  "category_folders": [
+    {
+      "category": "视频",
+      "total_gb": 15.2592,
+      "folders": [
+        {
+          "path": "01-工作与项目\\ITPM-PlayBooks",
+          "files": 58,
+          "gb": 15.2235
+        },
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 3,
+          "gb": 0.0358
+        }
+      ]
+    },
+    {
+      "category": "图片",
+      "total_gb": 4.9901,
+      "folders": [
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 12342,
+          "gb": 4.051
+        },
+        {
+          "path": "hermes-migration\\mobobrain-assets",
+          "files": 597,
+          "gb": 0.5627
+        },
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 1013,
+          "gb": 0.3603
+        },
+        {
+          "path": "01-工作与项目\\AutopilotTradeBoMo",
+          "files": 39,
+          "gb": 0.0076
+        },
+        {
+          "path": "01-工作与项目\\ITPM-PlayBooks",
+          "files": 42,
+          "gb": 0.0062
+        },
+        {
+          "path": "ReadingBooks",
+          "files": 2,
+          "gb": 0.0023
+        },
+        {
+          "path": "sites\\mobohome",
+          "files": 1,
+          "gb": 0.0
+        }
+      ]
+    },
+    {
+      "category": "数据库/状态快照",
+      "total_gb": 6.3142,
+      "folders": [
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 27,
+          "gb": 6.3124
+        },
+        {
+          "path": ".git\\cursor",
+          "files": 2,
+          "gb": 0.0017
+        },
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 1,
+          "gb": 0.0001
+        }
+      ]
+    },
+    {
+      "category": "版本库对象",
+      "total_gb": 4.3532,
+      "folders": [
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 15,
+          "gb": 4.3526
+        },
+        {
+          "path": ".git\\objects",
+          "files": 3,
+          "gb": 0.0006
+        }
+      ]
+    },
+    {
+      "category": "PDF",
+      "total_gb": 2.3278,
+      "folders": [
+        {
+          "path": "01-工作与项目\\AutopilotTradeBoMo",
+          "files": 83,
+          "gb": 0.7697
+        },
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 85,
+          "gb": 0.743
+        },
+        {
+          "path": "ITPM原稿内容\\PTM2-20260320",
+          "files": 41,
+          "gb": 0.4386
+        },
+        {
+          "path": "ITPM原稿内容\\POTM2-20260320",
+          "files": 31,
+          "gb": 0.2823
+        },
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 147,
+          "gb": 0.0354
+        },
+        {
+          "path": "01-工作与项目\\ITPM-PlayBooks",
+          "files": 5,
+          "gb": 0.0354
+        },
+        {
+          "path": "ITPM原稿内容",
+          "files": 7,
+          "gb": 0.0222
+        },
+        {
+          "path": "AIGC原稿",
+          "files": 2,
+          "gb": 0.0011
+        }
+      ]
+    },
+    {
+      "category": "Word",
+      "total_gb": 0.6836,
+      "folders": [
+        {
+          "path": "01-工作与项目\\ITPM-PlayBooks",
+          "files": 36,
+          "gb": 0.5341
+        },
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 662,
+          "gb": 0.0902
+        },
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 14,
+          "gb": 0.0315
+        },
+        {
+          "path": "01-工作与项目\\AutopilotTradeBoMo",
+          "files": 17,
+          "gb": 0.0139
+        },
+        {
+          "path": "ITPM原稿内容",
+          "files": 2,
+          "gb": 0.0132
+        },
+        {
+          "path": "(root)",
+          "files": 4,
+          "gb": 0.0002
+        },
+        {
+          "path": "docs\\07-原始资料",
+          "files": 4,
+          "gb": 0.0002
+        },
+        {
+          "path": "AIGC原稿",
+          "files": 3,
+          "gb": 0.0001
+        }
+      ]
+    },
+    {
+      "category": "压缩包",
+      "total_gb": 0.5878,
+      "folders": [
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 13,
+          "gb": 0.4374
+        },
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 74,
+          "gb": 0.1503
+        }
+      ]
+    },
+    {
+      "category": "音频",
+      "total_gb": 0.1916,
+      "folders": [
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 13,
+          "gb": 0.1916
+        }
+      ]
+    },
+    {
+      "category": "Markdown",
+      "total_gb": 0.183,
+      "folders": [
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 18716,
+          "gb": 0.17
+        },
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 360,
+          "gb": 0.0115
+        },
+        {
+          "path": "01-工作与项目\\AutopilotTradeBoMo",
+          "files": 55,
+          "gb": 0.0004
+        },
+        {
+          "path": "hermes-migration\\skills",
+          "files": 7,
+          "gb": 0.0003
+        },
+        {
+          "path": "01-工作与项目\\ITPM-PlayBooks",
+          "files": 13,
+          "gb": 0.0002
+        },
+        {
+          "path": "docs\\07-原始资料",
+          "files": 7,
+          "gb": 0.0001
+        },
+        {
+          "path": "docs\\00-总册",
+          "files": 5,
+          "gb": 0.0001
+        },
+        {
+          "path": "docs\\05-运维与灾备",
+          "files": 9,
+          "gb": 0.0001
+        }
+      ]
+    },
+    {
+      "category": "代码/配置",
+      "total_gb": 0.118,
+      "folders": [
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 7631,
+          "gb": 0.1061
+        },
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 427,
+          "gb": 0.01
+        },
+        {
+          "path": "services\\mobo-cli",
+          "files": 35,
+          "gb": 0.0004
+        },
+        {
+          "path": "01-工作与项目\\AutopilotTradeBoMo",
+          "files": 22,
+          "gb": 0.0003
+        },
+        {
+          "path": "sites\\mobohome",
+          "files": 3,
+          "gb": 0.0003
+        },
+        {
+          "path": "docs\\07-原始资料",
+          "files": 15,
+          "gb": 0.0002
+        },
+        {
+          "path": "deploy\\scripts",
+          "files": 5,
+          "gb": 0.0002
+        },
+        {
+          "path": "sites\\mobocapital",
+          "files": 4,
+          "gb": 0.0001
+        }
+      ]
+    },
+    {
+      "category": "演示/表格",
+      "total_gb": 0.0425,
+      "folders": [
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 31,
+          "gb": 0.0408
+        },
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 13,
+          "gb": 0.0014
+        },
+        {
+          "path": "01-工作与项目\\AutopilotTradeBoMo",
+          "files": 16,
+          "gb": 0.0002
+        },
+        {
+          "path": "01-工作与项目\\ITPM-PlayBooks",
+          "files": 1,
+          "gb": 0.0001
+        },
+        {
+          "path": "AIGC原稿",
+          "files": 1,
+          "gb": 0.0
+        }
+      ]
+    },
+    {
+      "category": "文本",
+      "total_gb": 0.0023,
+      "folders": [
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 25,
+          "gb": 0.0012
+        },
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 173,
+          "gb": 0.0009
+        },
+        {
+          "path": "01-工作与项目\\AutopilotTradeBoMo",
+          "files": 6,
+          "gb": 0.0003
+        },
+        {
+          "path": "docs\\07-原始资料",
+          "files": 5,
+          "gb": 0.0
+        },
+        {
+          "path": "docs\\03-架构设计",
+          "files": 2,
+          "gb": 0.0
+        },
+        {
+          "path": "tools\\wsl",
+          "files": 5,
+          "gb": 0.0
+        },
+        {
+          "path": "services\\mobo-cli",
+          "files": 5,
+          "gb": 0.0
+        },
+        {
+          "path": "services\\archive-dashboard",
+          "files": 2,
+          "gb": 0.0
+        }
+      ]
+    },
+    {
+      "category": "字体",
+      "total_gb": 0.065,
+      "folders": [
+        {
+          "path": "hermes-migration\\mobobrain-assets",
+          "files": 5,
+          "gb": 0.065
+        }
+      ]
+    },
+    {
+      "category": "其他/无扩展名",
+      "total_gb": 0.0987,
+      "folders": [
+        {
+          "path": "hermes-migration\\henrry-push",
+          "files": 1302,
+          "gb": 0.0973
+        },
+        {
+          "path": "01-工作与项目\\WorkFiles",
+          "files": 68,
+          "gb": 0.0005
+        },
+        {
+          "path": ".git\\objects",
+          "files": 223,
+          "gb": 0.0005
+        },
+        {
+          "path": "01-工作与项目\\ITPM-PlayBooks",
+          "files": 66,
+          "gb": 0.0003
+        },
+        {
+          "path": ".git\\hooks",
+          "files": 14,
+          "gb": 0.0
+        },
+        {
+          "path": ".git",
+          "files": 5,
+          "gb": 0.0
+        },
+        {
+          "path": "(root)",
+          "files": 5,
+          "gb": 0.0
+        },
+        {
+          "path": "deploy\\caddy",
+          "files": 2,
+          "gb": 0.0
+        }
+      ]
+    }
+  ],
+  "top_files": [
+    {
+      "path": "hermes-migration\\henrry-push\\.git\\objects\\pack\\pack-7db3225aadd49a5c75b69fe8ffaa3e362701a2eb.pack",
+      "size": 3227867718,
+      "category": "版本库对象",
+      "mtime": "2026-10-19 21:27:45",
+      "gb": 3.0062
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\.git\\objects\\pack\\pack-f7b41bdd1a65635e376c0aff00a70e4d38be42a0.pack",
+      "size": 862853160,
+      "category": "版本库对象",
+      "mtime": "2026-10-18 20:59:29",
+      "gb": 0.8036
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\07-转瞬百万-华尔街的战士们01.mp4",
+      "size": 716496494,
+      "category": "视频",
+      "mtime": "2026-10-14 17:14:39",
+      "gb": 0.6673
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\01-实现财务自由的十项原则和五个秘密.mp4",
+      "size": 706394934,
+      "category": "视频",
+      "mtime": "2026-10-14 16:38:46",
+      "gb": 0.6579
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\29-《华尔街》-墙在哪里02.mp4",
+      "size": 617162422,
+      "category": "视频",
+      "mtime": "2026-10-14 18:38:31",
+      "gb": 0.5748
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\37-《华尔街》-资本之河10.mp4",
+      "size": 617035858,
+      "category": "视频",
+      "mtime": "2026-10-14 19:01:32",
+      "gb": 0.5747
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\31-《华尔街》-镀金时代04.mp4",
+      "size": 611401411,
+      "category": "视频",
+      "mtime": "2026-10-14 18:45:52",
+      "gb": 0.5694
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\28-《华尔街》-资本无眠01.mp4",
+      "size": 601431642,
+      "category": "视频",
+      "mtime": "2026-10-14 18:29:10",
+      "gb": 0.5601
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\33-《华尔街》-投资之道06.mp4",
+      "size": 601198990,
+      "category": "视频",
+      "mtime": "2026-10-14 18:54:05",
+      "gb": 0.5599
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\32-《华尔街》-硅谷方程05.mp4",
+      "size": 600724593,
+      "category": "视频",
+      "mtime": "2026-10-14 18:51:21",
+      "gb": 0.5595
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\35-《华尔街》-明暗创新08.mp4",
+      "size": 593048890,
+      "category": "视频",
+      "mtime": "2026-10-14 18:59:58",
+      "gb": 0.5523
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\30-《华尔街》-两条道路03.mp4",
+      "size": 586600908,
+      "category": "视频",
+      "mtime": "2026-10-14 18:40:29",
+      "gb": 0.5463
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\.git\\objects\\pack\\pack-34540dda96708acef535ffec4e46dd7005aa5615.pack",
+      "size": 582024630,
+      "category": "版本库对象",
+      "mtime": "2026-10-18 20:59:25",
+      "gb": 0.5421
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\李录最新哥大演讲：讲透AI、中国经济与价值投资的核心逻辑。看完受益匪浅！.mp4",
+      "size": 571525809,
+      "category": "视频",
+      "mtime": "2026-10-14 21:25:05",
+      "gb": 0.5323
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\36-《华尔街》-明暗创新09.mp4",
+      "size": 552540474,
+      "category": "视频",
+      "mtime": "2026-10-14 19:01:04",
+      "gb": 0.5146
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-26T230507+0800\\state.db",
+      "size": 525586432,
+      "category": "数据库/状态快照",
+      "mtime": "2026-09-26 23:08:00",
+      "gb": 0.4895
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\06-百万美金交易员之真钱交易跟风险管理.mp4",
+      "size": 499705855,
+      "category": "视频",
+      "mtime": "2026-10-14 17:45:45",
+      "gb": 0.4654
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\03-百万美金交易员之基础分析.mp4",
+      "size": 494604994,
+      "category": "视频",
+      "mtime": "2026-10-14 17:43:18",
+      "gb": 0.4606
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\02-一堂课教会你什么是金融交易.mp4",
+      "size": 461494702,
+      "category": "视频",
+      "mtime": "2026-10-14 16:38:08",
+      "gb": 0.4298
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-25T213556+0800\\state.db",
+      "size": 457064448,
+      "category": "数据库/状态快照",
+      "mtime": "2026-09-25 21:39:40",
+      "gb": 0.4257
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-25T230553+0800\\state.db",
+      "size": 457064448,
+      "category": "数据库/状态快照",
+      "mtime": "2026-09-25 23:09:53",
+      "gb": 0.4257
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks\\PodcastPlayBooks\\Videos\\34-《华尔街》-阳光交易07.mp4",
+      "size": 456834316,
+      "category": "视频",
+      "mtime": "2026-10-14 18:58:50",
+      "gb": 0.4255
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-23T231618+0800\\state.db",
+      "size": 446255104,
+      "category": "数据库/状态快照",
+      "mtime": "2026-09-23 23:16:50",
+      "gb": 0.4156
+    },
+    {
+      "path": "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-22T230557+0800\\state.db",
+      "size": 438173696,
+      "category": "数据库/状态快照",
+      "mtime": "2026-09-22 23:06:26",
+      "gb": 0.4081
+    }
+  ],
+  "backup_snapshots": [
+    {
+      "snap": "2026-09-26T230507+0800",
+      "files": 657,
+      "gb": 0.5065
+    },
+    {
+      "snap": "2026-09-25T213556+0800",
+      "files": 629,
+      "gb": 0.4428
+    },
+    {
+      "snap": "2026-09-25T230553+0800",
+      "files": 625,
+      "gb": 0.4428
+    },
+    {
+      "snap": "2026-09-23T231618+0800",
+      "files": 622,
+      "gb": 0.4303
+    },
+    {
+      "snap": "2026-09-22T230557+0800",
+      "files": 626,
+      "gb": 0.4228
+    },
+    {
+      "snap": "2026-09-22T180432+0800",
+      "files": 625,
+      "gb": 0.4161
+    },
+    {
+      "snap": "2026-09-21T230510+0800",
+      "files": 623,
+      "gb": 0.3831
+    },
+    {
+      "snap": "2026-09-20T230557+0800",
+      "files": 613,
+      "gb": 0.3397
+    },
+    {
+      "snap": "2026-09-20T220555+0800",
+      "files": 613,
+      "gb": 0.3397
+    },
+    {
+      "snap": "2026-09-17T094316+0800",
+      "files": 608,
+      "gb": 0.3247
+    },
+    {
+      "snap": "2026-09-16T115757+0800",
+      "files": 609,
+      "gb": 0.3153
+    },
+    {
+      "snap": "2026-09-14T230525+0800",
+      "files": 601,
+      "gb": 0.2626
+    },
+    {
+      "snap": "2026-09-14T081817+0800",
+      "files": 554,
+      "gb": 0.2046
+    },
+    {
+      "snap": "2026-09-09T091059+0800",
+      "files": 551,
+      "gb": 0.1989
+    },
+    {
+      "snap": "2026-09-07T230518+0800",
+      "files": 551,
+      "gb": 0.1957
+    },
+    {
+      "snap": "2026-09-07T063530+0800",
+      "files": 549,
+      "gb": 0.1894
+    },
+    {
+      "snap": "2026-09-02T230526+0800",
+      "files": 549,
+      "gb": 0.1833
+    },
+    {
+      "snap": "2026-09-01T230500+0800",
+      "files": 548,
+      "gb": 0.1747
+    },
+    {
+      "snap": "2026-09-01T102807+0800",
+      "files": 544,
+      "gb": 0.1623
+    },
+    {
+      "snap": "2026-08-31T061404+0800",
+      "files": 544,
+      "gb": 0.1538
+    },
+    {
+      "snap": "2026-08-29T230539+0800",
+      "files": 544,
+      "gb": 0.1478
+    },
+    {
+      "snap": "2026-08-28T230519+0800",
+      "files": 544,
+      "gb": 0.144
+    },
+    {
+      "snap": "2026-08-27T230506+0800",
+      "files": 544,
+      "gb": 0.1206
+    },
+    {
+      "snap": "2026-08-26T230554+0800",
+      "files": 541,
+      "gb": 0.0624
+    },
+    {
+      "snap": "2026-08-25T230503+0800",
+      "files": 522,
+      "gb": 0.0363
+    }
+  ],
+  "duplicates": {
+    "groups": 1621,
+    "redundant_files": 13354,
+    "redundant_gb": 2.452,
+    "by_ext": [
+      {
+        "ext": ".pdf",
+        "groups": 89,
+        "files": 262,
+        "bytes": 1630430147,
+        "gb": 1.518
+      },
+      {
+        "ext": ".png",
+        "groups": 584,
+        "files": 671,
+        "bytes": 665612490,
+        "gb": 0.62
+      },
+      {
+        "ext": ".gz",
+        "groups": 5,
+        "files": 64,
+        "bytes": 142562585,
+        "gb": 0.133
+      },
+      {
+        "ext": ".md",
+        "groups": 551,
+        "files": 8542,
+        "bytes": 99630004,
+        "gb": 0.093
+      },
+      {
+        "ext": ".jpg",
+        "groups": 96,
+        "files": 132,
+        "bytes": 28356632,
+        "gb": 0.026
+      },
+      {
+        "ext": ".py",
+        "groups": 120,
+        "files": 1747,
+        "bytes": 16046530,
+        "gb": 0.015
+      },
+      {
+        "ext": ".docx",
+        "groups": 10,
+        "files": 10,
+        "bytes": 14596271,
+        "gb": 0.014
+      },
+      {
+        "ext": ".sty",
+        "groups": 11,
+        "files": 327,
+        "bytes": 6361675,
+        "gb": 0.006
+      },
+      {
+        "ext": ".tex",
+        "groups": 9,
+        "files": 251,
+        "bytes": 4315259,
+        "gb": 0.004
+      },
+      {
+        "ext": ".bst",
+        "groups": 4,
+        "files": 126,
+        "bytes": 3939123,
+        "gb": 0.004
+      }
+    ],
+    "top_groups": [
+      {
+        "sha256": "da87cf1ac66fac6caa105b88b3f2b8539e3e11495b9b992e24ea5a0bc58ba616",
+        "bytes": 19049268,
+        "copies": 4,
+        "redundant_bytes": 57147804,
+        "ext": ".pdf",
+        "canonical": "ITPM原稿内容\\PTM2-20260320\\007.pdf",
+        "sample_duplicates": [
+          "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\007.pdf",
+          "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\007.pdf",
+          "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\007.pdf"
+        ]
+      },
+      {
+        "sha256": "340c034bbad71cfbfaf53436be0996106c319523516f057f9634df6d6d8bb877",
+        "bytes": 26699183,
+        "copies": 3,
+        "redundant_bytes": 53398366,
+        "ext": ".pdf",
+        "canonical": "ITPM原稿内容\\POTM2-20260320\\026.pdf",
+        "sample_duplicates": [
+          "01-工作与项目\\WorkFiles\\data\\input\\01-031\\026.pdf",
+          "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\POTM2-20260320\\026.pdf"
+        ]
+      },
+      {
+        "sha256": "80fc88760f92b3cb6550153c9af76e9902d927734472f21348f34a3ae2e90e05",
+        "bytes": 2126561,
+        "copies": 25,
+        "redundant_bytes": 51037464,
+        "ext": ".gz",
+        "canonical": "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-25T230503+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+        "sample_duplicates": [
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-26T230554+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-27T230506+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-28T230519+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-29T230539+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz",
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-08-31T061404+0800\\skills\\.curator_backups\\2026-08-25T00-21-35Z\\skills.tar.gz"
+        ]
+      },
+      {
+        "sha256": "39474f25d58d919ee2aea3820d3718c1996a900c9fd611887319857424e6179d",
+        "bytes": 19560337,
+        "copies": 3,
+        "redundant_bytes": 39120674,
+        "ext": ".pdf",
+        "canonical": "ITPM原稿内容\\PTM2-20260320\\0027.pdf",
+        "sample_duplicates": [
+          "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0027.pdf",
+          "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0027.pdf"
+        ]
+      },
+      {
+        "sha256": "62022bc6879242ada3fcc514d8511002b896791385c22669674c2afede278807",
+        "bytes": 19247329,
+        "copies": 3,
+        "redundant_bytes": 38494658,
+        "ext": ".pdf",
+        "canonical": "ITPM原稿内容\\POTM2-20260320\\019.pdf",
+        "sample_duplicates": [
+          "01-工作与项目\\WorkFiles\\data\\input\\01-031\\019.pdf",
+          "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\POTM2-20260320\\019.pdf"
+        ]
+      },
+      {
+        "sha256": "6299e8603f789b1b0e0af998ab4fa10f6e70c0d637e561d5064936b3947ecb73",
+        "bytes": 2215425,
+        "copies": 18,
+        "redundant_bytes": 37662225,
+        "ext": ".gz",
+        "canonical": "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-01T230500+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+        "sample_duplicates": [
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-02T230526+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-07T063530+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-07T230518+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-09T091059+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz",
+          "hermes-migration\\henrry-push\\hermes\\backups\\2026-09-14T081817+0800\\skills\\.curator_backups\\2026-09-01T14-22-05Z\\skills.tar.gz"
+        ]
+      },
+      {
+        "sha256": "d6cfb3567f0bb7b66dbd00f5a01adf6b94c6f1af2dee11da3efd9a410f7104b6",
+        "bytes": 17676957,
+        "copies": 3,
+        "redundant_bytes": 35353914,
+        "ext": ".pdf",
+        "canonical": "ITPM原稿内容\\PTM2-20260320\\004.pdf",
+        "sample_duplicates": [
+          "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\004.pdf",
+          "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\004.pdf"
+        ]
+      },
+      {
+        "sha256": "1382a4ff4e8c1bca3fd65afe31fdbb2752cdaf1b7b1035fbc061292af7c5dea9",
+        "bytes": 17209187,
+        "copies": 3,
+        "redundant_bytes": 34418374,
+        "ext": ".pdf",
+        "canonical": "ITPM原稿内容\\PTM2-20260320\\0019.pdf",
+        "sample_duplicates": [
+          "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0019.pdf",
+          "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0019.pdf"
+        ]
+      },
+      {
+        "sha256": "f7c67ec05dece0daf6ffde34b07c36b2c40132d53e4c2fa5940f44ba1a1c9210",
+        "bytes": 16590697,
+        "copies": 3,
+        "redundant_bytes": 33181394,
+        "ext": ".pdf",
+        "canonical": "ITPM原稿内容\\PTM2-20260320\\0022.pdf",
+        "sample_duplicates": [
+          "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\0022.pdf",
+          "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\0022.pdf"
+        ]
+      },
+      {
+        "sha256": "2886e8d48357e28dfd4c396fefc4c0c1f7ec63c08170b17d64c5c0fa72cbd23b",
+        "bytes": 16448180,
+        "copies": 3,
+        "redundant_bytes": 32896360,
+        "ext": ".pdf",
+        "canonical": "ITPM原稿内容\\PTM2-20260320\\006.pdf",
+        "sample_duplicates": [
+          "01-工作与项目\\WorkFiles\\data\\input\\001-0041\\006.pdf",
+          "01-工作与项目\\AutopilotTradeBoMo\\01_原始文档\\ITPM原稿内容\\PTM2-20260320\\006.pdf"
+        ]
+      }
+    ]
+  },
+  "dup_by_folder": {
+    "by_top": [
+      {
+        "path": "01-工作与项目",
+        "files": 303,
+        "bytes": 1642550699,
+        "gb": 1.53
+      },
+      {
+        "path": "hermes-migration",
+        "files": 13049,
+        "bytes": 990050201,
+        "gb": 0.922
+      },
+      {
+        "path": "docs",
+        "files": 1,
+        "bytes": 43396,
+        "gb": 0.0
+      },
+      {
+        "path": ".git",
+        "files": 1,
+        "bytes": 3315,
+        "gb": 0.0
+      }
+    ],
+    "by_p2": [
+      {
+        "path": "hermes-migration\\henrry-push",
+        "files": 13049,
+        "bytes": 990050201,
+        "gb": 0.922
+      },
+      {
+        "path": "01-工作与项目\\AutopilotTradeBoMo",
+        "files": 97,
+        "bytes": 832914464,
+        "gb": 0.776
+      },
+      {
+        "path": "01-工作与项目\\WorkFiles",
+        "files": 162,
+        "bytes": 795402895,
+        "gb": 0.741
+      },
+      {
+        "path": "01-工作与项目\\ITPM-PlayBooks",
+        "files": 44,
+        "bytes": 14233340,
+        "gb": 0.013
+      },
+      {
+        "path": "docs\\07-原始资料",
+        "files": 1,
+        "bytes": 43396,
+        "gb": 0.0
+      },
+      {
+        "path": ".git\\logs",
+        "files": 1,
+        "bytes": 3315,
+        "gb": 0.0
+      }
+    ]
+  },
+  "launch": {
+    "total": {
+      "files": 44814,
+      "bytes": 37814088408,
+      "gb": 35.217
+    },
+    "excluded": {
+      "files": 15063,
+      "bytes": 28438339072,
+      "gb": 26.485,
+      "share": 75.21,
+      "reasons": [
+        {
+          "exclude_reason": "视频（用户明确排除）",
+          "files": 61,
+          "bytes": 16384482579,
+          "gb": 15.2592,
+          "share_total": 43.33,
+          "share_remaining": 174.75
+        },
+        {
+          "exclude_reason": "GitHub/Hermes 状态快照（用户明确排除）",
+          "files": 14536,
+          "bytes": 7086870642,
+          "gb": 6.6002,
+          "share_total": 18.74,
+          "share_remaining": 75.59
+        },
+        {
+          "exclude_reason": "Git 版本库（用户明确排除）",
+          "files": 453,
+          "bytes": 4761204466,
+          "gb": 4.4342,
+          "share_total": 12.59,
+          "share_remaining": 50.78
+        },
+        {
+          "exclude_reason": "音频（用户明确排除）",
+          "files": 13,
+          "bytes": 205781385,
+          "gb": 0.1916,
+          "share_total": 0.54,
+          "share_remaining": 2.19
+        }
+      ]
+    },
+    "remaining": {
+      "files": 29751,
+      "bytes": 9375749336,
+      "gb": 8.732,
+      "share": 24.79,
+      "categories": [
+        {
+          "category": "图片",
+          "files": 14036,
+          "bytes": 5358095864,
+          "gb": 4.9901,
+          "share_total": 14.17,
+          "share_remaining": 57.15
+        },
+        {
+          "category": "PDF",
+          "files": 301,
+          "bytes": 2486430385,
+          "gb": 2.3157,
+          "share_total": 6.58,
+          "share_remaining": 26.52
+        },
+        {
+          "category": "Word",
+          "files": 742,
+          "bytes": 734026538,
+          "gb": 0.6836,
+          "share_total": 1.94,
+          "share_remaining": 7.83
+        },
+        {
+          "category": "压缩包",
+          "files": 18,
+          "bytes": 477020518,
+          "gb": 0.4443,
+          "share_total": 1.26,
+          "share_remaining": 5.09
+        },
+        {
+          "category": "Markdown",
+          "files": 9162,
+          "bytes": 100558780,
+          "gb": 0.0937,
+          "share_total": 0.27,
+          "share_remaining": 1.07
+        },
+        {
+          "category": "字体",
+          "files": 5,
+          "bytes": 69757228,
+          "gb": 0.065,
+          "share_total": 0.18,
+          "share_remaining": 0.74
+        },
+        {
+          "category": "其他",
+          "files": 2217,
+          "bytes": 52968978,
+          "gb": 0.0493,
+          "share_total": 0.14,
+          "share_remaining": 0.56
+        },
+        {
+          "category": "代码/配置",
+          "files": 2962,
+          "bytes": 48685578,
+          "gb": 0.0453,
+          "share_total": 0.13,
+          "share_remaining": 0.52
+        },
+        {
+          "category": "演示/表格",
+          "files": 62,
+          "bytes": 45643378,
+          "gb": 0.0425,
+          "share_total": 0.12,
+          "share_remaining": 0.49
+        },
+        {
+          "category": "文本",
+          "files": 174,
+          "bytes": 2282913,
+          "gb": 0.0021,
+          "share_total": 0.01,
+          "share_remaining": 0.02
+        },
+        {
+          "category": "临时/系统",
+          "files": 72,
+          "bytes": 279176,
+          "gb": 0.0003,
+          "share_total": 0.0,
+          "share_remaining": 0.0
+        }
+      ],
+      "packages": [
+        {
+          "package": "99-原始归档（不上服务器）",
+          "files": 2093,
+          "bytes": 3960911436,
+          "gb": 3.6889,
+          "share_total": 10.47,
+          "share_remaining": 42.25
+        },
+        {
+          "package": "People-archive",
+          "files": 21064,
+          "bytes": 3856006570,
+          "gb": 3.5912,
+          "share_total": 10.2,
+          "share_remaining": 41.13
+        },
+        {
+          "package": "A-public",
+          "files": 1141,
+          "bytes": 759310564,
+          "gb": 0.7072,
+          "share_total": 2.01,
+          "share_remaining": 8.1
+        },
+        {
+          "package": "A-internal",
+          "files": 1883,
+          "bytes": 669216204,
+          "gb": 0.6233,
+          "share_total": 1.77,
+          "share_remaining": 7.14
+        },
+        {
+          "package": "B-private",
+          "files": 216,
+          "bytes": 68709615,
+          "gb": 0.064,
+          "share_total": 0.18,
+          "share_remaining": 0.73
+        },
+        {
+          "package": "00-清理/临时",
+          "files": 3134,
+          "bytes": 56808579,
+          "gb": 0.0529,
+          "share_total": 0.15,
+          "share_remaining": 0.61
+        },
+        {
+          "package": "B-public",
+          "files": 2,
+          "bytes": 2503162,
+          "gb": 0.0023,
+          "share_total": 0.01,
+          "share_remaining": 0.03
+        },
+        {
+          "package": "90-工程仓（Git 部署）",
+          "files": 218,
+          "bytes": 2283206,
+          "gb": 0.0021,
+          "share_total": 0.01,
+          "share_remaining": 0.02
+        }
+      ]
+    }
+  },
+  "syncv5": {
+    "total": {
+      "files": 44819,
+      "bytes": 37765198120,
+      "gb": 35.172
+    },
+    "excluded": {
+      "files": 15060,
+      "bytes": 28399912067,
+      "gb": 26.449,
+      "reasons": [
+        {
+          "exclude_reason": "视频（排除）",
+          "files": 58,
+          "bytes": 16346055574,
+          "gb": 15.2235
+        },
+        {
+          "exclude_reason": "状态快照（排除）",
+          "files": 14536,
+          "bytes": 7086870642,
+          "gb": 6.6002
+        },
+        {
+          "exclude_reason": "Git（排除）",
+          "files": 453,
+          "bytes": 4761204466,
+          "gb": 4.4342
+        },
+        {
+          "exclude_reason": "音频（排除）",
+          "files": 13,
+          "bytes": 205781385,
+          "gb": 0.1916
+        }
+      ]
+    },
+    "local_only": {
+      "files": 13531,
+      "bytes": 4031005947,
+      "gb": 3.754,
+      "folders": [
+        {
+          "local_reason": "01-影视库（只读本地）",
+          "files": 12153,
+          "bytes": 3321208433,
+          "gb": 3.0931
+        },
+        {
+          "local_reason": "MoBoBrain 完整原件（只读本地）",
+          "files": 1378,
+          "bytes": 709797514,
+          "gb": 0.6611
+        }
+      ]
+    },
+    "sync": {
+      "files": 13541,
+      "bytes": 5297070744,
+      "gb": 4.933,
+      "categories": [
+        {
+          "category": "PDF",
+          "files": 279,
+          "bytes": 2478264186,
+          "gb": 2.3081
+        },
+        {
+          "category": "图片",
+          "files": 2440,
+          "bytes": 1411263913,
+          "gb": 1.3143
+        },
+        {
+          "category": "Word",
+          "files": 255,
+          "bytes": 687689590,
+          "gb": 0.6405
+        },
+        {
+          "category": "压缩包",
+          "files": 17,
+          "bytes": 477018709,
+          "gb": 0.4443
+        },
+        {
+          "category": "Markdown",
+          "files": 8844,
+          "bytes": 92479143,
+          "gb": 0.0861
+        },
+        {
+          "category": "字体",
+          "files": 5,
+          "bytes": 69757228,
+          "gb": 0.065
+        },
+        {
+          "category": "演示/表格",
+          "files": 75,
+          "bytes": 47802933,
+          "gb": 0.0445
+        },
+        {
+          "category": "代码/配置",
+          "files": 1230,
+          "bytes": 23471553,
+          "gb": 0.0219
+        },
+        {
+          "category": "其他",
+          "files": 294,
+          "bytes": 7348935,
+          "gb": 0.0068
+        },
+        {
+          "category": "文本",
+          "files": 102,
+          "bytes": 1974554,
+          "gb": 0.0018
+        }
+      ],
+      "p2": [
+        {
+          "p2": "01-工作与项目\\WorkFiles",
+          "files": 2010,
+          "bytes": 1756631603,
+          "gb": 1.636
+        },
+        {
+          "p2": "01-工作与项目\\AutopilotTradeBoMo",
+          "files": 239,
+          "bytes": 850794291,
+          "gb": 0.7924
+        },
+        {
+          "p2": "hermes-migration\\mobobrain-assets",
+          "files": 602,
+          "bytes": 673918073,
+          "gb": 0.6276
+        },
+        {
+          "p2": "01-工作与项目\\ITPM-PlayBooks",
+          "files": 100,
+          "bytes": 618599174,
+          "gb": 0.5761
+        },
+        {
+          "p2": "hermes-migration\\henrry-push",
+          "files": 10238,
+          "bytes": 574291885,
+          "gb": 0.5349
+        },
+        {
+          "p2": "ITPM原稿内容\\PTM2-20260320",
+          "files": 41,
+          "bytes": 470971455,
+          "gb": 0.4386
+        },
+        {
+          "p2": "ITPM原稿内容\\POTM2-20260320",
+          "files": 31,
+          "bytes": 303118976,
+          "gb": 0.2823
+        },
+        {
+          "p2": "ITPM原稿内容\\交易的真相-0420.pdf",
+          "files": 1,
+          "bytes": 10073854,
+          "gb": 0.0094
+        },
+        {
+          "p2": "ITPM原稿内容\\Trading of the Truth-交易的真相.docx",
+          "files": 1,
+          "bytes": 9394427,
+          "gb": 0.0087
+        },
+        {
+          "p2": "ITPM原稿内容\\中国连锁餐饮企业资本之路系列报告2025-终稿.pdf",
+          "files": 1,
+          "bytes": 5953206,
+          "gb": 0.0055
+        },
+        {
+          "p2": "ITPM原稿内容\\The5PrinciplesBehindThe10Secrets.docx",
+          "files": 1,
+          "bytes": 4807181,
+          "gb": 0.0045
+        },
+        {
+          "p2": "docs\\07-原始资料",
+          "files": 60,
+          "bytes": 4633754,
+          "gb": 0.0043
+        },
+        {
+          "p2": "ITPM原稿内容\\hudgefundsystemprompt-01.pdf",
+          "files": 1,
+          "bytes": 3558801,
+          "gb": 0.0033
+        },
+        {
+          "p2": "ITPM原稿内容\\财务管理的10个秘密-0420.pdf",
+          "files": 1,
+          "bytes": 2898002,
+          "gb": 0.0027
+        },
+        {
+          "p2": "ReadingBooks\\01.jpg",
+          "files": 1,
+          "bytes": 2354374,
+          "gb": 0.0022
+        },
+        {
+          "p2": "AIGC原稿\\分析与创作报告 — 《亿万》原型动漫短剧.pdf",
+          "files": 1,
+          "bytes": 853618,
+          "gb": 0.0008
+        },
+        {
+          "p2": "ITPM原稿内容\\48-中连协【2025】48号 关于公布2024年商业特许经营TOP300的通知-定稿.pdf",
+          "files": 1,
+          "bytes": 785644,
+          "gb": 0.0007
+        },
+        {
+          "p2": "ITPM原稿内容\\求职工具包完整版-0323.pdf",
+          "files": 1,
+          "bytes": 359388,
+          "gb": 0.0003
+        },
+        {
+          "p2": "AIGC原稿\\Billions_Anime_Adaptation_Strategy.pdf",
+          "files": 1,
+          "bytes": 345417,
+          "gb": 0.0003
+        },
+        {
+          "p2": "hermes-migration\\skills",
+          "files": 7,
+          "bytes": 308705,
+          "gb": 0.0003
+        },
+        {
+          "p2": "sites\\mobohome",
+          "files": 6,
+          "bytes": 299213,
+          "gb": 0.0003
+        },
+        {
+          "p2": "deploy\\scripts",
+          "files": 6,
+          "bytes": 187815,
+          "gb": 0.0002
+        },
+        {
+          "p2": "ITPM原稿内容\\个人简历-0323.pdf",
+          "files": 1,
+          "bytes": 157682,
+          "gb": 0.0001
+        },
+        {
+          "p2": "ReadingBooks\\02.png",
+          "files": 1,
+          "bytes": 148788,
+          "gb": 0.0001
+        },
+        {
+          "p2": "services\\mobo-cli",
+          "files": 30,
+          "bytes": 140955,
+          "gb": 0.0001
+        },
+        {
+          "p2": "docs\\00-总册",
+          "files": 5,
+          "bytes": 126161,
+          "gb": 0.0001
+        },
+        {
+          "p2": "sites\\mobocapital",
+          "files": 6,
+          "bytes": 118327,
+          "gb": 0.0001
+        },
+        {
+          "p2": "技术加速时代的青年未老先衰症候_政治哲学博士论文_扩写版.docx",
+          "files": 1,
+          "bytes": 115780,
+          "gb": 0.0001
+        },
+        {
+          "p2": "系统级提示词体系×实战内容范本全集.docx",
+          "files": 1,
+          "bytes": 89793,
+          "gb": 0.0001
+        },
+        {
+          "p2": "deploy\\postgres",
+          "files": 9,
+          "bytes": 84485,
+          "gb": 0.0001
+        },
+        {
+          "p2": "docs\\05-运维与灾备",
+          "files": 9,
+          "bytes": 82969,
+          "gb": 0.0001
+        },
+        {
+          "p2": "docs\\01-项目治理",
+          "files": 17,
+          "bytes": 77907,
+          "gb": 0.0001
+        },
+        {
+          "p2": "services\\console",
+          "files": 8,
+          "bytes": 65467,
+          "gb": 0.0001
+        },
+        {
+          "p2": "tools\\local-preview",
+          "files": 6,
+          "bytes": 64052,
+          "gb": 0.0001
+        },
+        {
+          "p2": "docs\\06-合规与成本",
+          "files": 6,
+          "bytes": 57908,
+          "gb": 0.0001
+        },
+        {
+          "p2": "docs\\04-数据库设计",
+          "files": 6,
+          "bytes": 56218,
+          "gb": 0.0001
+        },
+        {
+          "p2": "AIGC原稿\\Billions_Anime_Strategy_V3_终极版.docx",
+          "files": 1,
+          "bytes": 55726,
+          "gb": 0.0001
+        },
+        {
+          "p2": "AIGC原稿\\Billions_Anime_Strategy_50K-29页.docx",
+          "files": 1,
+          "bytes": 53564,
+          "gb": 0.0
+        },
+        {
+          "p2": "tools\\wsl",
+          "files": 12,
+          "bytes": 47069,
+          "gb": 0.0
+        },
+        {
+          "p2": "AxeCapital_BotArmy_RoleHandbook.docx",
+          "files": 1,
+          "bytes": 37779,
+          "gb": 0.0
+        },
+        {
+          "p2": "services\\archive-dashboard",
+          "files": 11,
+          "bytes": 34570,
+          "gb": 0.0
+        },
+        {
+          "p2": "docs\\03-架构设计",
+          "files": 6,
+          "bytes": 31695,
+          "gb": 0.0
+        },
+        {
+          "p2": "AIGC原稿\\OpenClaw完整部署方案-简历更新版-0321.docx",
+          "files": 1,
+          "bytes": 31236,
+          "gb": 0.0
+        },
+        {
+          "p2": "tools\\doc-builder",
+          "files": 1,
+          "bytes": 27925,
+          "gb": 0.0
+        },
+        {
+          "p2": "deploy\\backup",
+          "files": 5,
+          "bytes": 22795,
+          "gb": 0.0
+        },
+        {
+          "p2": "ITPM原稿内容\\hedge_fund_system_prompt.md",
+          "files": 1,
+          "bytes": 18973,
+          "gb": 0.0
+        },
+        {
+          "p2": "docs\\02-需求与验收",
+          "files": 4,
+          "bytes": 18394,
+          "gb": 0.0
+        },
+        {
+          "p2": "高智商群体认知模式深度分析报告.docx",
+          "files": 1,
+          "bytes": 17151,
+          "gb": 0.0
+        },
+        {
+          "p2": "seeds\\52-week-sandbox.sql",
+          "files": 1,
+          "bytes": 16626,
+          "gb": 0.0
+        },
+        {
+          "p2": "README.md",
+          "files": 1,
+          "bytes": 13023,
+          "gb": 0.0
+        },
+        {
+          "p2": "workflows\\workflow-03-mobocapital-1plus3.template.json",
+          "files": 1,
+          "bytes": 12217,
+          "gb": 0.0
+        },
+        {
+          "p2": "docker-compose.yml",
+          "files": 1,
+          "bytes": 11488,
+          "gb": 0.0
+        },
+        {
+          "p2": "AIGC原稿\\generate_trends_video.py",
+          "files": 1,
+          "bytes": 11443,
+          "gb": 0.0
+        },
+        {
+          "p2": "deploy\\caddy",
+          "files": 2,
+          "bytes": 9823,
+          "gb": 0.0
+        },
+        {
+          "p2": "tests\\sql",
+          "files": 2,
+          "bytes": 9575,
+          "gb": 0.0
+        },
+        {
+          "p2": "TASK_STATE.md",
+          "files": 1,
+          "bytes": 9547,
+          "gb": 0.0
+        },
+        {
+          "p2": "workflows\\workflow-02-score-to-draft.template.json",
+          "files": 1,
+          "bytes": 5948,
+          "gb": 0.0
+        },
+        {
+          "p2": "CLAUDE.md",
+          "files": 1,
+          "bytes": 5824,
+          "gb": 0.0
+        },
+        {
+          "p2": ".env.example",
+          "files": 1,
+          "bytes": 5246,
+          "gb": 0.0
+        },
+        {
+          "p2": "AIGC原稿\\.codebuddy",
+          "files": 2,
+          "bytes": 4449,
+          "gb": 0.0
+        },
+        {
+          "p2": "workflows\\workflow-01-rss-to-vault.template.json",
+          "files": 1,
+          "bytes": 4065,
+          "gb": 0.0
+        },
+        {
+          "p2": "migrations\\apply.sh",
+          "files": 1,
+          "bytes": 3361,
+          "gb": 0.0
+        },
+        {
+          "p2": "workflows\\README.md",
+          "files": 1,
+          "bytes": 3359,
+          "gb": 0.0
+        },
+        {
+          "p2": ".env.local",
+          "files": 1,
+          "bytes": 3293,
+          "gb": 0.0
+        },
+        {
+          "p2": "docker-compose.wsl.yml",
+          "files": 1,
+          "bytes": 2641,
+          "gb": 0.0
+        },
+        {
+          "p2": "workflows\\prompts",
+          "files": 1,
+          "bytes": 2248,
+          "gb": 0.0
+        },
+        {
+          "p2": ".gitignore",
+          "files": 1,
+          "bytes": 2162,
+          "gb": 0.0
+        },
+        {
+          "p2": "migrations\\README.md",
+          "files": 1,
+          "bytes": 2107,
+          "gb": 0.0
+        },
+        {
+          "p2": "AIGC原稿\\README.md",
+          "files": 1,
+          "bytes": 1890,
+          "gb": 0.0
+        },
+        {
+          "p2": "tests\\README.md",
+          "files": 1,
+          "bytes": 1807,
+          "gb": 0.0
+        },
+        {
+          "p2": "docker-compose.local.yml",
+          "files": 1,
+          "bytes": 1531,
+          "gb": 0.0
+        },
+        {
+          "p2": "migrations\\202610210001__grant_n8n_create_on_database.sql",
+          "files": 1,
+          "bytes": 991,
+          "gb": 0.0
+        },
+        {
+          "p2": "workflows\\nodes",
+          "files": 1,
+          "bytes": 967,
+          "gb": 0.0
+        },
+        {
+          "p2": "seeds\\README.md",
+          "files": 1,
+          "bytes": 910,
+          "gb": 0.0
+        },
+        {
+          "p2": "AIGC原稿\\language_data.csv",
+          "files": 1,
+          "bytes": 820,
+          "gb": 0.0
+        },
+        {
+          "p2": "migrations\\202610200001__schema_migrations.sql",
+          "files": 1,
+          "bytes": 664,
+          "gb": 0.0
+        },
+        {
+          "p2": "workflows\\wechat-draft-push.template.json",
+          "files": 1,
+          "bytes": 494,
+          "gb": 0.0
+        },
+        {
+          "p2": "deploy\\volumes",
+          "files": 7,
+          "bytes": 0,
+          "gb": 0.0
+        }
+      ],
+      "text": {
+        "files": 9555,
+        "gb": 3.081,
+        "categories": [
+          {
+            "category": "PDF",
+            "files": 279,
+            "bytes": 2478264186,
+            "gb": 2.3081
+          },
+          {
+            "category": "Word",
+            "files": 255,
+            "bytes": 687689590,
+            "gb": 0.6405
+          },
+          {
+            "category": "Markdown",
+            "files": 8844,
+            "bytes": 92479143,
+            "gb": 0.0861
+          },
+          {
+            "category": "演示/表格",
+            "files": 75,
+            "bytes": 47802933,
+            "gb": 0.0445
+          },
+          {
+            "category": "文本",
+            "files": 102,
+            "bytes": 1974554,
+            "gb": 0.0018
+          }
+        ]
+      },
+      "images": {
+        "files": 2440,
+        "gb": 1.314
+      },
+      "other": {
+        "files": 1546,
+        "gb": 0.538
+      }
+    },
+    "cleanup": {
+      "files": 2687,
+      "bytes": 37209362,
+      "gb": 0.035
+    }
+  }
+}

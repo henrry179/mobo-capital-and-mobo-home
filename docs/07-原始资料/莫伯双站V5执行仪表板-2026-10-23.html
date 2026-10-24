@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>莫伯双站 · V5 金库执行仪表板 · 2026-10-23</title>
+<style>
+  :root{
+    --bg:#0B1020; --panel:#111A30; --panel2:#0E1626; --line:#1E2A45; --line2:#26344F;
+    --tx:#E7EEFB; --tx2:#9FB0CC; --tx3:#67789A;
+    --sync:#4F7CFF; --local:#22C55E; --excl:#94A3B8; --exclD:#64748B;
+    --av:#0EA5E9; --syncNC:#A78BFA; --quar:#EF4444;
+    --ok:#22C55E; --part:#F59E0B; --todo:#64748B;
+    --gold:#F5C044; --blue:#4F7CFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1200px 600px at 80% -10%, #16224A 0%, var(--bg) 55%) ,var(--bg);color:var(--tx);
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;font-size:14px;line-height:1.55;padding:28px 20px 60px}
+  .wrap{max-width:1280px;margin:0 auto}
+  .topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px}
+  .mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#4F7CFF,#1E2A45);display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:17px;letter-spacing:.5px;border:1px solid #2C3E66;box-shadow:0 6px 18px rgba(79,124,255,.25)}
+  .brand .name{font-weight:700;font-size:15px;letter-spacing:.14em}
+  .brand .sub{color:var(--tx3);font-size:11px;letter-spacing:.22em}
+  .spacer{flex:1}
+  .stamp{display:flex;align-items:center;gap:8px;color:var(--tx2);font-size:12px;border:1px solid var(--line2);
+    padding:7px 12px;border-radius:999px;background:var(--panel2)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+  h1{font-size:26px;margin:22px 0 6px;font-weight:800}
+  .hero-sub{color:var(--tx2);max-width:980px}
+  .chips{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .chip{font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid var(--line2);color:var(--tx2);background:var(--panel2)}
+  .chip b{color:var(--tx)}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin-top:24px}
+  .kpi{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:16px 18px;position:relative;overflow:hidden}
+  .kpi::after{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--accent,var(--blue))}
+  .kpi .k{color:var(--tx3);font-size:11px;letter-spacing:.18em;margin-bottom:8px}
+  .kpi .v{font-size:25px;font-weight:800;letter-spacing:.01em}
+  .kpi .s{color:var(--tx2);font-size:12px;margin-top:5px}
+  .sec{margin-top:34px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+  .sec-num{color:var(--tx3);font-size:12px;letter-spacing:.22em}
+  .sec-head h2{font-size:18px;font-weight:800}
+  .sec-note{color:var(--tx3);font-size:12px;margin:2px 0 14px}
+  .grid2{display:grid;grid-template-columns:1.25fr .75fr;gap:16px}
+  .grid2b{display:grid;grid-template-columns:.75fr 1.25fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:960px){.grid2,.grid2b,.grid3{grid-template-columns:1fr}}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:18px}
+  .card h3{font-size:14px;font-weight:700;margin-bottom:4px}
+  .card .kick{color:var(--tx3);font-size:11px;letter-spacing:.18em;margin-bottom:12px}
+  /* partition cards */
+  .pt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+  .pt{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--panel2);border-top:3px solid var(--accent)}
+  .pt .name{font-weight:700;font-size:13px}
+  .pt .big{font-size:21px;font-weight:800;margin:6px 0 2px}
+  .pt .emp{color:var(--tx3);font-size:12px}
+  /* stacked bar */
+  .stack{display:flex;height:34px;border-radius:10px;overflow:hidden;border:1px solid var(--line2);margin-top:6px}
+  .stack i{display:block;height:100%;position:relative}
+  .stack i:hover{filter:brightness(1.2)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--tx2)}
+  .legend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  /* rows bars */
+  .brow{display:grid;grid-template-columns:120px 1fr 118px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line)}
+  .brow:last-child{border-bottom:none}
+  .brow .lb{color:var(--tx2);font-size:13px}
+  .brow .vl{text-align:right;font-size:12px;color:var(--tx2);white-space:nowrap}
+  .bar{height:9px;border-radius:5px;background:#1A2440;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:5px}
+  .cols-title{color:var(--tx3);font-size:11px;letter-spacing:.18em;margin:14px 0 6px}
+  /* donut */
+  .donutwrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .donut{width:180px;height:180px;border-radius:50%;position:relative;flex:none}
+  .donut::after{content:"";position:absolute;inset:26px;border-radius:50%;background:var(--panel)}
+  .donut .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+  .donut .c .v{font-size:20px;font-weight:800}
+  .donut .c .t{color:var(--tx3);font-size:11px}
+  /* goal/mbrain */
+  .mini{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .mini .m{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .mini .m .t{color:var(--tx3);font-size:11px;letter-spacing:.14em}
+  .mini .m .v{font-weight:800;font-size:16px;margin-top:4px}
+  .mini .m .d{color:var(--tx2);font-size:12px;margin-top:3px}
+  /* stages */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+  .step{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:13px 15px;display:flex;gap:12px;align-items:flex-start}
+  .pill{flex:none;min-width:44px;text-align:center;font-size:11px;font-weight:800;border-radius:999px;padding:4px 10px;letter-spacing:.04em}
+  .pill.ok{background:rgba(34,197,94,.14);color:var(--ok);border:1px solid rgba(34,197,94,.4)}
+  .pill.part{background:rgba(245,158,11,.14);color:var(--part);border:1px solid rgba(245,158,11,.4)}
+  .pill.todo{background:rgba(100,116,139,.16);color:#94A3B8;border:1px solid rgba(148,163,184,.35)}
+  .step .t{font-weight:700;font-size:13px}
+  .step .d{color:var(--tx2);font-size:12px;margin-top:3px}
+  /* decisions */
+  .dec{border-left:3px solid var(--gold);background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;padding:14px 16px}
+  .dec .t{font-weight:700;font-size:13px;margin-bottom:6px}
+  .dec .d{color:var(--tx2);font-size:12.5px}
+  .dec .d b{color:var(--tx)}
+  /* acceptance */
+  table.acc{width:100%;border-collapse:collapse;font-size:12.5px}
+  table.acc td{padding:7px 8px;border-bottom:1px solid var(--line);color:var(--tx2);vertical-align:top}
+  table.acc td.n{width:26px;font-weight:800;color:var(--tx)}
+  .st{font-weight:700}
+  .st.y{color:var(--ok)} .st.p{color:var(--part)} .st.x{color:#94A3B8}
+  .todo-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:8px}
+  .todo-list .it{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:12.5px;color:var(--tx2)}
+  .todo-list .it b{color:var(--tx);margin-right:6px}
+  .foot{margin-top:36px;color:var(--tx3);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+  .foot code{background:#0D1526;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark">MB</div>
+      <div>
+        <div class="name">MOBO · VAULT EXECUTION DASHBOARD</div>
+        <div class="sub">CAPITAL × HOME / V5 原件保全 · 双站同步</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="stamp"><span class="dot"></span>金库已建成 · <b>2026-10-23 11:51</b></div>
+  </div>
+
+  <h1>莫伯双站 V5 执行仪表板</h1>
+  <div class="hero-sub">依据 <b>docs/07-原始资料/莫伯双站原件保全与双站同步方案-v5.md</b> 执行。原件保全、不合并不转换、按类型落盘、按站点同步；重复件只登记；凭据先行隔离。所有数字从 <b>00-INDEX</b>（MANIFEST / COUNTS / VERIFY）复算得出。</div>
+  <div class="chips">
+    <span class="chip">V0 安全隔离 <b>✅</b></span>
+    <span class="chip">V1 冻结清单+SHA-256 <b>✅</b></span>
+    <span class="chip">V2 金库复制 <b>✅ 0 错误</b></span>
+    <span class="chip">V3 双归档原样保留 <b>✅</b></span>
+    <span class="chip">V4 同步清单 <b>✅ 13,492</b></span>
+    <span class="chip">V5 展示层 <b>◐ 缩略图待工具</b></span>
+    <span class="chip">V6 上线 <b>⏸ 等 OSS/服务器</b></span>
+    <span class="chip">V7 回滚演练 <b>⏸ 依赖 V6</b></span>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <!-- 01 四分区 -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">01 / PARTITIONS</span><h2>四分区总览</h2></div>
+    <div class="sec-note">机读口径取 COUNTS.json；下方细分为六分片可精确对账 44,817 文件 / 37,765,232,027 B（分毫不差）。</div>
+    <div class="pt-grid" id="ptGrid"></div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="card">
+        <h3>体积构成（GiB 环形）</h3>
+        <div class="kick">排他六分片 · 按 1024³ B</div>
+        <div class="donutwrap">
+          <div class="donut" id="donutGiB"><div class="c"><div class="v">35.172</div><div class="t">GiB 全量</div></div></div>
+          <div class="legend" id="legGiB"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>六分片对账（文件数 / 体积）</h3>
+        <div class="kick">排他切片 · 合计 = 全量 44,817 / 35.172 GiB</div>
+        <div id="sliceRows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 类型分布 -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">02 / MEDIA</span><h2>类型分布（已复制分区）</h2></div>
+    <div class="sec-note">条长按字节等比；左侧为「同步原件」13,492 件构成，右侧为「本地只读」13,530 件构成。</div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card"><h3>同步原件 · 按类型</h3><div class="kick">sync = 4.9322 GiB</div><div id="clsSync"></div></div>
+      <div class="card"><h3>本地只读 · 按类型</h3><div class="kick">local = 3.7539 GiB（另 13 个 MoBoBrain 音频 0.1916 GiB 已归档）</div><div id="clsLocal"></div></div>
+    </div>
+  </div>
+
+  <!-- 03 目录空间 -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">03 / TREE</span><h2>金库结构 · 目录空间</h2></div>
+    <div class="sec-note">物理实测：27,055 文件 / 9,577,019,223 B = 27,035 资产副本 + 20 个索引产物；资产副本逐一存在性核对 0 缺失。</div>
+    <div class="grid2b" style="margin-top:14px">
+      <div class="card"><h3>路径映射</h3><div class="kick">源 → 金库</div>
+        <div style="font-size:12.5px;color:var(--tx2);line-height:1.9">
+          <div><b>MoBoBrain-ITPM-Archive\**</b> → <code style="color:#9EC5FF">70-Archive-Immutable/MoBoBrain-ITPM-Archive/</code>（仅本地）</div>
+          <div><b>Goals\01-影视库\**</b> → <code style="color:#9EC5FF">70-Archive-Immutable/MoBo-Capital-Goals/01-影视库/</code>（仅本地）</div>
+          <div><b>Goals\02–07 + 根文档</b> → <code style="color:#9EC5FF">70-Archive-Immutable/MoBo-Capital-Goals/…</code>（同步）</div>
+          <div><b>Goals 隐藏目录（非密钥件）</b> → <code style="color:#9EC5FF">60-Other/internal/ops/goals/</code>（同步）</div>
+          <div><b>其余散件</b> → <code style="color:#9EC5FF">10-MD / 20-Word / 30-PDF / 40-Excel / 50-Images / 60-Other</code></div>
+        </div>
+      </div>
+      <div class="card"><h3>顶层目录 · 文件 / 字节</h3><div class="kick">70-Archive 含 MBrain 1,391 + Goals 21,423</div><div id="topRows"></div></div>
+    </div>
+  </div>
+
+  <!-- 04 归档专区 -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">04 / ARCHIVES</span><h2>两个不可变归档专区</h2></div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card">
+        <h3>MoBo-Capital-Goals · 24,136 行 / 3.65 GiB</h3>
+        <div class="kick" id="goalsKick">01 本地 + 02–07 同步 + 隐藏目录分流</div>
+        <div class="mini" id="goalsMini"></div>
+      </div>
+      <div class="card">
+        <h3>MoBoBrain-ITPM-Archive · 1,391 文件 / 0.8527 GiB</h3>
+        <div class="kick">完整原件 · 只本地 · 上线后放 /private/archive/</div>
+        <div id="mbrainRows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 站点路由 -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">05 / ROUTING</span><h2>站点路由 · 优先级 · OSS 计划</h2></div>
+    <div class="grid3" style="margin-top:14px">
+      <div class="card"><h3>站点分流</h3><div class="kick">13,492 件</div><div id="siteRows"></div></div>
+      <div class="card"><h3>同步优先级</h3><div class="kick">P0 首批 → P3 代码配置</div><div id="prioRows"></div></div>
+      <div class="card"><h3>OSS 私有桶计划</h3><div class="kick">无 OSS 时回退 ECS /private/library/</div>
+        <div class="mini">
+          <div class="m"><div class="t">PLANNED KEYS</div><div class="v">13,492</div><div class="d">mobo-private/originals/&lt;site&gt;/&lt;class&gt;/&lt;sha²&gt;/…</div></div>
+          <div class="m"><div class="t">缩略图 / 封面计划</div><div class="v">2,719</div><div class="d">图片 2,440 + PDF 封面 279（待 WebP 工具）</div></div>
+          <div class="m"><div class="t">HITL 标记</div><div class="v">13,382</div><div class="d">公域发布前人工终审</div></div>
+          <div class="m"><div class="t">同步清单</div><div class="v">SYNC-FILES</div><div class="d">0 影视库 / 0 MBrain / 0 视频 / 0 音频 / 0 .git / 0 .env</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 决策 -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">06 / DECISIONS</span><h2>三项用户决策 · 落实证据</h2></div>
+    <div class="grid3" style="margin-top:14px">
+      <div class="dec"><div class="t">① MoBoBrain 本地保存</div><div class="d">1,391 件 / 915,578,899 B 完整保留；<b>0 进 SYNC-FILES</b>；服务器就绪后整夹放 <b>/private/archive/</b>。</div></div>
+      <div class="dec"><div class="t">② Goals 隐藏目录 → internal/ops</div><div class="d">扫描后 <b>74 件</b>迁入 <b>60-Other/internal/ops/goals/</b>；<b>31 项拒上站</b>（.git 子库 29 · settings.local.json 1 · 其他 1）；<b>.git/settings 不同步</b>。</div></div>
+      <div class="dec"><div class="t">③ OSS 优先 · ECS 回退</div><div class="d"><b>13,492 个 planned_oss_key</b> 已写入 OSS-KEYS.csv；2,719 缩略图 key 占位；无 OSS 时回退 <b>ECS /opt/mobo-stack/private/library/</b>。</div></div>
+    </div>
+  </div>
+
+  <!-- 07 阶段 -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">07 / STAGES</span><h2>执行阶段 · V0–V7</h2></div>
+    <div class="steps" style="margin-top:14px">
+      <div class="step"><span class="pill ok">✅</span><div><div class="t">V0 · 安全隔离</div><div class="d">7 处 P0 + 精化命中 15 件隔离登记；MoBo-Secrets 抽取待拍板</div></div></div>
+      <div class="step"><span class="pill ok">✅</span><div><div class="t">V1 · 冻结清单 + SHA-256</div><div class="d">MANIFEST.csv 44,817 行全量（方案 44,819 估算差 2）</div></div></div>
+      <div class="step"><span class="pill ok">✅</span><div><div class="t">V2 · 本地金库复制</div><div class="d">27,035 件 / 9,532,495,945 B / 0 错误</div></div></div>
+      <div class="step"><span class="pill ok">✅</span><div><div class="t">V3 · 双归档原样保留</div><div class="d">MBrain 1,391 全含；Goals 24,136 行登记</div></div></div>
+      <div class="step"><span class="pill ok">✅</span><div><div class="t">V4 · 同步清单</div><div class="d">13,492 行，显式排除 01 / MBrain / 视频 / 音频 / Git / 快照</div></div></div>
+      <div class="step"><span class="pill part">◐</span><div><div class="t">V5 · 展示层衍生</div><div class="d">80-Site JSON 占位 + 缩略图规格完成；WebP 未做（本机无工具）</div></div></div>
+      <div class="step"><span class="pill todo">⏸</span><div><div class="t">V6 · 上传 + 原子切换</div><div class="d">等域名 / ICP / HTTPS / 服务器 2C4G / OSS 就绪</div></div></div>
+      <div class="step"><span class="pill todo">⏸</span><div><div class="t">V7 · 回滚演练 + 验收</div><div class="d">上一版 JSON 5 分钟内恢复（依赖 V6）</div></div></div>
+    </div>
+  </div>
+
+  <!-- 08 验收 -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">08 / ACCEPTANCE</span><h2>验收对照 · v5 §10</h2></div>
+    <div class="card" style="margin-top:14px">
+      <table class="acc" id="accTable"></table>
+    </div>
+  </div>
+
+  <!-- 09 待办 -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">09 / NEXT</span><h2>待办清单</h2></div>
+    <div class="todo-list" style="margin-top:14px">
+      <div class="it"><b>1</b>7 处 P0 凭据轮换 / 作废 → 手动删除源明文（SECRETS-FOUND.md）</div>
+      <div class="it"><b>2</b>MoBo-Secrets 抽取拍板</div>
+      <div class="it"><b>3</b>cacert.pem 定性后可一行补复制（240,216 B，公共 CA 包）</div>
+      <div class="it"><b>4</b>安装 WebP 工具 → 生成 2,719 缩略图 / 封面</div>
+      <div class="it"><b>5</b>服务器 2C4G + 域名 + ICP + HTTPS 就绪</div>
+      <div class="it"><b>6</b>OSS 私有桶开通（或确认 ECS /private/ 回退）</div>
+      <div class="it"><b>7</b>V6：rsync --files-from + OSS 批量上传 + 原子切换</div>
+      <div class="it"><b>8</b>V7：回滚演练 + 最终验收；HITL 终审后方可公开任何字节</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    口径：1 GiB = 1024³ B（v5 文档中的 GB 同义）· 全量 44,817 文件 / 37,765,232,027 B（35.172 GiB）· 密文扫描 15 件隔离未复制、源保留待轮换。
+    机读底稿：<code>E:\01-文档资料\报告与规划\MoBo-Content-Vault-v5\00-INDEX\</code>（MANIFEST.csv 44,817 行 · COUNTS.json · VERIFY.json · SITE-ROUTING.csv · SYNC-FILES.txt 13,492 行 · QUARANTINE.csv 15 行 · EXCLUDED.csv 15,142 行 · DUPLICATES.csv 1,008 行）。
+    配套报告：<code>docs/07-原始资料/莫伯双站V5执行报告-2026-10-23.md</code>。0 修改 · 0 合并 · 0 转换 · 0 改名 · 0 删除源文件。
+  </div>
+</div>
+
+<script>
+const D = {
+  kpis: [
+    {k:'TOTAL ASSETS', v:'35.172 GiB', s:'44,817 文件全量 · 全部登记', a:'#4F7CFF'},
+    {k:'VAULT COPY',   v:'27,035 件',   s:'9,532,495,945 B · 0 复制错误', a:'#22C55E'},
+    {k:'SYNC ORIGINALS',v:'13,492 件',  s:'4.9322 GiB · 唯一上站清单', a:'#4F7CFF'},
+    {k:'LOCAL ARCHIVE', v:'13,530 件',  s:'3.7539 GiB + 13 音频 0.1916 GiB', a:'#0EA5E9'},
+    {k:'EXCLUDED',      v:'17,767 件',  s:'26.291 GiB（排除 15,129 + 候选排除 2,638）', a:'#94A3B8'},
+    {k:'QUARANTINE',    v:'15 件',      s:'1.036 MiB · 凭据隔离未复制', a:'#EF4444'},
+    {k:'DUPLICATES',    v:'1,008 组',   s:'冗余 1,298 件 / 2.1673 GiB · 只登记', a:'#A78BFA'}
+  ],
+  pts: [
+    {key:'sync',      name:'同步原件 package=sync',  files:13492, gib:'4.9322', c:'var(--sync)'},
+    {key:'local',     name:'本地只读 package=local', files:13530, gib:'3.7539', c:'var(--local)'},
+    {key:'excluded',  name:'排除 / 清理',            files:15142, gib:'26.4502', c:'var(--excl)'},
+    {key:'quarantine',name:'凭据隔离 quarantine',    files:15,    gib:'0.0010', c:'var(--quar)'}
+  ],
+  ptNote:'excluded 15,142 = 排除登记 15,006 + 清理 123 + MoBoBrain 音频 13（音频另在“本地归档额外 13 件”重复提示）；另存在 2,638 件“同步候选排除”（缓存/Git/凭据，见六分片 ⑤）。',
+  slices: [
+    {key:'sync',      label:'同步原件（已复制，将上站）', files:13492, bytes:5295948829, c:'#4F7CFF'},
+    {key:'local',     label:'本地只读（已复制，不上站）', files:13530, bytes:4030765731, c:'#22C55E'},
+    {key:'localAV',   label:'MoBoBrain 音频（已归档）',  files:13,    bytes:205781385,  c:'#0EA5E9'},
+    {key:'excludedNC',label:'排除 / 清理（未复制登记）',  files:15129, bytes:28194909469,c:'#94A3B8'},
+    {key:'syncNC',    label:'同步候选排除（缓存/Git/凭据/PEM）', files:2638, bytes:36790485, c:'#A78BFA'},
+    {key:'quarantine',label:'凭据隔离（源保留待轮换）',  files:15,    bytes:1036128,    c:'#EF4444'}
+  ],
+  clsSync: [
+    {n:'PDF 原件', f:279,  b:2478264186, c:'#EF9F43'},
+    {n:'图片原图', f:2440, b:1411213502, c:'#38BDF8'},
+    {n:'Word 原件',f:255,  b:687689590,  c:'#60A5FA'},
+    {n:'压缩包',   f:17,   b:477018709,  c:'#A78BFA'},
+    {n:'Markdown', f:8841, b:92492226,   c:'#22C55E'},
+    {n:'字体',     f:5,    b:69757228,   c:'#F5C044'},
+    {n:'表格',     f:78,   b:47807089,   c:'#34D399'},
+    {n:'代码',     f:1253, b:23570914,   c:'#F472B6'},
+    {n:'其他',     f:227,  b:6233430,    c:'#94A3B8'},
+    {n:'文本',     f:97,   b:1901955,    c:'#CBD5E1'}
+  ],
+  clsLocal: [
+    {n:'图片（01-影视库+MBrain）', f:11588, b:3934149515, c:'#38BDF8'},
+    {n:'Word',    f:476,  b:45888452, c:'#60A5FA'},
+    {n:'代码',    f:841,  b:16970715, c:'#F472B6'},
+    {n:'其他',    f:256,  b:17264609, c:'#94A3B8'},
+    {n:'Markdown',f:316,  b:8104172,  c:'#22C55E'},
+    {n:'PDF',     f:22,   b:8166199,  c:'#EF9F43'},
+    {n:'文本',    f:30,   b:221907,   c:'#CBD5E1'},
+    {n:'临时',    f:1,    b:162,      c:'#475569'}
+  ],
+  vaultTop: [
+    {n:'70-Archive-Immutable', f:22814, b:4790518246, c:'#4F7CFF'},
+    {n:'30-PDF',               f:258,   b:2461917508, c:'#EF9F43'},
+    {n:'50-Images',            f:1696,  b:1009698177, c:'#38BDF8'},
+    {n:'20-Word',              f:82,    b:637238271,  c:'#60A5FA'},
+    {n:'60-Other',             f:1047,  b:567914010,  c:'#A78BFA'},
+    {n:'00-INDEX（索引产物）', f:14,    b:38506234,   c:'#22C55E'},
+    {n:'40-Excel',             f:72,    b:46428968,   c:'#34D399'},
+    {n:'80-Site-Release（产物）', f:6,  b:6017044,    c:'#F5C044'},
+    {n:'10-MD',                f:1066,  b:18780765,   c:'#22C55E'},
+    {n:'90-Quarantine（空）',  f:0,     b:0,          c:'#EF4444'}
+  ],
+  goals: {
+    mini: [
+      {t:'01-影视库 · 本地', v:'12,152 件 / 3.0911 GiB', d:'12,153 行登记（1 件 cacert.pem 因 .pem 规则仅登记）'},
+      {t:'02–07 + 根文档 · 同步', v:'9,271 件 / 0.5160 GiB', d:'复制入 70-Archive/MoBo-Capital-Goals'},
+      {t:'隐藏目录 → internal/ops', v:'74 件 / 459,216 B', d:'60-Other/internal/ops/goals/'},
+      {t:'缓存 / Git / 凭据 · 排除', v:'2,637 件 / 36,550,269 B', d:'缓存/venv 2,575 + Git 58 + 凭据 4 · 只登记'}
+    ],
+    mbrain: [
+      {n:'图片', f:658, b:649674184, c:'#38BDF8'},
+      {n:'音频', f:13,  b:205781385, c:'#0EA5E9'},
+      {n:'Word', f:476, b:45888452,  c:'#60A5FA'},
+      {n:'Markdown', f:196, b:5109259, c:'#22C55E'},
+      {n:'PDF', f:22, b:8166199, c:'#EF9F43'},
+      {n:'代码', f:25, b:959258, c:'#F472B6'}
+    ],
+    sites: [
+      {n:'internal 内部层', f:3378, b:3213519976, c:'#A78BFA'},
+      {n:'capital 投研站',  f:841,  b:1525954561, c:'#4F7CFF'},
+      {n:'home 个人站',     f:9273, b:556474292,  c:'#22C55E'}
+    ],
+    prio: [
+      {n:'P0 首批（MD/索引）', f:7788, c:'#22C55E'},
+      {n:'P1 文档原件',        f:1211, c:'#F5C044'},
+      {n:'P2 图片/文本/其他',  f:1405, c:'#38BDF8'},
+      {n:'P3 代码/配置',       f:3088, c:'#94A3B8'}
+    ],
+    acc: [
+      [1,'44,819 源文件 sha256 与副本一一相等；0 修改 0 合并 0 转换','y','✅ 44,817 全量登记 + 复制流 SHA 同源 · 0 错误'],
+      [2,'MANIFEST.csv 覆盖全部；package 四值可统计','y','✅ 44,817 行 / sync·local·excluded·quarantine'],
+      [3,'MoBoBrain 文件数与源一致、内容未改','y','✅ 1,391 / 915,578,899 B 全保留'],
+      [4,'Goals 完整保留；同步清单 0 个 01-影视库','y','✅ 12,153 行登记 · 同步清单 0 命中'],
+      [5,'Goals 02–07 + 其他子文件夹在同步清单（01 除外）','y','✅ 9,271 原件 + 74 ops 件 · 2,637 安全排除已登记'],
+      [6,'视频/音频/Git/快照 0 个进入服务器','y','✅ 复核通过'],
+      [7,'公开展示层 0 Word/PDF/Excel 原件','y','✅ 80-Site-Release 仅 JSON/README'],
+      [8,'public JSON 0 私有字段','p','◐ 占位结构，数据待生成 + HITL'],
+      [9,'private/ 不在 Caddy root','x','⏸ 待服务器部署（V6）'],
+      [10,'上线 200/401 + 回滚通过','x','⏸ 待 V6 + V7']
+    ]
+  }
+};
+D.goals.mbrain = [
+  {n:'图片', f:658, b:649674184, c:'#38BDF8'},
+  {n:'音频', f:13,  b:205781385, c:'#0EA5E9'},
+  {n:'Word', f:476, b:45888452,  c:'#60A5FA'},
+  {n:'Markdown', f:196, b:5109259, c:'#22C55E'},
+  {n:'PDF', f:22, b:8166199, c:'#EF9F43'},
+  {n:'代码', f:25, b:959258, c:'#F472B6'}
+];
+D.sites = [
+  {n:'internal 内部层', f:3378, b:3213519976, c:'#A78BFA'},
+  {n:'capital 投研站',  f:841,  b:1525954561, c:'#4F7CFF'},
+  {n:'home 个人站',     f:9273, b:556474292,  c:'#22C55E'}
+];
+D.prio = [
+  {n:'P0 首批（MD / 索引）', f:7788, c:'#22C55E'},
+  {n:'P1 文档原件',          f:1211, c:'#F5C044'},
+  {n:'P2 图片 / 文本 / 其他',f:1405, c:'#38BDF8'},
+  {n:'P3 代码 / 配置',       f:3088, c:'#94A3B8'}
+];
+D.acc = [
+  [1,'44,819 源文件 sha256 与副本一一相等；0 修改 0 合并 0 转换','y','✅ 44,817 全量登记 + 复制流 SHA 同源 · 0 错误'],
+  [2,'MANIFEST.csv 覆盖全部；package 四值可统计','y','✅ 44,817 行 / sync·local·excluded·quarantine'],
+  [3,'MoBoBrain 文件数与源一致、内容未改','y','✅ 1,391 / 915,578,899 B 全保留'],
+  [4,'Goals 完整保留；同步清单 0 个 01-影视库','y','✅ 12,153 行登记 · 同步清单 0 命中'],
+  [5,'Goals 02–07 + 其他子文件夹在同步清单（01 除外）','y','✅ 9,271 原件 + 74 ops 件 · 2,637 安全排除已登记'],
+  [6,'视频 / 音频 / Git / 快照 0 个进入服务器','y','✅ 复核通过'],
+  [7,'公开展示层 0 Word / PDF / Excel 原件','y','✅ 80-Site-Release 仅 JSON/README'],
+  [8,'public JSON 0 私有字段、0 INTERNAL','p','◐ 占位结构，数据待生成 + HITL'],
+  [9,'private/ 不在 Caddy root；未认证无法访问','x','⏸ 待服务器部署（V6）'],
+  [10,'上线后 200 / 401 / 回滚演练通过','x','⏸ 待 V6 + V7']
+];
+
+const fmt = n => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const mb  = b => (b/1048576).toFixed(1)+' MB';
+const gib = b => (b/1073741824).toFixed(2)+' GiB';
+
+// KPI cards
+document.getElementById('kpis').innerHTML = D.kpis.map(k =>
+  `<div class="kpi" style="--accent:${k.a}"><div class="k">${k.k}</div><div class="v">${k.v}</div><div class="s">${k.s}</div></div>`).join('');
+
+// partition cards
+document.getElementById('ptGrid').innerHTML = D.pts.map(p =>
+  `<div class="pt" style="--accent:${p.c}"><div class="name">${p.name}</div><div class="big">${fmt(p.files)} <span style="font-size:13px;color:var(--tx2)">件</span></div><div class="emp">${p.gib} GiB</div></div>`).join('') +
+  `<div class="pt" style="--accent:var(--gold)"><div class="name">全量</div><div class="big">44,817 <span style="font-size:13px;color:var(--tx2)">件</span></div><div class="emp">35.172 GiB · 六分片闭合</div></div>`;
+
+// donut (bytes share, top slices + group tiny)
+const totalB = D.slices.reduce((a,s)=>a+s.bytes,0);
+const big = D.slices.filter(s=>s.bytes/totalB>0.02);
+const tiny = D.slices.filter(s=>s.bytes/totalB<=0.02);
+let stops = 0, conicParts = [];
+big.forEach(s=>{const p=s.bytes/totalB*100;conicParts.push(`${s.c} ${stops}% ${stops+p}%`);stops+=p;});
+const tinyC = '#475569';
+conicParts.push(`${tinyC} ${stops}% 100%`);
+document.getElementById('donutGiB').style.background = `conic-gradient(${conicParts.join(',')})`;
+document.getElementById('legGiB').innerHTML =
+  big.map(s=>`<span><span class="sw" style="background:${s.c}"></span>${s.label} <b style="color:var(--tx)">${gib(s.bytes)}</b></span>`).join('') +
+  `<span><span class="sw" style="background:${tinyC}"></span>其他（音频 + 候选排除 + 隔离）<b style="color:var(--tx)">${gib(tiny.reduce((a,s)=>a+s.bytes,0))}</b></span>`;
+
+// slice rows with two mini bars (files% & bytes%)
+const totalF = D.slices.reduce((a,s)=>a+s.files,0);
+document.getElementById('sliceRows').innerHTML = D.slices.map(s=>{
+  const pf=s.files/totalF*100, pb=s.bytes/totalB*100;
+  return `<div style="padding:7px 0;border-bottom:1px dashed var(--line)">
+    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+      <span style="color:var(--tx2)"><span class="sw" style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${s.c};margin-right:7px"></span>${s.label}</span>
+      <span style="color:var(--tx)">--${fmt(s.files)} 件 · ${gib(s.bytes)}</span>
+    </div>
+    <div class="bar" title="文件占比"><i style="width:${Math.max(pf,0.15)}%;background:${s.c}"></i></div>
+    <div style="height:3px"></div>
+    <div class="bar" title="体积占比"><i style="width:${Math.max(pb,0.15)}%;background:${s.c};opacity:.55"></i></div>
+  </div>`;
+}).join('') + '<div style="color:var(--tx3);font-size:11px;margin-top:8px">细条 = 体积占比；粗条 = 文件占比。合计 ${fmt(totalF)} 件 / ${gib(totalB)}。</div>'.replace('${fmt(totalF)}',fmt(totalF)).replace('${gib(totalB)}',gib(totalB));
+
+// class bars helper with file/byte labels
+function rowsOf(el, arr){
+  const max = Math.max(...arr.map(x=>x.b||x.f));
+  document.getElementById(el).innerHTML = arr.map(x=>{
+    const b=x.b!==undefined, v=b?x.b:x.f;
+    return `<div class="brow"><div class="lb">${x.n}</div>
+      <div class="bar"><i style="width:${v/max*100}%;background:${x.c}"></i></div>
+      <div class="vl">${b?fmt(x.f)+' 件 · '+gib(x.b):fmt(x.f)+' 件'}</div></div>`;
+  }).join('');
+}
+rowsOf('clsSync', D.clsSync);
+rowsOf('clsLocal', D.clsLocal);
+rowsOf('topRows', D.vaultTop);
+rowsOf('siteRows', D.sites);
+document.getElementById('prioRows').innerHTML = D.prio.map(p=>{
+  const max=Math.max(...D.prio.map(x=>x.f));
+  return `<div class="brow"><div class="lb">${p.n}</div><div class="bar"><i style="width:${p.f/max*100}%;background:${p.c}"></i></div><div class="vl">${fmt(p.f)} 件</div></div>`;
+}).join('');
+
+// goals mini
+document.getElementById('goalsMini').innerHTML = D.goals.mini.map(m=>
+  `<div class="m"><div class="t">${m.t}</div><div class="v">${m.v}</div><div class="d">${m.d}</div></div>`).join('');
+
+// mbrain class
+rowsOf('mbrainRows', D.goals.mbrain);
+
+// acceptance
+document.getElementById('accTable').innerHTML = D.acc.map(r=>
+  `<tr><td class="n">${r[0]}</td><td>${r[1]}</td><td class="st ${r[2]}" style="width:34px">${r[2]==='y'?'✅':r[2]==='p'?'◐':'⏸'}</td><td>${r[3]}</td></tr>`).join('');
+</script>
+</body>
+</html>

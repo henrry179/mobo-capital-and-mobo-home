@@ -118,7 +118,7 @@ NEW → SCORED → SYNCED
 
 ## 7. 视图 `intel.v_recent_high_value`
 
-筛选 `relevance_score >= 7` 且 `status IN ('SCORED','SYNCED')`，按相关性/发布时间排序；工作流 #1 的思源推送候选集。
+筛选高相关且已评分/已同步的文章，供工作流 #1 思源推送候选。**行为说明**见 [`触发器与视图.md`](触发器与视图.md) §3 `intel.v_recent_high_value`。
 
 ## 8. n8n Schema
 

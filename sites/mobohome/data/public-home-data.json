@@ -1,0 +1,474 @@
+{
+  "exported_at": "2026-10-24T12:59:04.283054+00:00",
+  "visibility": "PUBLIC",
+  "source_notes": "timeline/gallery privacy=PUBLIC; reading tag=public_portal; no sandbox retros/workouts",
+  "timeline_stories": [
+    {
+      "id": "home-2026-1007",
+      "event_date": "2026-10-07",
+      "category": "milestone",
+      "title": "武汉三线融合定稿：主线财务数字化 × Memo × 多资产研究",
+      "summary": "将学术哲学母本、定居规划、认知机制、内容工业化与 Local-First 第二大脑贯通为同一套人生算法。",
+      "location_name": "武汉",
+      "importance": 5,
+      "mood_score": 9,
+      "energy_score": 5,
+      "tags": [
+        "三线融合",
+        "慢就是快",
+        "Local-First",
+        "时间主权"
+      ],
+      "metadata": {
+        "life_chapter": "湖北·归航与长期筑基",
+        "domain": "FAMILY_LIFE",
+        "content_markdown": "2036 愿景不是规模崇拜，而是：职业卡位稳、家庭与住房落地、媒体品牌可复利、自营研究可审计。五大账户隔离与健康优先宪法，是一切仓位之上的安全壁垒。\n\n技术基座选择本地优先与端到端加密——把「一人一亿」的镜像倒转成可长期持有的主权数字家园。"
+      },
+      "attached_media": [
+        {
+          "title": "长江岸线散步与周期思考",
+          "asset_type": "photo",
+          "public_thumb_url": "https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?auto=format&fit=crop&w=800&q=80"
+        }
+      ]
+    },
+    {
+      "id": "home-2026-0215",
+      "event_date": "2026-02-15",
+      "category": "milestone",
+      "title": "从北上深数据战场归航武汉：人生仓位的风险隔离",
+      "summary": "十余年零售与生鲜供应链数据深耕后，选择湖北作为长期家庭与投研根据地。",
+      "location_name": "武汉",
+      "importance": 5,
+      "mood_score": 9,
+      "energy_score": 5,
+      "tags": [
+        "归航",
+        "家庭筑基",
+        "莫伯之家"
+      ],
+      "metadata": {
+        "life_chapter": "湖北·归航与长期筑基",
+        "domain": "FAMILY_LIFE",
+        "content_markdown": "用交易员的风险隔离模型审视人生：真正的复利需要稳定底仓。归航不是撤退，而是把时间主权从高频噪声里夺回来——Slow Empowerment。"
+      },
+      "attached_media": []
+    },
+    {
+      "id": "home-2024-1010",
+      "event_date": "2024-10-10",
+      "category": "career",
+      "title": "上海深耕：生鲜供应链周转率与多仓协同",
+      "summary": "多温区仓储网络数字化与呆滞库存压降，训练微观现金流手感。",
+      "location_name": "上海",
+      "importance": 4,
+      "mood_score": 8,
+      "energy_score": 5,
+      "tags": [
+        "供应链",
+        "周转率",
+        "业财"
+      ],
+      "metadata": {
+        "life_chapter": "上海·供应链深耕",
+        "domain": "CAREER_WORK",
+        "content_markdown": "生鲜的核心是「鲜」与「转」。SKU 周转预测与动态补货，让微观库存语言后来能对接宏观 PMI 订单-库存差与期权波动率曲面——同一套因果语法。"
+      },
+      "attached_media": []
+    },
+    {
+      "id": "home-2018-0520",
+      "event_date": "2018-05-20",
+      "category": "career",
+      "title": "北上深历练：物流调度与生鲜 B2B 数据基建",
+      "summary": "从 BI 分析师走向业务战略操盘，理解规模效应与边际成本。",
+      "location_name": "北京 / 深圳",
+      "importance": 4,
+      "mood_score": 8,
+      "energy_score": 5,
+      "tags": [
+        "物流",
+        "数仓",
+        "高强度作战"
+      ],
+      "metadata": {
+        "life_chapter": "北上深·历练期",
+        "domain": "CAREER_WORK",
+        "content_markdown": "公路干线与大仓运营教会了我：没有现金流闭环的叙事都是噪声。这段经历成为后来 ITPM 宏观框架与企业基本面复盘的思维底座。"
+      },
+      "attached_media": []
+    },
+    {
+      "id": "home-2015-0801",
+      "event_date": "2015-08-01",
+      "category": "reflection",
+      "title": "2015 股灾尾部记忆：宏观因果优先于模式识别",
+      "summary": "亲历指数急挫后的身体记忆，固化「先机制、后预测」的研究纪律。",
+      "location_name": "中国",
+      "importance": 5,
+      "mood_score": 6,
+      "energy_score": 5,
+      "tags": [
+        "股灾",
+        "尾部风险",
+        "研究纪律"
+      ],
+      "metadata": {
+        "life_chapter": "北上深·历练期",
+        "domain": "INVEST_TRADING",
+        "content_markdown": "指数从高位回撤的那一周，比任何回测曲线都更清晰地写下：没有证伪条件的信念会杀人。此后所有 Memo 与交易复盘，必须先写清「如果我错了，会因为什么」。"
+      },
+      "attached_media": []
+    }
+  ],
+  "gallery_assets": [
+    {
+      "id": "g1",
+      "asset_type": "photo",
+      "title": "武汉东湖晨跑与体能训练",
+      "captured_at": "2026-10-12",
+      "public_thumb_url": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": "g4",
+      "asset_type": "video",
+      "title": "秋季力量训练突破日",
+      "captured_at": "2026-10-01",
+      "public_thumb_url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": "g2",
+      "asset_type": "photo",
+      "title": "莫伯之家书房与投研资料",
+      "captured_at": "2026-09-28",
+      "public_thumb_url": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": "g5",
+      "asset_type": "photo",
+      "title": "阅读与跨学科笔记",
+      "captured_at": "2026-09-05",
+      "public_thumb_url": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": "g3",
+      "asset_type": "photo",
+      "title": "长江岸线宏观思考",
+      "captured_at": "2026-08-15",
+      "public_thumb_url": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+    }
+  ],
+  "reading_library": [
+    {
+      "id": "editorial:b8",
+      "title": "Local-First & E2EE 笔记",
+      "author": "MoBo 工程札记",
+      "category": "STRATEGY",
+      "status": "READING",
+      "rating": 4,
+      "core_takeaway": "个人主权数字档案：加密、盲中继与第二大脑调度。"
+    },
+    {
+      "id": "editorial:b7",
+      "title": "Trading in the Zone",
+      "author": "Mark Douglas",
+      "category": "FINANCE",
+      "status": "COMPLETED",
+      "rating": 4,
+      "core_takeaway": "概率思维与执行心理学，对接行为教练角色。"
+    },
+    {
+      "id": "editorial:b6",
+      "title": "ITPM / POTM 课程笔记",
+      "author": "Anton Kreil 体系",
+      "category": "FINANCE",
+      "status": "READING",
+      "rating": 5,
+      "core_takeaway": "记分卡、门禁流程与期权策略筛选，正在双语精读归档。"
+    },
+    {
+      "id": "editorial:b5",
+      "title": "孙子兵法",
+      "author": "孙武",
+      "category": "STRATEGY",
+      "status": "COMPLETED",
+      "rating": 5,
+      "core_takeaway": "先胜而后求战——风险隔离铁律。"
+    },
+    {
+      "id": "editorial:b4",
+      "title": "周期 / Mastering the Market Cycle",
+      "author": "Howard Marks",
+      "category": "FINANCE",
+      "status": "COMPLETED",
+      "rating": 5,
+      "core_takeaway": "第二层思维与 Memo 文风底座。"
+    },
+    {
+      "id": "editorial:b3",
+      "title": "原则 / Principles",
+      "author": "Ray Dalio",
+      "category": "FINANCE",
+      "status": "COMPLETED",
+      "rating": 5,
+      "core_takeaway": "债务周期模板与原则化决策，对接年度宏观旗舰写作。"
+    },
+    {
+      "id": "editorial:b2",
+      "title": "穷查理宝典",
+      "author": "Charlie Munger",
+      "category": "FINANCE",
+      "status": "COMPLETED",
+      "rating": 5,
+      "core_takeaway": "多元思维模型与逆向思考；慢就是快。"
+    },
+    {
+      "id": "editorial:b1",
+      "title": "The Road to Reality",
+      "author": "Roger Penrose",
+      "category": "PHYSICS",
+      "status": "COMPLETED",
+      "rating": 5,
+      "core_takeaway": "几何与物理底层结构，帮助理解复杂系统与非线性波动。"
+    }
+  ],
+  "timeline_events": [
+    {
+      "event_id": "1702ddc5-4f49-50a3-ba5a-29c06e07640f",
+      "title": "武汉三线融合定稿：主线财务数字化 × Memo × 多资产研究",
+      "summary": "将学术哲学母本、定居规划、认知机制、内容工业化与 Local-First 第二大脑贯通为同一套人生算法。",
+      "domain": "FAMILY_LIFE",
+      "event_type": "milestone",
+      "occurred_at": "2026-10-07T12:00:00+08:00",
+      "ended_at": null,
+      "importance_score": 5,
+      "energy_impact": 5,
+      "duration_minutes": null,
+      "location_name": "武汉",
+      "tags": [
+        "三线融合",
+        "慢就是快",
+        "Local-First",
+        "时间主权"
+      ],
+      "metrics_payload": {
+        "mood_score": 9,
+        "life_chapter": "湖北·归航与长期筑基",
+        "attached_media": [
+          {
+            "title": "长江岸线散步与周期思考",
+            "asset_type": "photo",
+            "public_thumb_url": "https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?auto=format&fit=crop&w=800&q=80"
+          }
+        ],
+        "editorial_slug": "home-2026-1007",
+        "content_markdown": "2036 愿景不是规模崇拜，而是：职业卡位稳、家庭与住房落地、媒体品牌可复利、自营研究可审计。五大账户隔离与健康优先宪法，是一切仓位之上的安全壁垒。\n\n技术基座选择本地优先与端到端加密——把「一人一亿」的镜像倒转成可长期持有的主权数字家园。"
+      },
+      "privacy": "PUBLIC"
+    },
+    {
+      "event_id": "8a39f924-17fe-5365-8184-d697b91359d8",
+      "title": "从北上深数据战场归航武汉：人生仓位的风险隔离",
+      "summary": "十余年零售与生鲜供应链数据深耕后，选择湖北作为长期家庭与投研根据地。",
+      "domain": "FAMILY_LIFE",
+      "event_type": "milestone",
+      "occurred_at": "2026-02-15T12:00:00+08:00",
+      "ended_at": null,
+      "importance_score": 5,
+      "energy_impact": 5,
+      "duration_minutes": null,
+      "location_name": "武汉",
+      "tags": [
+        "归航",
+        "家庭筑基",
+        "莫伯之家"
+      ],
+      "metrics_payload": {
+        "mood_score": 9,
+        "life_chapter": "湖北·归航与长期筑基",
+        "editorial_slug": "home-2026-0215",
+        "content_markdown": "用交易员的风险隔离模型审视人生：真正的复利需要稳定底仓。归航不是撤退，而是把时间主权从高频噪声里夺回来——Slow Empowerment。"
+      },
+      "privacy": "PUBLIC"
+    },
+    {
+      "event_id": "9d60402e-43b0-56c7-be98-4f71232eefe1",
+      "title": "上海深耕：生鲜供应链周转率与多仓协同",
+      "summary": "多温区仓储网络数字化与呆滞库存压降，训练微观现金流手感。",
+      "domain": "CAREER_WORK",
+      "event_type": "career",
+      "occurred_at": "2024-10-10T12:00:00+08:00",
+      "ended_at": null,
+      "importance_score": 4,
+      "energy_impact": 5,
+      "duration_minutes": null,
+      "location_name": "上海",
+      "tags": [
+        "供应链",
+        "周转率",
+        "业财"
+      ],
+      "metrics_payload": {
+        "mood_score": 8,
+        "life_chapter": "上海·供应链深耕",
+        "editorial_slug": "home-2024-1010",
+        "content_markdown": "生鲜的核心是「鲜」与「转」。SKU 周转预测与动态补货，让微观库存语言后来能对接宏观 PMI 订单-库存差与期权波动率曲面——同一套因果语法。"
+      },
+      "privacy": "PUBLIC"
+    },
+    {
+      "event_id": "339bac70-9bf5-56fb-a774-e40ee2052b10",
+      "title": "北上深历练：物流调度与生鲜 B2B 数据基建",
+      "summary": "从 BI 分析师走向业务战略操盘，理解规模效应与边际成本。",
+      "domain": "CAREER_WORK",
+      "event_type": "career",
+      "occurred_at": "2018-05-20T12:00:00+08:00",
+      "ended_at": null,
+      "importance_score": 4,
+      "energy_impact": 5,
+      "duration_minutes": null,
+      "location_name": "北京 / 深圳",
+      "tags": [
+        "物流",
+        "数仓",
+        "高强度作战"
+      ],
+      "metrics_payload": {
+        "mood_score": 8,
+        "life_chapter": "北上深·历练期",
+        "editorial_slug": "home-2018-0520",
+        "content_markdown": "公路干线与大仓运营教会了我：没有现金流闭环的叙事都是噪声。这段经历成为后来 ITPM 宏观框架与企业基本面复盘的思维底座。"
+      },
+      "privacy": "PUBLIC"
+    },
+    {
+      "event_id": "d21776af-2a50-576f-ad4f-7cd97944d229",
+      "title": "2015 股灾尾部记忆：宏观因果优先于模式识别",
+      "summary": "亲历指数急挫后的身体记忆，固化「先机制、后预测」的研究纪律。",
+      "domain": "INVEST_TRADING",
+      "event_type": "reflection",
+      "occurred_at": "2015-08-01T12:00:00+08:00",
+      "ended_at": null,
+      "importance_score": 5,
+      "energy_impact": 5,
+      "duration_minutes": null,
+      "location_name": "中国",
+      "tags": [
+        "股灾",
+        "尾部风险",
+        "研究纪律"
+      ],
+      "metrics_payload": {
+        "mood_score": 6,
+        "life_chapter": "北上深·历练期",
+        "editorial_slug": "home-2015-0801",
+        "content_markdown": "指数从高位回撤的那一周，比任何回测曲线都更清晰地写下：没有证伪条件的信念会杀人。此后所有 Memo 与交易复盘，必须先写清「如果我错了，会因为什么」。"
+      },
+      "privacy": "PUBLIC"
+    }
+  ],
+  "archive_assets": [
+    {
+      "asset_id": "a1111111-1111-5111-8111-111111111101",
+      "asset_category": "PHOTO",
+      "title": "武汉东湖晨跑与体能训练",
+      "original_filename": "donghu-run.jpg",
+      "mime_type": "image/jpeg",
+      "file_size_bytes": 120000,
+      "captured_at": "2026-10-12T07:00:00+08:00",
+      "document_date": "2026-10-12",
+      "domain": "FITNESS_HEALTH",
+      "tags": [
+        "public_portal",
+        "武汉"
+      ],
+      "privacy": "PUBLIC",
+      "media_metadata": {
+        "editorial_slug": "g1",
+        "public_thumb_url": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80"
+      }
+    },
+    {
+      "asset_id": "a1111111-1111-5111-8111-111111111104",
+      "asset_category": "VIDEO",
+      "title": "秋季力量训练突破日",
+      "original_filename": "strength.jpg",
+      "mime_type": "image/jpeg",
+      "file_size_bytes": 140000,
+      "captured_at": "2026-10-01T19:00:00+08:00",
+      "document_date": "2026-10-01",
+      "domain": "FITNESS_HEALTH",
+      "tags": [
+        "public_portal",
+        "训练"
+      ],
+      "privacy": "PUBLIC",
+      "media_metadata": {
+        "editorial_slug": "g4",
+        "public_thumb_url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80"
+      }
+    },
+    {
+      "asset_id": "a1111111-1111-5111-8111-111111111102",
+      "asset_category": "PHOTO",
+      "title": "莫伯之家书房与投研资料",
+      "original_filename": "study-desk.jpg",
+      "mime_type": "image/jpeg",
+      "file_size_bytes": 110000,
+      "captured_at": "2026-09-28T20:00:00+08:00",
+      "document_date": "2026-09-28",
+      "domain": "FAMILY_LIFE",
+      "tags": [
+        "public_portal",
+        "书房"
+      ],
+      "privacy": "PUBLIC",
+      "media_metadata": {
+        "editorial_slug": "g2",
+        "public_thumb_url": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80"
+      }
+    },
+    {
+      "asset_id": "a1111111-1111-5111-8111-111111111105",
+      "asset_category": "PHOTO",
+      "title": "阅读与跨学科笔记",
+      "original_filename": "reading-notes.jpg",
+      "mime_type": "image/jpeg",
+      "file_size_bytes": 100000,
+      "captured_at": "2026-09-05T21:00:00+08:00",
+      "document_date": "2026-09-05",
+      "domain": "LEARNING_EXAM",
+      "tags": [
+        "public_portal",
+        "阅读"
+      ],
+      "privacy": "PUBLIC",
+      "media_metadata": {
+        "editorial_slug": "g5",
+        "public_thumb_url": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80"
+      }
+    },
+    {
+      "asset_id": "a1111111-1111-5111-8111-111111111103",
+      "asset_category": "PHOTO",
+      "title": "长江岸线宏观思考",
+      "original_filename": "yangtze.jpg",
+      "mime_type": "image/jpeg",
+      "file_size_bytes": 130000,
+      "captured_at": "2026-08-15T18:00:00+08:00",
+      "document_date": "2026-08-15",
+      "domain": "FAMILY_LIFE",
+      "tags": [
+        "public_portal",
+        "长江"
+      ],
+      "privacy": "PUBLIC",
+      "media_metadata": {
+        "editorial_slug": "g3",
+        "public_thumb_url": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+      }
+    }
+  ],
+  "retrospectives": [],
+  "workouts": []
+}

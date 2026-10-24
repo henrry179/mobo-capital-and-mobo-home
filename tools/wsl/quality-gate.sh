@@ -13,6 +13,11 @@ cd "$PROJECT_DIR" || exit 1
 
 C="docker compose -f docker-compose.yml -f docker-compose.wsl.yml --env-file .env.local"
 VENV="${MOBO_VENV:-/root/venv-mobo-cli}"
+# 日志落在项目内（已 gitignore）；项目目录不可写时退回到 mktemp。
+# 早期版本写死 /tmp/mobo_qgate_*.log，非 root 运行时会被 root 残留文件挡住，
+# 表现为"单测失败"的假象，故改为可写目录。
+GATE_LOG_DIR="$PROJECT_DIR/tools/wsl/logs"
+mkdir -p "$GATE_LOG_DIR" 2>/dev/null || GATE_LOG_DIR="$(mktemp -d)"
 GATE_ITEMS=()
 PASS=0; FAIL=0
 ck() {
@@ -29,6 +34,14 @@ mkdir -p services/console/data
 
 echo "############ Q0 仓库与权限 ############"
 git rev-parse --is-inside-work-tree >/dev/null 2>&1; ck "Q0 仓库可访问（safe.directory）" $?
+
+# 预检：CLI venv 是否可用。本地优先模式的 venv 默认在 /root/venv-mobo-cli（仅 root 可读），
+# 非 root 运行会表现为"单测失败"的假象，这里提前把话说清楚。
+if [ ! -x "$VENV/bin/python" ]; then
+  echo "    [!] 不可用的 CLI venv：$VENV"
+  echo "    [!] 请用 root 执行：wsl -u root -e bash -lc \"bash tools/wsl/quality-gate.sh\""
+  echo "    [!] 或用 MOBO_VENV=/path/to/venv 指定当前用户可读的 venv"
+fi
 
 echo
 echo "############ Q1 Shell 语法 ############"
@@ -87,13 +100,13 @@ echo "$out" | grep -q 'SMOKE TEST PASSED'; ck "Q7 smoke.sql 全绿" $?
 
 echo
 echo "############ Q8 CLI 单测 ############"
-(cd services/mobo-cli && "$VENV/bin/python" -m pytest tests -q >/tmp/mobo_qgate_cli.log 2>&1); rc=$?
-tail -2 /tmp/mobo_qgate_cli.log | sed 's/^/    /'; ck "Q8 mobo-cli 单测通过" $rc
+(cd services/mobo-cli && "$VENV/bin/python" -m pytest tests -q >"$GATE_LOG_DIR/mobo_qgate_cli.log" 2>&1); rc=$?
+tail -2 "$GATE_LOG_DIR/mobo_qgate_cli.log" | sed 's/^/    /'; ck "Q8 mobo-cli 单测通过" $rc
 
 echo
 echo "############ Q9 看板单测 ############"
-(cd services/archive-dashboard && "$VENV/bin/python" -m pytest tests -q >/tmp/mobo_qgate_dash.log 2>&1); rc=$?
-tail -2 /tmp/mobo_qgate_dash.log | sed 's/^/    /'; ck "Q9 archive-dashboard 单测通过" $rc
+(cd services/archive-dashboard && "$VENV/bin/python" -m pytest tests -q >"$GATE_LOG_DIR/mobo_qgate_dash.log" 2>&1); rc=$?
+tail -2 "$GATE_LOG_DIR/mobo_qgate_dash.log" | sed 's/^/    /'; ck "Q9 archive-dashboard 单测通过" $rc
 
 echo
 echo "############ Q10 网关入口与鉴权 ############"
@@ -119,8 +132,8 @@ echo "    /api/capital/data/public-data.json -> $c"
 
 echo
 echo "############ Q11 CLI 闭环与脱敏 ############"
-"$VENV/bin/mobo-cli" --env-file .env.local doctor >/tmp/mobo_qgate_doctor.log 2>&1; rc=$?
-grep -E '结果' /tmp/mobo_qgate_doctor.log | sed 's/^/    /'
+"$VENV/bin/mobo-cli" --env-file .env.local doctor >"$GATE_LOG_DIR/mobo_qgate_doctor.log" 2>&1; rc=$?
+grep -E '结果' "$GATE_LOG_DIR/mobo_qgate_doctor.log" | sed 's/^/    /'
 ck "Q11 doctor FAIL=0" $rc
 "$VENV/bin/mobo-cli" --env-file .env.local export-site --site all >/dev/null 2>&1; ck "Q11 export-site 产出数据包" $?
 pv=$(grep -c 'private_blotter_oss_key\|oss_object_key' sites/mobocapital/data/public-data.json 2>/dev/null | head -1)
@@ -142,11 +155,15 @@ bash -n deploy/backup/restore-drill.sh 2>/dev/null && bash -n deploy/backup/disa
 
 echo
 echo "############ Q14 文档链接 ############"
+# 原料仓（五大夹）是待迁移的**内容资产**，不是项目文档：占 4.4 万文件、含第三方仓库自带
+# 的历史 Markdown，扫它们的相对链接会产生上万条假断链。
+# 详见 docs/07-原始资料/内容原料仓深度整合与整理方案-v2.md（Phase P9）。
 node -e "
 const fs=require('fs'),path=require('path');
+const SKIP=['.git','node_modules','证据','01-工作与项目','hermes-migration','AIGC原稿','ITPM原稿内容','ReadingBooks'];
 let bad=0,n=0;
 (function walk(d){for(const e of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,e.name);
- if(e.isDirectory()){if(!['.git','node_modules','证据'].includes(e.name))walk(p);}
+ if(e.isDirectory()){if(!SKIP.includes(e.name))walk(p);}
  else if(e.name.endsWith('.md')){for(const m of fs.readFileSync(p,'utf8').matchAll(/\]\(([^)#][^)]*\.md)\)/g)){const t=path.resolve(path.dirname(p),m[1]);n++;if(!fs.existsSync(t)){console.log('    BROKEN '+p+' -> '+m[1]);bad++;}}}}})('.');
 console.log('    检查 '+n+' 条相对链接');
 process.exit(bad?1:0)"; ck "Q14 Markdown 相对链接 0 断链" $?
@@ -179,6 +196,34 @@ if git ls-files --error-unmatch services/console/data/credentials.local.json >/d
   ck "Q16 credentials.local.json 未入库" 1
 else
   ck "Q16 credentials.local.json 未入库" 0
+fi
+
+echo
+echo "############ Q17 看板四模块真数据 ############"
+$C cp tests/sql/dashboard-real-data.sql postgres:/tmp/dashboard-real-data.sql >/dev/null 2>&1
+dout=$($C exec -T postgres psql -U postgres -d db_archive -t -A -f /tmp/dashboard-real-data.sql 2>&1)
+echo "$dout" | grep -v '^$' | sed 's/^/    /'
+echo "$dout" | grep -q 'DASHBOARD REAL DATA OK'; ck "Q17 看板四模块数据源有真实行（非内存沙盒）" $?
+denv=$(docker exec archive-dashboard env 2>/dev/null | grep -c '^PG_PASS_ARCHIVE=' || true)
+echo "    archive-dashboard 注入 PG_PASS_ARCHIVE：${denv}"
+[ "${denv:-0}" -ge 1 ]; ck "Q17 看板容器已注入数据库凭据" $?
+
+echo
+echo "############ Q18 量化终端采集器与 Cron 接线 ############"
+"$VENV/bin/python" services/mobo-cli/collectors/macro_iv_collector.py --env-file .env.local --check >"$GATE_LOG_DIR/mobo_qgate_collector.log" 2>&1
+rc=$?
+tail -6 "$GATE_LOG_DIR/mobo_qgate_collector.log" | sed 's/^/    /'
+ck "Q18 采集器可连通 db_mobobrain（PG_* 口径正确）" $rc
+if command -v crontab >/dev/null 2>&1; then
+  if crontab -l 2>/dev/null | grep -q 'macro_iv_collector.py'; then
+    echo "    crontab 已包含 macro_iv_collector.py 条目"
+    ck "Q18 采集器已接本地 Cron" 0
+  else
+    echo "    缺失：请执行 bash tools/wsl/install-local-cron.sh"
+    ck "Q18 采集器已接本地 Cron" 1
+  fi
+else
+  echo "    WARN：本机无 crontab 命令，跳过 Cron 接线检查"
 fi
 
 echo

@@ -1,0 +1,643 @@
+{
+  "total": {
+    "files": 44819,
+    "bytes": 37765198120,
+    "gb": 35.172
+  },
+  "excluded": {
+    "files": 15060,
+    "bytes": 28399912067,
+    "gb": 26.449,
+    "reasons": [
+      {
+        "exclude_reason": "视频（排除）",
+        "files": 58,
+        "bytes": 16346055574,
+        "gb": 15.2235
+      },
+      {
+        "exclude_reason": "状态快照（排除）",
+        "files": 14536,
+        "bytes": 7086870642,
+        "gb": 6.6002
+      },
+      {
+        "exclude_reason": "Git（排除）",
+        "files": 453,
+        "bytes": 4761204466,
+        "gb": 4.4342
+      },
+      {
+        "exclude_reason": "音频（排除）",
+        "files": 13,
+        "bytes": 205781385,
+        "gb": 0.1916
+      }
+    ]
+  },
+  "local_only": {
+    "files": 13531,
+    "bytes": 4031005947,
+    "gb": 3.754,
+    "folders": [
+      {
+        "local_reason": "01-影视库（只读本地）",
+        "files": 12153,
+        "bytes": 3321208433,
+        "gb": 3.0931
+      },
+      {
+        "local_reason": "MoBoBrain 完整原件（只读本地）",
+        "files": 1378,
+        "bytes": 709797514,
+        "gb": 0.6611
+      }
+    ]
+  },
+  "sync": {
+    "files": 13541,
+    "bytes": 5297070744,
+    "gb": 4.933,
+    "categories": [
+      {
+        "category": "PDF",
+        "files": 279,
+        "bytes": 2478264186,
+        "gb": 2.3081
+      },
+      {
+        "category": "图片",
+        "files": 2440,
+        "bytes": 1411263913,
+        "gb": 1.3143
+      },
+      {
+        "category": "Word",
+        "files": 255,
+        "bytes": 687689590,
+        "gb": 0.6405
+      },
+      {
+        "category": "压缩包",
+        "files": 17,
+        "bytes": 477018709,
+        "gb": 0.4443
+      },
+      {
+        "category": "Markdown",
+        "files": 8844,
+        "bytes": 92479143,
+        "gb": 0.0861
+      },
+      {
+        "category": "字体",
+        "files": 5,
+        "bytes": 69757228,
+        "gb": 0.065
+      },
+      {
+        "category": "演示/表格",
+        "files": 75,
+        "bytes": 47802933,
+        "gb": 0.0445
+      },
+      {
+        "category": "代码/配置",
+        "files": 1230,
+        "bytes": 23471553,
+        "gb": 0.0219
+      },
+      {
+        "category": "其他",
+        "files": 294,
+        "bytes": 7348935,
+        "gb": 0.0068
+      },
+      {
+        "category": "文本",
+        "files": 102,
+        "bytes": 1974554,
+        "gb": 0.0018
+      }
+    ],
+    "p2": [
+      {
+        "p2": "01-工作与项目\\WorkFiles",
+        "files": 2010,
+        "bytes": 1756631603,
+        "gb": 1.636
+      },
+      {
+        "p2": "01-工作与项目\\AutopilotTradeBoMo",
+        "files": 239,
+        "bytes": 850794291,
+        "gb": 0.7924
+      },
+      {
+        "p2": "hermes-migration\\mobobrain-assets",
+        "files": 602,
+        "bytes": 673918073,
+        "gb": 0.6276
+      },
+      {
+        "p2": "01-工作与项目\\ITPM-PlayBooks",
+        "files": 100,
+        "bytes": 618599174,
+        "gb": 0.5761
+      },
+      {
+        "p2": "hermes-migration\\henrry-push",
+        "files": 10238,
+        "bytes": 574291885,
+        "gb": 0.5349
+      },
+      {
+        "p2": "ITPM原稿内容\\PTM2-20260320",
+        "files": 41,
+        "bytes": 470971455,
+        "gb": 0.4386
+      },
+      {
+        "p2": "ITPM原稿内容\\POTM2-20260320",
+        "files": 31,
+        "bytes": 303118976,
+        "gb": 0.2823
+      },
+      {
+        "p2": "ITPM原稿内容\\交易的真相-0420.pdf",
+        "files": 1,
+        "bytes": 10073854,
+        "gb": 0.0094
+      },
+      {
+        "p2": "ITPM原稿内容\\Trading of the Truth-交易的真相.docx",
+        "files": 1,
+        "bytes": 9394427,
+        "gb": 0.0087
+      },
+      {
+        "p2": "ITPM原稿内容\\中国连锁餐饮企业资本之路系列报告2025-终稿.pdf",
+        "files": 1,
+        "bytes": 5953206,
+        "gb": 0.0055
+      },
+      {
+        "p2": "ITPM原稿内容\\The5PrinciplesBehindThe10Secrets.docx",
+        "files": 1,
+        "bytes": 4807181,
+        "gb": 0.0045
+      },
+      {
+        "p2": "docs\\07-原始资料",
+        "files": 60,
+        "bytes": 4633754,
+        "gb": 0.0043
+      },
+      {
+        "p2": "ITPM原稿内容\\hudgefundsystemprompt-01.pdf",
+        "files": 1,
+        "bytes": 3558801,
+        "gb": 0.0033
+      },
+      {
+        "p2": "ITPM原稿内容\\财务管理的10个秘密-0420.pdf",
+        "files": 1,
+        "bytes": 2898002,
+        "gb": 0.0027
+      },
+      {
+        "p2": "ReadingBooks\\01.jpg",
+        "files": 1,
+        "bytes": 2354374,
+        "gb": 0.0022
+      },
+      {
+        "p2": "AIGC原稿\\分析与创作报告 — 《亿万》原型动漫短剧.pdf",
+        "files": 1,
+        "bytes": 853618,
+        "gb": 0.0008
+      },
+      {
+        "p2": "ITPM原稿内容\\48-中连协【2025】48号 关于公布2024年商业特许经营TOP300的通知-定稿.pdf",
+        "files": 1,
+        "bytes": 785644,
+        "gb": 0.0007
+      },
+      {
+        "p2": "ITPM原稿内容\\求职工具包完整版-0323.pdf",
+        "files": 1,
+        "bytes": 359388,
+        "gb": 0.0003
+      },
+      {
+        "p2": "AIGC原稿\\Billions_Anime_Adaptation_Strategy.pdf",
+        "files": 1,
+        "bytes": 345417,
+        "gb": 0.0003
+      },
+      {
+        "p2": "hermes-migration\\skills",
+        "files": 7,
+        "bytes": 308705,
+        "gb": 0.0003
+      },
+      {
+        "p2": "sites\\mobohome",
+        "files": 6,
+        "bytes": 299213,
+        "gb": 0.0003
+      },
+      {
+        "p2": "deploy\\scripts",
+        "files": 6,
+        "bytes": 187815,
+        "gb": 0.0002
+      },
+      {
+        "p2": "ITPM原稿内容\\个人简历-0323.pdf",
+        "files": 1,
+        "bytes": 157682,
+        "gb": 0.0001
+      },
+      {
+        "p2": "ReadingBooks\\02.png",
+        "files": 1,
+        "bytes": 148788,
+        "gb": 0.0001
+      },
+      {
+        "p2": "services\\mobo-cli",
+        "files": 30,
+        "bytes": 140955,
+        "gb": 0.0001
+      },
+      {
+        "p2": "docs\\00-总册",
+        "files": 5,
+        "bytes": 126161,
+        "gb": 0.0001
+      },
+      {
+        "p2": "sites\\mobocapital",
+        "files": 6,
+        "bytes": 118327,
+        "gb": 0.0001
+      },
+      {
+        "p2": "技术加速时代的青年未老先衰症候_政治哲学博士论文_扩写版.docx",
+        "files": 1,
+        "bytes": 115780,
+        "gb": 0.0001
+      },
+      {
+        "p2": "系统级提示词体系×实战内容范本全集.docx",
+        "files": 1,
+        "bytes": 89793,
+        "gb": 0.0001
+      },
+      {
+        "p2": "deploy\\postgres",
+        "files": 9,
+        "bytes": 84485,
+        "gb": 0.0001
+      },
+      {
+        "p2": "docs\\05-运维与灾备",
+        "files": 9,
+        "bytes": 82969,
+        "gb": 0.0001
+      },
+      {
+        "p2": "docs\\01-项目治理",
+        "files": 17,
+        "bytes": 77907,
+        "gb": 0.0001
+      },
+      {
+        "p2": "services\\console",
+        "files": 8,
+        "bytes": 65467,
+        "gb": 0.0001
+      },
+      {
+        "p2": "tools\\local-preview",
+        "files": 6,
+        "bytes": 64052,
+        "gb": 0.0001
+      },
+      {
+        "p2": "docs\\06-合规与成本",
+        "files": 6,
+        "bytes": 57908,
+        "gb": 0.0001
+      },
+      {
+        "p2": "docs\\04-数据库设计",
+        "files": 6,
+        "bytes": 56218,
+        "gb": 0.0001
+      },
+      {
+        "p2": "AIGC原稿\\Billions_Anime_Strategy_V3_终极版.docx",
+        "files": 1,
+        "bytes": 55726,
+        "gb": 0.0001
+      },
+      {
+        "p2": "AIGC原稿\\Billions_Anime_Strategy_50K-29页.docx",
+        "files": 1,
+        "bytes": 53564,
+        "gb": 0.0
+      },
+      {
+        "p2": "tools\\wsl",
+        "files": 12,
+        "bytes": 47069,
+        "gb": 0.0
+      },
+      {
+        "p2": "AxeCapital_BotArmy_RoleHandbook.docx",
+        "files": 1,
+        "bytes": 37779,
+        "gb": 0.0
+      },
+      {
+        "p2": "services\\archive-dashboard",
+        "files": 11,
+        "bytes": 34570,
+        "gb": 0.0
+      },
+      {
+        "p2": "docs\\03-架构设计",
+        "files": 6,
+        "bytes": 31695,
+        "gb": 0.0
+      },
+      {
+        "p2": "AIGC原稿\\OpenClaw完整部署方案-简历更新版-0321.docx",
+        "files": 1,
+        "bytes": 31236,
+        "gb": 0.0
+      },
+      {
+        "p2": "tools\\doc-builder",
+        "files": 1,
+        "bytes": 27925,
+        "gb": 0.0
+      },
+      {
+        "p2": "deploy\\backup",
+        "files": 5,
+        "bytes": 22795,
+        "gb": 0.0
+      },
+      {
+        "p2": "ITPM原稿内容\\hedge_fund_system_prompt.md",
+        "files": 1,
+        "bytes": 18973,
+        "gb": 0.0
+      },
+      {
+        "p2": "docs\\02-需求与验收",
+        "files": 4,
+        "bytes": 18394,
+        "gb": 0.0
+      },
+      {
+        "p2": "高智商群体认知模式深度分析报告.docx",
+        "files": 1,
+        "bytes": 17151,
+        "gb": 0.0
+      },
+      {
+        "p2": "seeds\\52-week-sandbox.sql",
+        "files": 1,
+        "bytes": 16626,
+        "gb": 0.0
+      },
+      {
+        "p2": "README.md",
+        "files": 1,
+        "bytes": 13023,
+        "gb": 0.0
+      },
+      {
+        "p2": "workflows\\workflow-03-mobocapital-1plus3.template.json",
+        "files": 1,
+        "bytes": 12217,
+        "gb": 0.0
+      },
+      {
+        "p2": "docker-compose.yml",
+        "files": 1,
+        "bytes": 11488,
+        "gb": 0.0
+      },
+      {
+        "p2": "AIGC原稿\\generate_trends_video.py",
+        "files": 1,
+        "bytes": 11443,
+        "gb": 0.0
+      },
+      {
+        "p2": "deploy\\caddy",
+        "files": 2,
+        "bytes": 9823,
+        "gb": 0.0
+      },
+      {
+        "p2": "tests\\sql",
+        "files": 2,
+        "bytes": 9575,
+        "gb": 0.0
+      },
+      {
+        "p2": "TASK_STATE.md",
+        "files": 1,
+        "bytes": 9547,
+        "gb": 0.0
+      },
+      {
+        "p2": "workflows\\workflow-02-score-to-draft.template.json",
+        "files": 1,
+        "bytes": 5948,
+        "gb": 0.0
+      },
+      {
+        "p2": "CLAUDE.md",
+        "files": 1,
+        "bytes": 5824,
+        "gb": 0.0
+      },
+      {
+        "p2": ".env.example",
+        "files": 1,
+        "bytes": 5246,
+        "gb": 0.0
+      },
+      {
+        "p2": "AIGC原稿\\.codebuddy",
+        "files": 2,
+        "bytes": 4449,
+        "gb": 0.0
+      },
+      {
+        "p2": "workflows\\workflow-01-rss-to-vault.template.json",
+        "files": 1,
+        "bytes": 4065,
+        "gb": 0.0
+      },
+      {
+        "p2": "migrations\\apply.sh",
+        "files": 1,
+        "bytes": 3361,
+        "gb": 0.0
+      },
+      {
+        "p2": "workflows\\README.md",
+        "files": 1,
+        "bytes": 3359,
+        "gb": 0.0
+      },
+      {
+        "p2": ".env.local",
+        "files": 1,
+        "bytes": 3293,
+        "gb": 0.0
+      },
+      {
+        "p2": "docker-compose.wsl.yml",
+        "files": 1,
+        "bytes": 2641,
+        "gb": 0.0
+      },
+      {
+        "p2": "workflows\\prompts",
+        "files": 1,
+        "bytes": 2248,
+        "gb": 0.0
+      },
+      {
+        "p2": ".gitignore",
+        "files": 1,
+        "bytes": 2162,
+        "gb": 0.0
+      },
+      {
+        "p2": "migrations\\README.md",
+        "files": 1,
+        "bytes": 2107,
+        "gb": 0.0
+      },
+      {
+        "p2": "AIGC原稿\\README.md",
+        "files": 1,
+        "bytes": 1890,
+        "gb": 0.0
+      },
+      {
+        "p2": "tests\\README.md",
+        "files": 1,
+        "bytes": 1807,
+        "gb": 0.0
+      },
+      {
+        "p2": "docker-compose.local.yml",
+        "files": 1,
+        "bytes": 1531,
+        "gb": 0.0
+      },
+      {
+        "p2": "migrations\\202610210001__grant_n8n_create_on_database.sql",
+        "files": 1,
+        "bytes": 991,
+        "gb": 0.0
+      },
+      {
+        "p2": "workflows\\nodes",
+        "files": 1,
+        "bytes": 967,
+        "gb": 0.0
+      },
+      {
+        "p2": "seeds\\README.md",
+        "files": 1,
+        "bytes": 910,
+        "gb": 0.0
+      },
+      {
+        "p2": "AIGC原稿\\language_data.csv",
+        "files": 1,
+        "bytes": 820,
+        "gb": 0.0
+      },
+      {
+        "p2": "migrations\\202610200001__schema_migrations.sql",
+        "files": 1,
+        "bytes": 664,
+        "gb": 0.0
+      },
+      {
+        "p2": "workflows\\wechat-draft-push.template.json",
+        "files": 1,
+        "bytes": 494,
+        "gb": 0.0
+      },
+      {
+        "p2": "deploy\\volumes",
+        "files": 7,
+        "bytes": 0,
+        "gb": 0.0
+      }
+    ],
+    "text": {
+      "files": 9555,
+      "gb": 3.081,
+      "categories": [
+        {
+          "category": "PDF",
+          "files": 279,
+          "bytes": 2478264186,
+          "gb": 2.3081
+        },
+        {
+          "category": "Word",
+          "files": 255,
+          "bytes": 687689590,
+          "gb": 0.6405
+        },
+        {
+          "category": "Markdown",
+          "files": 8844,
+          "bytes": 92479143,
+          "gb": 0.0861
+        },
+        {
+          "category": "演示/表格",
+          "files": 75,
+          "bytes": 47802933,
+          "gb": 0.0445
+        },
+        {
+          "category": "文本",
+          "files": 102,
+          "bytes": 1974554,
+          "gb": 0.0018
+        }
+      ]
+    },
+    "images": {
+      "files": 2440,
+      "gb": 1.314
+    },
+    "other": {
+      "files": 1546,
+      "gb": 0.538
+    }
+  },
+  "cleanup": {
+    "files": 2687,
+    "bytes": 37209362,
+    "gb": 0.035
+  }
+}

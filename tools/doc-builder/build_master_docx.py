@@ -40,6 +40,16 @@ HEX_QUOTE_BG = "FEFCE8"                      # 引用提示框暖黄底色
 HEX_BORDER_GRAY = "CBD5E1"                   # 表格与容器边框灰
 HEX_GOLD_LINE = "C5A059"                     # 标题底部金线
 
+# --- 封面/页眉文案（可用命令行覆盖，使本工具可渲染任意 Markdown 文档）-----
+DOC_TAG = "ARCHITECTURE & FULL-STACK ENGINEERING MANUAL · V2.1"
+DOC_TITLE = "莫伯双站系统全栈架构与部署总册"
+DOC_SUBTITLE = (
+    "MoBoCapital.com（莫伯资本投研智库与对冲基金孵化平台）\n"
+    "MoBoHome.com（莫伯之家个人主权生命数字档案馆）"
+)
+HEADER_TEXT = "MO BO CAPITAL & MO BO HOME  |  莫伯双站系统全栈架构与部署总册 (v2.1)"
+COVER_META_ROWS: list[tuple[str, str]] = []   # 非空时覆盖默认封面元数据卡
+
 
 # ============================================================================
 # 2. 底层 OXML 样式与中文字体绑定工具函数
@@ -138,7 +148,7 @@ def setup_page_layout_and_header_footer(doc):
         header = section.header
         hp = header.paragraphs[0]
         hp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        hrun = hp.add_run("MO BO CAPITAL & MO BO HOME  |  莫伯双站系统全栈架构与部署总册 (v2.1)")
+        hrun = hp.add_run(HEADER_TEXT)
         set_run_font(hrun, size_pt=8.5, color=COLOR_TEXT_MUTED)
 
         # 页脚
@@ -156,27 +166,24 @@ def build_cover_page(doc):
 
     p_tag = doc.add_paragraph()
     p_tag.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    r_tag = p_tag.add_run("ARCHITECTURE & FULL-STACK ENGINEERING MANUAL · V2.1")
+    r_tag = p_tag.add_run(DOC_TAG)
     set_run_font(r_tag, ascii_font="Consolas", size_pt=10, bold=True, color=COLOR_GOLD_ACCENT)
 
     p_title = doc.add_paragraph()
     p_title.paragraph_format.space_before = Pt(12)
     p_title.paragraph_format.space_after = Pt(8)
-    r_title = p_title.add_run("莫伯双站系统全栈架构与部署总册")
+    r_title = p_title.add_run(DOC_TITLE)
     set_run_font(r_title, size_pt=26, bold=True, color=COLOR_NAVY_DARK)
     add_bottom_border_to_paragraph(p_title, color_hex=HEX_GOLD_LINE, sz="18")
 
     p_sub = doc.add_paragraph()
     p_sub.paragraph_format.space_before = Pt(8)
     p_sub.paragraph_format.space_after = Pt(28)
-    r_sub = p_sub.add_run(
-        "MoBoCapital.com（莫伯资本投研智库与对冲基金孵化平台）\n"
-        "MoBoHome.com（莫伯之家个人主权生命数字档案馆）"
-    )
+    r_sub = p_sub.add_run(DOC_SUBTITLE)
     set_run_font(r_sub, size_pt=13, bold=True, color=COLOR_NAVY_MED)
 
     # 封面核心元数据卡片表
-    meta_rows = [
+    meta_rows = COVER_META_ROWS or [
         ("文档编号", "MOBO-DUAL-STACK-MASTER-V2.1 (定稿版)"),
         ("核心计算底座", "阿里云 2核4G ECS (Ubuntu 24.04 LTS) + 4GB Swap + 6 容器硬限流 (常驻约 1.46GB)"),
         ("数据库隔离内核", "PostgreSQL 16 (pgvector) 单实例双库隔离：db_mobobrain & db_archive"),
@@ -539,6 +546,9 @@ def assemble_markdown_from_stack_dir(stack_dir: Path) -> str:
 # 8. 主程序入口
 # ============================================================================
 def main():
+    # 封面/页眉文案覆盖（模块级变量被 build_cover_page / setup_page_layout 读取）
+    global DOC_TAG, DOC_TITLE, DOC_SUBTITLE, HEADER_TEXT, COVER_META_ROWS
+
     parser = argparse.ArgumentParser(
         description="无需 Pandoc，直接将莫伯双站系统总册渲染为机构级 Word (.docx) 文档"
     )
@@ -566,9 +576,52 @@ def main():
         const="/opt/mobo-stack",
         help="直接扫描 /opt/mobo-stack 目录下的实盘代码与配置文件自动组装生成 Word 总册",
     )
+    parser.add_argument(
+        "--doc-tag",
+        type=str,
+        default=DOC_TAG,
+        help="封面左上角的小标签文字",
+    )
+    parser.add_argument(
+        "--doc-title",
+        type=str,
+        default=DOC_TITLE,
+        help="封面主标题",
+    )
+    parser.add_argument(
+        "--doc-subtitle",
+        type=str,
+        default=DOC_SUBTITLE,
+        help="封面副标题（可用 \\n 分行）",
+    )
+    parser.add_argument(
+        "--header-text",
+        type=str,
+        default=HEADER_TEXT,
+        help="页眉文字",
+    )
+    parser.add_argument(
+        "--cover-meta",
+        action="append",
+        default=[],
+        metavar="KEY=VALUE",
+        help="封面元数据卡行，可重复；给了就替换默认卡片",
+    )
 
     args = parser.parse_args()
     md_content = ""
+
+    DOC_TAG = args.doc_tag
+    DOC_TITLE = args.doc_title
+    DOC_SUBTITLE = args.doc_subtitle.replace("\\n", "\n")
+    HEADER_TEXT = args.header_text
+    COVER_META_ROWS = []
+    for item in args.cover_meta:
+        if "=" in item:
+            k, v = item.split("=", 1)
+            COVER_META_ROWS.append((k.strip(), v.strip()))
+        else:
+            print(f"⚠️ 忽略格式不合法的 --cover-meta：{item}")
 
     if args.from_clipboard:
         try:

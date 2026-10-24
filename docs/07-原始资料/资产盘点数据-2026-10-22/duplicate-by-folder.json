@@ -1,0 +1,66 @@
+{
+  "by_top": [
+    {
+      "path": "01-工作与项目",
+      "files": 303,
+      "bytes": 1642550699,
+      "gb": 1.53
+    },
+    {
+      "path": "hermes-migration",
+      "files": 13049,
+      "bytes": 990050201,
+      "gb": 0.922
+    },
+    {
+      "path": "docs",
+      "files": 1,
+      "bytes": 43396,
+      "gb": 0.0
+    },
+    {
+      "path": ".git",
+      "files": 1,
+      "bytes": 3315,
+      "gb": 0.0
+    }
+  ],
+  "by_p2": [
+    {
+      "path": "hermes-migration\\henrry-push",
+      "files": 13049,
+      "bytes": 990050201,
+      "gb": 0.922
+    },
+    {
+      "path": "01-工作与项目\\AutopilotTradeBoMo",
+      "files": 97,
+      "bytes": 832914464,
+      "gb": 0.776
+    },
+    {
+      "path": "01-工作与项目\\WorkFiles",
+      "files": 162,
+      "bytes": 795402895,
+      "gb": 0.741
+    },
+    {
+      "path": "01-工作与项目\\ITPM-PlayBooks",
+      "files": 44,
+      "bytes": 14233340,
+      "gb": 0.013
+    },
+    {
+      "path": "docs\\07-原始资料",
+      "files": 1,
+      "bytes": 43396,
+      "gb": 0.0
+    },
+    {
+      "path": ".git\\logs",
+      "files": 1,
+      "bytes": 3315,
+      "gb": 0.0
+    }
+  ]
+}

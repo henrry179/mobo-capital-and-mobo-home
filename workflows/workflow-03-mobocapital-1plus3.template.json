@@ -111,6 +111,7 @@
       },
       "id": "c3d4e5f6-0003-4000-8000-000000000007",
       "name": "Webhook_发布",
+      "disabled": true,
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [200, 560],

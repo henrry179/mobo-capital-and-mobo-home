@@ -1,0 +1,92 @@
+﻿package,p2,files,bytes,gb
+00-清理/临时,hermes-migration\henrry-push,3023,55910917,0.0521
+00-清理/临时,01-工作与项目\WorkFiles,27,350391,0.0003
+00-清理/临时,01-工作与项目\ITPM-PlayBooks,63,258048,0.0002
+00-清理/临时,services\mobo-cli,17,253792,0.0002
+00-清理/临时,services\archive-dashboard,2,35107,0.0
+00-清理/临时,~$加速时代的青年未老先衰症候_政治哲学博士论文_扩写版.docx,1,162,0.0
+00-清理/临时,~$商群体认知模式深度分析报告.docx,1,162,0.0
+90-工程仓（Git 部署）,docs\07-原始资料,31,609658,0.0006
+90-工程仓（Git 部署）,sites\mobohome,6,299213,0.0003
+90-工程仓（Git 部署）,deploy\scripts,6,187815,0.0002
+90-工程仓（Git 部署）,services\mobo-cli,30,140955,0.0001
+90-工程仓（Git 部署）,docs\00-总册,5,126161,0.0001
+90-工程仓（Git 部署）,sites\mobocapital,6,118327,0.0001
+90-工程仓（Git 部署）,deploy\postgres,9,84485,0.0001
+90-工程仓（Git 部署）,docs\05-运维与灾备,9,82969,0.0001
+90-工程仓（Git 部署）,docs\01-项目治理,17,77907,0.0001
+90-工程仓（Git 部署）,services\console,8,65467,0.0001
+90-工程仓（Git 部署）,tools\local-preview,6,64052,0.0001
+90-工程仓（Git 部署）,docs\06-合规与成本,6,57908,0.0001
+90-工程仓（Git 部署）,docs\04-数据库设计,6,56218,0.0001
+90-工程仓（Git 部署）,tools\wsl,12,47069,0.0
+90-工程仓（Git 部署）,services\archive-dashboard,11,34570,0.0
+90-工程仓（Git 部署）,docs\03-架构设计,6,31695,0.0
+90-工程仓（Git 部署）,tools\doc-builder,1,27925,0.0
+90-工程仓（Git 部署）,deploy\backup,5,22795,0.0
+90-工程仓（Git 部署）,docs\02-需求与验收,4,18394,0.0
+90-工程仓（Git 部署）,seeds\52-week-sandbox.sql,1,16626,0.0
+90-工程仓（Git 部署）,README.md,1,13023,0.0
+90-工程仓（Git 部署）,workflows\workflow-03-mobocapital-1plus3.template.json,1,12217,0.0
+90-工程仓（Git 部署）,docker-compose.yml,1,11488,0.0
+90-工程仓（Git 部署）,deploy\caddy,2,9823,0.0
+90-工程仓（Git 部署）,tests\sql,2,9575,0.0
+90-工程仓（Git 部署）,TASK_STATE.md,1,9253,0.0
+90-工程仓（Git 部署）,workflows\workflow-02-score-to-draft.template.json,1,5948,0.0
+90-工程仓（Git 部署）,CLAUDE.md,1,5824,0.0
+90-工程仓（Git 部署）,.env.example,1,5246,0.0
+90-工程仓（Git 部署）,workflows\workflow-01-rss-to-vault.template.json,1,4065,0.0
+90-工程仓（Git 部署）,migrations\apply.sh,1,3361,0.0
+90-工程仓（Git 部署）,workflows\README.md,1,3359,0.0
+90-工程仓（Git 部署）,.env.local,1,3293,0.0
+90-工程仓（Git 部署）,docker-compose.wsl.yml,1,2641,0.0
+90-工程仓（Git 部署）,workflows\prompts,1,2248,0.0
+90-工程仓（Git 部署）,.gitignore,1,2162,0.0
+90-工程仓（Git 部署）,migrations\README.md,1,2107,0.0
+90-工程仓（Git 部署）,tests\README.md,1,1807,0.0
+90-工程仓（Git 部署）,docker-compose.local.yml,1,1531,0.0
+90-工程仓（Git 部署）,migrations\202610210001__grant_n8n_create_on_database.sql,1,991,0.0
+90-工程仓（Git 部署）,workflows\nodes,1,967,0.0
+90-工程仓（Git 部署）,seeds\README.md,1,910,0.0
+90-工程仓（Git 部署）,migrations\202610200001__schema_migrations.sql,1,664,0.0
+90-工程仓（Git 部署）,workflows\wechat-draft-push.template.json,1,494,0.0
+90-工程仓（Git 部署）,deploy\volumes,7,0,0.0
+99-原始归档（不上服务器）,01-工作与项目\WorkFiles,1794,1687921988,1.572
+99-原始归档（不上服务器）,01-工作与项目\AutopilotTradeBoMo,113,842032182,0.7842
+99-原始归档（不上服务器）,01-工作与项目\ITPM-PlayBooks,100,618599174,0.5761
+99-原始归档（不上服务器）,ITPM原稿内容\PTM2-20260320,41,470971455,0.4386
+99-原始归档（不上服务器）,ITPM原稿内容\POTM2-20260320,31,303118976,0.2823
+99-原始归档（不上服务器）,ITPM原稿内容\交易的真相-0420.pdf,1,10073854,0.0094
+99-原始归档（不上服务器）,ITPM原稿内容\Trading of the Truth-交易的真相.docx,1,9394427,0.0087
+99-原始归档（不上服务器）,ITPM原稿内容\中国连锁餐饮企业资本之路系列报告2025-终稿.pdf,1,5953206,0.0055
+99-原始归档（不上服务器）,ITPM原稿内容\The5PrinciplesBehindThe10Secrets.docx,1,4807181,0.0045
+99-原始归档（不上服务器）,ITPM原稿内容\hudgefundsystemprompt-01.pdf,1,3558801,0.0033
+99-原始归档（不上服务器）,ITPM原稿内容\财务管理的10个秘密-0420.pdf,1,2898002,0.0027
+99-原始归档（不上服务器）,ITPM原稿内容\48-中连协【2025】48号 关于公布2024年商业特许经营TOP300的通知-定稿.pdf,1,785644,0.0007
+99-原始归档（不上服务器）,ITPM原稿内容\求职工具包完整版-0323.pdf,1,359388,0.0003
+99-原始归档（不上服务器）,ITPM原稿内容\个人简历-0323.pdf,1,157682,0.0001
+99-原始归档（不上服务器）,技术加速时代的青年未老先衰症候_政治哲学博士论文_扩写版.docx,1,115780,0.0001
+99-原始归档（不上服务器）,系统级提示词体系×实战内容范本全集.docx,1,89793,0.0001
+99-原始归档（不上服务器）,AxeCapital_BotArmy_RoleHandbook.docx,1,37779,0.0
+99-原始归档（不上服务器）,ITPM原稿内容\hedge_fund_system_prompt.md,1,18973,0.0
+99-原始归档（不上服务器）,高智商群体认知模式深度分析报告.docx,1,17151,0.0
+A-internal,hermes-migration\henrry-push,1789,589376906,0.5489
+A-internal,hermes-migration\mobobrain-assets,5,69757228,0.065
+A-internal,01-工作与项目\AutopilotTradeBoMo,72,8415202,0.0078
+A-internal,AIGC原稿\分析与创作报告 — 《亿万》原型动漫短剧.pdf,1,853618,0.0008
+A-internal,AIGC原稿\Billions_Anime_Adaptation_Strategy.pdf,1,345417,0.0003
+A-internal,hermes-migration\skills,7,308705,0.0003
+A-internal,AIGC原稿\Billions_Anime_Strategy_V3_终极版.docx,1,55726,0.0001
+A-internal,AIGC原稿\Billions_Anime_Strategy_50K-29页.docx,1,53564,0.0
+A-internal,AIGC原稿\OpenClaw完整部署方案-简历更新版-0321.docx,1,31236,0.0
+A-internal,AIGC原稿\generate_trends_video.py,1,11443,0.0
+A-internal,AIGC原稿\.codebuddy,2,4449,0.0
+A-internal,AIGC原稿\README.md,1,1890,0.0
+A-internal,AIGC原稿\language_data.csv,1,820,0.0
+A-public,hermes-migration\mobobrain-assets,597,604160845,0.5627
+A-public,hermes-migration\henrry-push,490,154802812,0.1442
+A-public,01-工作与项目\AutopilotTradeBoMo,54,346907,0.0003
+B-private,01-工作与项目\WorkFiles,216,68709615,0.064
+B-public,ReadingBooks\01.jpg,1,2354374,0.0022
+B-public,ReadingBooks\02.png,1,148788,0.0001
+People-archive,hermes-migration\henrry-push,21064,3856006570,3.5912

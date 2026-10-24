@@ -58,9 +58,16 @@ def test_public_capital_payload_is_clean() -> None:
                 {"thesis_code": "T2", "visibility": "INTERNAL"}],
         trades=[{"trade_code": "X1", "visibility": "PUBLIC",
                  "private_blotter_oss_key": "blotters/a.pdf"}],
+        milestones=[{"milestone_title": "M1", "visibility": "PUBLIC"},
+                    {"milestone_title": "M2", "visibility": "INTERNAL"}],
+        governance_docs=[{"doc_slug": "g1", "visibility": "LP_PROSPECT",
+                          "private_attachment_oss_key": "private/x.pdf"}],
     )
     assert len(payload["macro_theses"]) == 1
     assert "private_blotter_oss_key" not in payload["trade_reviews"][0]
+    assert len(payload["fund_incubation_milestones"]) == 1
+    assert len(payload["fund_governance_docs"]) == 1
+    assert "private_attachment_oss_key" not in payload["fund_governance_docs"][0]
     assert audit_payload(payload)["ok"] is True
 
 

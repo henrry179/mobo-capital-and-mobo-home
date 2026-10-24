@@ -204,22 +204,8 @@ COMPLETED → READING（触发器删除旧时间线节点）
 
 ## 10. 视图
 
-### `archive.v_weekly_life_analytics`
-
-近 52 周（周一开始）聚合：阅读时长/页数、训练次数/时长/跑量/力量容量、睡眠/静息心率/体重、复盘次数/执行分。看板主数据源。
-
-- 周起始：`date_trunc('week', ...)::date`。
-- `reading_hours = SUM(duration_minutes)/60`。
-- `strength_tonnage = SUM(total_volume_kg)/1000`。
-- 空周补 0；生理指标无记录则为 `NULL`（不要当 0 处理）。
-
-### `archive.v_asset_storage_summary`
-
-按 `current_tier`、`asset_category` 汇总资产数量与容量；只统计 `deleted_at IS NULL`。
-
-### `archive.v_recent_timeline`
-
-近 90 天时间线，按 `occurred_at DESC`，供看板/操作台快速读取。
+业务含义：周度生命体征（看板主数据源）、资产分层容量、近 90 天时间线。  
+**聚合逻辑与用法**见 [`触发器与视图.md`](触发器与视图.md) §3 前三节（`v_weekly_life_analytics` / `v_asset_storage_summary` / `v_recent_timeline`）。DDL 以 `02-archive-schema.sql` 为准。
 
 ## 11. 数据质量检查
 

@@ -86,6 +86,8 @@ def build_public_capital_payload(
     trades: Sequence[Mapping[str, Any]] = (),
     publications: Sequence[Mapping[str, Any]] = (),
     metrics: Sequence[Mapping[str, Any]] = (),
+    milestones: Sequence[Mapping[str, Any]] = (),
+    governance_docs: Sequence[Mapping[str, Any]] = (),
     terminal: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """构造莫伯资本公域数据包（PUBLIC + LP_PROSPECT）。"""
@@ -95,6 +97,8 @@ def build_public_capital_payload(
         "trade_reviews": filter_visibility(trades),
         "publications": filter_visibility(publications),
         "media_metrics": list(metrics),
+        "fund_incubation_milestones": filter_visibility(milestones),
+        "fund_governance_docs": filter_visibility(governance_docs),
     }
     if terminal is not None:
         payload["terminal"] = strip_private_fields(terminal)
@@ -124,6 +128,8 @@ def build_internal_capital_payload(
     trades: Sequence[Mapping[str, Any]] = (),
     publications: Sequence[Mapping[str, Any]] = (),
     metrics: Sequence[Mapping[str, Any]] = (),
+    milestones: Sequence[Mapping[str, Any]] = (),
+    governance_docs: Sequence[Mapping[str, Any]] = (),
 ) -> dict[str, Any]:
     """构造内网驾驶舱数据包：保留全量字段（含私有 OSS Key），仅受 BasicAuth 保护。"""
     return {
@@ -132,6 +138,8 @@ def build_internal_capital_payload(
         "trade_reviews": [dict(r) for r in trades],
         "publications": [dict(r) for r in publications],
         "media_metrics": [dict(r) for r in metrics],
+        "fund_incubation_milestones": [dict(r) for r in milestones],
+        "fund_governance_docs": [dict(r) for r in governance_docs],
     }
 
 

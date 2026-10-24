@@ -9,12 +9,25 @@
 (function () {
   'use strict';
 
-  var API = {
-    capital: '/api/capital/data/public-data.json',
-    terminal: '/api/capital/data/terminal-snapshot.json',
-    home: '/api/home/data/public-home-data.json',
-    status: '/data/status.json'
-  };
+  /** 本机 Caddy 用绝对同源路径；GitHub Pages 用相对路径指向仓库内公域 JSON */
+  function resolveAPI() {
+    var pages = /\.github\.io$/i.test(location.hostname);
+    if (pages) {
+      return {
+        capital: '../../sites/mobocapital/data/public-data.json',
+        terminal: '../../sites/mobocapital/data/terminal-snapshot.json',
+        home: '../../sites/mobohome/data/public-home-data.json',
+        status: './data/status.json'
+      };
+    }
+    return {
+      capital: '/api/capital/data/public-data.json',
+      terminal: '/api/capital/data/terminal-snapshot.json',
+      home: '/api/home/data/public-home-data.json',
+      status: '/data/status.json'
+    };
+  }
+  var API = resolveAPI();
 
   var state = { clearance: 'PUBLIC', data: {}, status: null, errors: [] };
 
@@ -95,6 +108,17 @@
   /** 兜底：没有 status.json 时，按当前域名推导同族入口（保证卡片始终是真链接） */
   function deriveServices() {
     var host = location.hostname || 'localhost';
+    if (/\.github\.io$/i.test(host)) {
+      var root = location.pathname.replace(/\/services\/console\/?.*$/, '/');
+      return [
+        { name: '莫伯资本 主站', url: root + 'sites/mobocapital/', auth: '公开', code: 200 },
+        { name: '莫伯之家 主站', url: root + 'sites/mobohome/', auth: '公开', code: 200 },
+        { name: '思源 知识库', url: '#', auth: '仓外', code: null },
+        { name: 'n8n 自动化', url: '#', auth: '仓外', code: null },
+        { name: '生命体征 实验室', url: '#', auth: '仓外', code: null },
+        { name: '莫伯系统 控制台', url: root + 'services/console/', auth: '公开', code: 200 }
+      ];
+    }
     var parts = host.split('.');
     var isLocal = host === 'localhost' || /\.localhost$/.test(host) || host === '127.0.0.1';
     var base = isLocal ? 'localhost' : parts.slice(-2).join('.');
@@ -398,7 +422,7 @@
 
   // ---------------------------------------------------------------- 凭据提示
   function renderCredentials() {
-    fetchJSON('/data/credentials.local.json').then(function (c) {
+    fetchJSON('./data/credentials.local.json').then(function (c) {
       if (!c || !c.layers) return;
       var html = '<div class="panel-head" style="margin:10px 0 6px"><span class="muted mono" style="font-size:11px">本地开发凭据（仅本地模式）</span></div>';
       html += '<table class="t"><thead><tr><th>层</th><th>在哪里输</th><th>用户名</th><th>密码 / 码</th></tr></thead><tbody>' +

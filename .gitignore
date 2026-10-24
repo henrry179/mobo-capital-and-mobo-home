@@ -8,12 +8,24 @@ mobo-stack.env
 *.crt
 secrets/
 
-# --- 控制台运行时数据（由 collect-status.sh / quality-gate.sh 生成）-------------
-services/console/data/*.json
+# --- 内容原料仓（体量 30GB+，含课件视频/剧照/Hermes 备份；仅本地/OSS，勿入 Git）---
+# 盘点与归库地图见 docs/07-原始资料/内容资产盘点与归库映射-2026-10-21.md
+01-工作与项目/
+hermes-migration/
+ITPM原稿内容/
+AIGC原稿/
+ReadingBooks/
+content-staging/
+AxeCapital_BotArmy_RoleHandbook.docx
+技术加速时代的青年未老先衰症候_政治哲学博士论文_扩写版.docx
+系统级提示词体系×实战内容范本全集.docx
+高智商群体认知模式深度分析报告.docx
+
+# --- 控制台运行时数据 -------------------------------------------------------
+# credentials 永不入库；status/gate 入库供 GitHub Pages 演示（本地重跑可能脏工作区）
 services/console/data/credentials.local.json
 
-# --- 静态站点生成产物（由 CLI 导出，勿入库）--------------------------------
-sites/*/data/*.json
+# --- 静态站点：公域 data 入库（Pages 可打开）；内域 JSON 不入库 --------------
 sites/*/internal/*.json
 
 # --- 运行时数据卷 -----------------------------------------------------------
@@ -51,6 +63,7 @@ public/build/
 *.zip
 tmp/
 temp/
+tools/wsl/logs/
 .DS_Store
 Thumbs.db
 desktop.ini
