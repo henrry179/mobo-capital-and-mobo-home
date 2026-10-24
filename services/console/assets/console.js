@@ -481,7 +481,22 @@
     });
   }
 
+  var docsPaneApi = null;
+
   function openRepoDoc(title, path, type) {
+    if (docsPaneApi && path) {
+      var idMap = {
+        'docs/01-项目治理/开发部署任务执行时间线.md': 'timeline',
+        'docs/00-总册/莫伯双站系统全栈架构与部署总册-v2.1.md': 'zongce'
+      };
+      var id = idMap[path];
+      if (id) {
+        docsPaneApi.openDoc(id);
+        var root = $('docs-pane-root');
+        if (root) root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    }
     if (!window.MoBoDocViewer) return;
     MoBoDocViewer.openFile({
       title: title,
@@ -491,37 +506,23 @@
     });
   }
 
-  function renderDocsInline() {
-    var el = $('docs-inline');
-    if (!el) return;
-    fetch('../../sites/docs-portal/catalog.json', { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('catalog')); })
-      .then(function (cat) {
-        var html = '';
-        (cat.groups || []).forEach(function (g) {
-          html += '<div class="docs-group"><div class="docs-group-title">' + esc(g.title) + '</div><div class="docs-links">';
-          (g.items || []).forEach(function (it) {
-            html += '<button type="button" class="doc-chip" data-path="' + esc(it.path) + '" data-type="' + esc(it.type || 'md') + '" data-title="' + esc(it.title) + '">' +
-              esc(it.title) + (it.badge ? ' · ' + esc(it.badge) : '') + '</button>';
-          });
-          html += '</div></div>';
-        });
-        el.innerHTML = html;
-        Array.prototype.forEach.call(el.querySelectorAll('.doc-chip'), function (btn) {
-          btn.addEventListener('click', function () {
-            openRepoDoc(btn.getAttribute('data-title'), btn.getAttribute('data-path'), btn.getAttribute('data-type'));
-          });
-        });
-      })
-      .catch(function () {
-        el.innerHTML = '<div class="empty">文档目录加载失败；仍可用页脚快捷打开总册 / 时间线。</div>';
-      });
+  function mountDocsPane() {
+    var el = $('docs-pane-root');
+    if (!el || !window.MoBoDocsPane) return;
+    MoBoDocsPane.mount(el, {
+      catalogUrl: '../../sites/docs-portal/catalog.json',
+      repoBase: '../../',
+      defaultId: 'zongce',
+      height: '70vh'
+    }).then(function (api) {
+      docsPaneApi = api;
+    });
   }
 
   document.addEventListener('DOMContentLoaded', function () {
     bindTop();
     renderActions();
-    renderDocsInline();
+    mountDocsPane();
     var tl = $('open-doc-timeline');
     var zc = $('open-doc-zongce');
     if (tl) tl.addEventListener('click', function (e) {

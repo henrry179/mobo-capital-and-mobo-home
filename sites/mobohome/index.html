@@ -127,6 +127,7 @@
         <button onclick="switchSection('gallery')" id="nav-gallery" class="nav-tab px-3.5 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-warm-800 transition-all">3. 影像画廊</button>
         <button onclick="switchSection('library')" id="nav-library" class="nav-tab px-3.5 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-warm-800 transition-all">4. 藏书馆</button>
         <button onclick="switchSection('dashboard')" id="nav-dashboard" class="nav-tab px-3.5 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-warm-800 transition-all">5. 自律看板</button>
+        <button onclick="switchSection('docs')" id="nav-docs" class="nav-tab px-3.5 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-warm-800 transition-all">6. 工程文档</button>
       </nav>
     </div>
 
@@ -137,6 +138,7 @@
       <button onclick="switchSection('gallery')" class="mobile-tab shrink-0 px-3 py-1.5 rounded text-slate-300">影像画廊</button>
       <button onclick="switchSection('library')" class="mobile-tab shrink-0 px-3 py-1.5 rounded text-slate-300">藏书馆</button>
       <button onclick="switchSection('dashboard')" class="mobile-tab shrink-0 px-3 py-1.5 rounded text-slate-300">自律看板</button>
+      <button onclick="switchSection('docs')" class="mobile-tab shrink-0 px-3 py-1.5 rounded text-slate-300">工程文档</button>
     </div>
   </header>
 
@@ -361,6 +363,16 @@
           </table>
         </div>
       </div>
+    </section>
+
+    <!-- SECTION 6: 工程文档分栏 -->
+    <section id="sec-docs" class="hidden space-y-6">
+      <div class="border-b border-warm-700 pb-4">
+        <span class="text-xs font-mono text-amber-400 uppercase tracking-widest">Engineering Docs · Markdown / Word</span>
+        <h2 class="font-serif text-3xl font-bold text-white mt-1">工程文档 · 总册 / ADR / Word 归档</h2>
+        <p class="text-sm text-slate-400 mt-1">左侧目录点选，右侧页内阅读；与人生叙事 JSON 分轨，同源自仓库 docs/。</p>
+      </div>
+      <div id="docs-pane-root"></div>
     </section>
 
   </main>
@@ -687,8 +699,21 @@
       MoBoDocViewer.openMarkdown({ title: b.title, subtitle: '藏书馆 · ' + (b.category || ''), markdown: md });
     }
 
+    let docsPaneMounted = false;
+    function ensureDocsPane() {
+      if (docsPaneMounted || !window.MoBoDocsPane) return;
+      const root = document.getElementById('docs-pane-root');
+      if (!root) return;
+      docsPaneMounted = true;
+      MoBoDocsPane.mount(root, {
+        catalogUrl: '../docs-portal/catalog.json',
+        repoBase: '../../',
+        defaultId: 'zongce'
+      });
+    }
+
     function switchSection(sec) {
-      ['timeline', 'compass', 'gallery', 'library', 'dashboard'].forEach(s => {
+      ['timeline', 'compass', 'gallery', 'library', 'dashboard', 'docs'].forEach(s => {
         const el = document.getElementById('sec-' + s);
         const nav = document.getElementById('nav-' + s);
         if (!el) return;
@@ -700,6 +725,7 @@
           if (nav) nav.className = 'nav-tab px-3.5 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-warm-800 transition-all';
         }
       });
+      if (sec === 'docs') ensureDocsPane();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -720,5 +746,6 @@
     });
   </script>
   <script src="../shared/doc-viewer.js"></script>
+  <script src="../shared/docs-pane.js"></script>
 </body>
 </html>

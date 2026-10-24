@@ -1,32 +1,71 @@
-/* MoBo shared in-page Markdown / Word viewer */
+/* MoBo shared in-page Markdown / Word viewer (overlay + embed) */
 (function (global) {
   'use strict';
 
-  var CDN = {
-    marked: 'https://cdn.jsdelivr.net/npm/marked/marked.min.js',
-    purify: 'https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js',
-    mammoth: 'https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js'
+  var CDN_MIRRORS = {
+    marked: [
+      'https://cdn.jsdelivr.net/npm/marked/marked.min.js',
+      'https://unpkg.com/marked/marked.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js'
+    ],
+    purify: [
+      'https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js',
+      'https://unpkg.com/dompurify@3.1.6/dist/purify.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js'
+    ],
+    mammoth: [
+      'https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js',
+      'https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js'
+    ]
   };
 
-  var loaded = {};
+  var libReady = { marked: null, purify: null, mammoth: null };
   var shellReady = false;
 
-  function loadScript(src) {
-    if (loaded[src]) return loaded[src];
-    loaded[src] = new Promise(function (resolve, reject) {
+  function loadScriptOnce(src) {
+    return new Promise(function (resolve, reject) {
+      var existing = document.querySelector('script[src="' + src + '"]');
+      if (existing && existing.getAttribute('data-mobo-loaded') === '1') {
+        resolve();
+        return;
+      }
       var s = document.createElement('script');
       s.src = src;
       s.async = true;
-      s.onload = function () { resolve(); };
-      s.onerror = function () { reject(new Error('load failed: ' + src)); };
+      s.onload = function () {
+        s.setAttribute('data-mobo-loaded', '1');
+        resolve();
+      };
+      s.onerror = function () { reject(new Error('CDN load failed: ' + src)); };
       document.head.appendChild(s);
     });
-    return loaded[src];
+  }
+
+  function loadLib(name, readyCheck) {
+    if (readyCheck()) return Promise.resolve();
+    if (libReady[name]) return libReady[name];
+    var urls = CDN_MIRRORS[name] || [];
+    libReady[name] = urls.reduce(function (chain, url) {
+      return chain.catch(function () {
+        return loadScriptOnce(url).then(function () {
+          if (!readyCheck()) throw new Error(name + ' loaded but global missing');
+        });
+      });
+    }, Promise.reject(new Error('start'))).catch(function () {
+      libReady[name] = null;
+      throw new Error('全部 CDN 无法加载 ' + name + '（jsDelivr / unpkg / cdnjs）');
+    });
+    return libReady[name];
   }
 
   function ensureLibs(needMammoth) {
-    var jobs = [loadScript(CDN.marked), loadScript(CDN.purify)];
-    if (needMammoth) jobs.push(loadScript(CDN.mammoth));
+    var jobs = [
+      loadLib('marked', function () { return !!(global.marked && marked.parse); }),
+      loadLib('purify', function () { return !!(global.DOMPurify && DOMPurify.sanitize); })
+    ];
+    if (needMammoth) {
+      jobs.push(loadLib('mammoth', function () { return !!(global.mammoth && mammoth.convertToHtml); }));
+    }
     return Promise.all(jobs);
   }
 
@@ -53,8 +92,16 @@
       '#mobo-doc-body table{border-collapse:collapse;width:100%;font-size:13px}',
       '#mobo-doc-body th,#mobo-doc-body td{border:1px solid #334155;padding:6px 8px}',
       '#mobo-doc-body a{color:#93c5fd}',
-      '#mobo-doc-body .mobo-doc-err{border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.08);',
-      'color:#fecaca;padding:12px;border-radius:10px}'
+      '.mobo-doc-err{border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.08);',
+      'color:#fecaca;padding:12px;border-radius:10px;line-height:1.5}',
+      '.mobo-doc-prose{line-height:1.7;font-size:15px}',
+      '.mobo-doc-prose h1,.mobo-doc-prose h2,.mobo-doc-prose h3{line-height:1.3;margin:1.1em 0 .5em}',
+      '.mobo-doc-prose pre{overflow:auto;padding:12px;border-radius:8px;background:#020617;border:1px solid #1e293b}',
+      '.mobo-doc-prose code{font-family:ui-monospace,Consolas,monospace;font-size:.88em}',
+      '.mobo-doc-prose table{border-collapse:collapse;width:100%;font-size:13px}',
+      '.mobo-doc-prose th,.mobo-doc-prose td{border:1px solid #334155;padding:6px 8px}',
+      '.mobo-doc-prose a{color:#93c5fd}',
+      '.mobo-doc-prose img{max-width:100%}'
     ].join('');
     document.head.appendChild(style);
 
@@ -83,7 +130,28 @@
     if (ov) ov.classList.remove('open');
   }
 
-  function show(title, sub, html) {
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function renderMarkdown(md) {
+    var raw = (global.marked && marked.parse)
+      ? marked.parse(md || '', { mangle: false, headerIds: true })
+      : ('<pre>' + escapeHtml(md || '') + '</pre>');
+    return (global.DOMPurify && DOMPurify.sanitize) ? DOMPurify.sanitize(raw) : raw;
+  }
+
+  function errHtml(msg) {
+    return '<div class="mobo-doc-err"><b>无法打开文档</b><br/>' + escapeHtml(msg) + '</div>';
+  }
+
+  function deliver(opts, title, sub, html) {
+    var mount = opts && opts.mount;
+    if (mount) {
+      if (opts.onMeta) opts.onMeta({ title: title, subtitle: sub });
+      mount.innerHTML = '<div class="mobo-doc-prose">' + html + '</div>';
+      return;
+    }
     ensureShell();
     document.getElementById('mobo-doc-title').textContent = title || '文档';
     document.getElementById('mobo-doc-sub').textContent = sub || '';
@@ -91,47 +159,12 @@
     document.getElementById('mobo-doc-overlay').classList.add('open');
   }
 
-  function renderMarkdown(md) {
-    var raw = (global.marked && marked.parse) ? marked.parse(md || '', { mangle: false, headerIds: true }) : ('<pre>' + escapeHtml(md || '') + '</pre>');
-    return (global.DOMPurify && DOMPurify.sanitize) ? DOMPurify.sanitize(raw) : raw;
-  }
-
-  function escapeHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
   function openMarkdown(opts) {
     opts = opts || {};
     return ensureLibs(false).then(function () {
-      show(opts.title || '文档', opts.subtitle || '', renderMarkdown(opts.markdown || ''));
+      deliver(opts, opts.title || '文档', opts.subtitle || '', renderMarkdown(opts.markdown || ''));
     }).catch(function (e) {
-      show(opts.title || '文档', opts.subtitle || '', '<div class="mobo-doc-err">' + escapeHtml(e.message) + '</div>');
-    });
-  }
-
-  function openFile(opts) {
-    opts = opts || {};
-    var path = opts.path;
-    var type = (opts.type || guessType(path)).toLowerCase();
-    var title = opts.title || path;
-    var url = opts.url || path;
-    ensureShell();
-    show(title, path || url, '<p style="color:#94a3b8">加载中…</p>');
-    return ensureLibs(type === 'docx').then(function () {
-      return fetch(url, { cache: 'no-store' }).then(function (r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status + ' · ' + path);
-        if (type === 'docx') return r.arrayBuffer().then(function (buf) {
-          return mammoth.convertToHtml({ arrayBuffer: buf }).then(function (res) {
-            var html = (DOMPurify && DOMPurify.sanitize) ? DOMPurify.sanitize(res.value || '') : res.value;
-            show(title, path, html || '<p>（空文档）</p>');
-          });
-        });
-        return r.text().then(function (text) {
-          show(title, path, renderMarkdown(text));
-        });
-      });
-    }).catch(function (e) {
-      show(title, path || url, '<div class="mobo-doc-err">无法打开：' + escapeHtml(e.message) + '</div>');
+      deliver(opts, opts.title || '文档', opts.subtitle || '', errHtml(e.message));
     });
   }
 
@@ -140,9 +173,37 @@
     return /\.docx$/i.test(path) ? 'docx' : 'md';
   }
 
+  function openFile(opts) {
+    opts = opts || {};
+    var path = opts.path;
+    var type = (opts.type || guessType(path)).toLowerCase();
+    var title = opts.title || path;
+    var url = opts.url || path;
+    deliver(opts, title, path || url, '<p style="color:#94a3b8">加载中…</p>');
+    return ensureLibs(type === 'docx').then(function () {
+      return fetch(url, { cache: 'no-store' }).then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status + ' · ' + path);
+        if (type === 'docx') {
+          return r.arrayBuffer().then(function (buf) {
+            return mammoth.convertToHtml({ arrayBuffer: buf }).then(function (res) {
+              var html = (DOMPurify && DOMPurify.sanitize) ? DOMPurify.sanitize(res.value || '') : res.value;
+              deliver(opts, title, path, html || '<p>（空文档）</p>');
+            });
+          });
+        }
+        return r.text().then(function (text) {
+          deliver(opts, title, path, renderMarkdown(text));
+        });
+      });
+    }).catch(function (e) {
+      deliver(opts, title, path || url, errHtml(e.message + (path ? ' · ' + path : '')));
+    });
+  }
+
   global.MoBoDocViewer = {
     openMarkdown: openMarkdown,
     openFile: openFile,
-    close: close
+    close: close,
+    ensureLibs: ensureLibs
   };
 })(window);

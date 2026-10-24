@@ -4,19 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>莫伯双站 · 工程文档站</title>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
   <style>
     :root {
       --bg: #0b1220;
-      --panel: #101827;
       --line: #1e2a44;
       --text: #e8eefc;
       --muted: #8b9bb8;
       --gold: #c9a227;
-      --accent: #3b82f6;
-      --danger: #f87171;
     }
     * { box-sizing: border-box; }
     body {
@@ -30,84 +24,22 @@
       position: sticky; top: 0; z-index: 5; backdrop-filter: blur(8px);
     }
     .top h1 { margin: 0; font-size: 1.05rem; font-weight: 650; }
-    .top .meta { color: var(--muted); font-size: 12px; }
+    .top .meta { color: var(--muted); font-size: 12px; margin-top: 4px; }
     .top nav { display: flex; gap: 10px; flex-wrap: wrap; }
     .top a {
       color: var(--muted); text-decoration: none; font-size: 12px;
       border: 1px solid var(--line); padding: 6px 10px; border-radius: 8px;
     }
     .top a:hover { color: var(--text); border-color: var(--gold); }
-    .layout {
-      display: grid; grid-template-columns: minmax(240px, 300px) 1fr;
-      min-height: calc(100vh - 56px);
-    }
-    @media (max-width: 860px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { max-height: 40vh; border-right: none; border-bottom: 1px solid var(--line); }
-    }
-    .sidebar {
-      border-right: 1px solid var(--line); background: var(--panel);
-      overflow: auto; padding: 12px 10px 24px;
-    }
-    .group { margin-bottom: 14px; }
-    .group h2 {
-      margin: 0 0 6px; padding: 0 8px; font-size: 11px; letter-spacing: .06em;
-      text-transform: uppercase; color: var(--muted); font-weight: 600;
-    }
-    .item {
-      display: block; width: 100%; text-align: left; cursor: pointer;
-      background: transparent; border: 1px solid transparent; color: var(--text);
-      padding: 8px 10px; border-radius: 8px; font-size: 13px; line-height: 1.35;
-    }
-    .item:hover { background: rgba(255,255,255,.04); border-color: var(--line); }
-    .item.active { background: rgba(201,162,39,.12); border-color: rgba(201,162,39,.45); }
-    .badge {
-      display: inline-block; margin-left: 6px; font-size: 10px; color: #fbbf24;
-      border: 1px solid rgba(251,191,36,.35); padding: 0 5px; border-radius: 999px;
-    }
-    .main { display: flex; flex-direction: column; min-width: 0; }
-    .toolbar {
-      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
-      padding: 10px 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px;
-    }
-    .toolbar a { color: var(--accent); }
-    .content {
-      flex: 1; overflow: auto; padding: 20px 22px 48px; max-width: 920px;
-    }
-    .placeholder { color: var(--muted); line-height: 1.6; }
-    .error {
-      border: 1px solid rgba(248,113,113,.4); background: rgba(248,113,113,.08);
-      color: #fecaca; padding: 12px 14px; border-radius: 10px; line-height: 1.5;
-    }
-    .prose { line-height: 1.7; font-size: 15px; }
-    .prose h1, .prose h2, .prose h3 { line-height: 1.3; margin-top: 1.4em; }
-    .prose h1 { font-size: 1.6rem; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
-    .prose h2 { font-size: 1.25rem; }
-    .prose a { color: #93c5fd; }
-    .prose code {
-      font-family: ui-monospace, Consolas, monospace; font-size: 0.88em;
-      background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 4px;
-    }
-    .prose pre {
-      overflow: auto; padding: 12px 14px; border-radius: 10px;
-      background: #0a101b; border: 1px solid var(--line);
-    }
-    .prose pre code { background: transparent; padding: 0; }
-    .prose table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 12px 0; }
-    .prose th, .prose td { border: 1px solid var(--line); padding: 6px 8px; vertical-align: top; }
-    .prose th { background: rgba(255,255,255,.04); }
-    .prose blockquote {
-      margin: 12px 0; padding: 6px 12px; border-left: 3px solid var(--gold);
-      color: var(--muted);
-    }
-    .prose img { max-width: 100%; }
+    .wrap { padding: 16px 18px 40px; max-width: 1280px; margin: 0 auto; }
+    .note { color: var(--muted); font-size: 13px; margin: 0 0 14px; line-height: 1.5; }
   </style>
 </head>
 <body>
   <header class="top">
     <div>
       <h1>莫伯双站 · 工程文档站</h1>
-      <div class="meta">精选公开说明书 · Markdown / Word 预览 · 与门户业务 JSON 分轨</div>
+      <div class="meta">精选公开说明书 · Markdown / Word · 与门户业务 JSON 分轨</div>
     </div>
     <nav>
       <a href="../../">入口</a>
@@ -116,183 +48,24 @@
       <a href="../../services/console/">控制台</a>
     </nav>
   </header>
-  <div class="layout">
-    <aside class="sidebar" id="sidebar"></aside>
-    <section class="main">
-      <div class="toolbar" id="toolbar">选择左侧文档开始阅读</div>
-      <article class="content" id="content">
-        <div class="placeholder">
-          <p>本站从仓库相对路径加载精选文档，可在 GitHub Pages 与本机静态服务下打开。</p>
-          <p>业务门户（资本 / 之家）仍使用脱敏 JSON；此处只展示工程与治理说明书。</p>
-        </div>
-      </article>
-    </section>
+  <div class="wrap">
+    <p class="note">与资本 / 之家 / 控制台共用同一套目录与阅读器。亦可在各站顶栏「工程文档」内页阅读。</p>
+    <div id="docs-pane-root"></div>
   </div>
+  <script src="../shared/doc-viewer.js"></script>
+  <script src="../shared/docs-pane.js"></script>
   <script>
-(function () {
-  'use strict';
-  var REPO_ROOT = '../../';
-  var catalog = null;
-  var byId = {};
-  var byPath = {};
-
-  function $(id) { return document.getElementById(id); }
-
-  function githubBlob(path) {
-    var repo = (catalog && catalog.repo) || 'henrry179/mobo-capital-and-mobo-home';
-    var branch = (catalog && catalog.branch) || 'main';
-    return 'https://github.com/' + repo + '/blob/' + branch + '/' + path.split('/').map(encodeURIComponent).join('/');
-  }
-
-  function resolveUrl(path) {
-    return REPO_ROOT + path.split('/').map(encodeURIComponent).join('/');
-  }
-
-  function setQuery(id) {
-    var u = new URL(location.href);
-    if (id) u.searchParams.set('doc', id);
-    else u.searchParams.delete('doc');
-    history.replaceState(null, '', u.toString());
-  }
-
-  function renderSidebar() {
-    var html = '';
-    catalog.groups.forEach(function (g) {
-      html += '<div class="group"><h2>' + escapeHtml(g.title) + '</h2>';
-      g.items.forEach(function (it) {
-        byId[it.id] = it;
-        byPath[it.path] = it;
-        html += '<button type="button" class="item" data-id="' + escapeHtml(it.id) + '">' +
-          escapeHtml(it.title) +
-          (it.badge ? '<span class="badge">' + escapeHtml(it.badge) + '</span>' : '') +
-          '</button>';
-      });
-      html += '</div>';
-    });
-    $('sidebar').innerHTML = html;
-    Array.prototype.forEach.call(document.querySelectorAll('.item'), function (btn) {
-      btn.addEventListener('click', function () { openDoc(btn.getAttribute('data-id')); });
-    });
-  }
-
-  function escapeHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function markActive(id) {
-    Array.prototype.forEach.call(document.querySelectorAll('.item'), function (el) {
-      el.classList.toggle('active', el.getAttribute('data-id') === id);
-    });
-  }
-
-  function rewriteMdLinks(container, currentPath) {
-    var baseDir = currentPath.replace(/[^/]+$/, '');
-    Array.prototype.forEach.call(container.querySelectorAll('a[href]'), function (a) {
-      var href = a.getAttribute('href') || '';
-      if (/^(https?:|mailto:|#)/i.test(href)) {
-        if (/^https?:/i.test(href)) a.setAttribute('target', '_blank');
-        return;
-      }
-      var cleaned = href.split('#')[0].split('?')[0];
-      if (!cleaned) return;
-      var joined = cleaned;
-      if (!cleaned.startsWith('/')) {
-        var parts = (baseDir + cleaned).split('/');
-        var out = [];
-        parts.forEach(function (p) {
-          if (p === '' || p === '.') return;
-          if (p === '..') out.pop();
-          else out.push(p);
-        });
-        joined = out.join('/');
-      } else {
-        joined = cleaned.replace(/^\//, '');
-      }
-      var hit = byPath[joined] || byPath[decodeURIComponent(joined)];
-      if (hit) {
-        a.setAttribute('href', '?doc=' + encodeURIComponent(hit.id));
-        a.addEventListener('click', function (e) {
-          e.preventDefault();
-          openDoc(hit.id);
-        });
-      } else {
-        a.setAttribute('href', githubBlob(joined));
-        a.setAttribute('target', '_blank');
-      }
-    });
-  }
-
-  function showError(item, err) {
-    var msg = (err && err.message) ? err.message : String(err);
-    $('content').innerHTML =
-      '<div class="error"><b>无法加载文档</b><br/>' + escapeHtml(msg) +
-      '<br/><br/>可改在 GitHub 打开：<a href="' + githubBlob(item.path) + '" target="_blank" rel="noopener">' +
-      escapeHtml(item.path) + '</a></div>';
-  }
-
-  function openDoc(id) {
-    var item = byId[id];
-    if (!item) {
-      $('content').innerHTML = '<div class="error">目录中不存在：' + escapeHtml(id) + '</div>';
-      return;
-    }
-    markActive(id);
-    setQuery(id);
-    $('toolbar').innerHTML =
-      '<span>' + escapeHtml(item.title) + '</span>' +
-      '<span>·</span><span class="mono">' + escapeHtml(item.path) + '</span>' +
-      '<span>·</span><a href="' + githubBlob(item.path) + '" target="_blank" rel="noopener">GitHub 源文件</a>';
-    $('content').innerHTML = '<div class="placeholder">加载中…</div>';
-
-    var url = resolveUrl(item.path);
-    if (item.type === 'docx') {
-      fetch(url, { cache: 'no-store' })
-        .then(function (r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status + ' · ' + item.path);
-          return r.arrayBuffer();
-        })
-        .then(function (buf) {
-          return mammoth.convertToHtml({ arrayBuffer: buf });
-        })
-        .then(function (result) {
-          var clean = DOMPurify.sanitize(result.value || '<p>（空文档）</p>');
-          $('content').innerHTML = '<div class="prose">' + clean + '</div>';
-        })
-        .catch(function (e) { showError(item, e); });
-      return;
-    }
-
-    fetch(url, { cache: 'no-store' })
-      .then(function (r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status + ' · ' + item.path);
-        return r.text();
-      })
-      .then(function (text) {
-        var raw = marked.parse(text, { mangle: false, headerIds: true });
-        var clean = DOMPurify.sanitize(raw);
-        $('content').innerHTML = '<div class="prose" id="prose">' + clean + '</div>';
-        rewriteMdLinks($('prose'), item.path);
-        window.scrollTo(0, 0);
-      })
-      .catch(function (e) { showError(item, e); });
-  }
-
-  fetch('./catalog.json', { cache: 'no-store' })
-    .then(function (r) {
-      if (!r.ok) throw new Error('catalog.json HTTP ' + r.status);
-      return r.json();
-    })
-    .then(function (data) {
-      catalog = data;
-      renderSidebar();
+    (function () {
+      var root = document.getElementById('docs-pane-root');
+      if (!root || !window.MoBoDocsPane) return;
       var q = new URL(location.href).searchParams.get('doc');
-      if (q && byId[q]) openDoc(q);
-      else if (byId.zongce) openDoc('zongce');
-    })
-    .catch(function (e) {
-      $('content').innerHTML = '<div class="error">目录加载失败：' + escapeHtml(e.message) + '</div>';
-    });
-})();
+      MoBoDocsPane.mount(root, {
+        catalogUrl: './catalog.json',
+        repoBase: '../../',
+        defaultId: q || 'zongce',
+        height: 'calc(100vh - 120px)'
+      });
+    })();
   </script>
 </body>
 </html>
