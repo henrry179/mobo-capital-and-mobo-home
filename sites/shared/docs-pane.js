@@ -13,17 +13,20 @@
   }
 
   function injectStyle() {
-    if (document.getElementById(STYLE_ID)) return;
-    var style = document.createElement('style');
-    style.id = STYLE_ID;
+    var style = document.getElementById(STYLE_ID);
+    if (!style) {
+      style = document.createElement('style');
+      style.id = STYLE_ID;
+      document.head.appendChild(style);
+    }
     style.textContent = [
       '.mobo-docs-pane{display:grid;grid-template-columns:minmax(220px,280px) 1fr;',
-      'height:min(72vh,820px);min-height:420px;max-height:min(72vh,820px);',
+      'height:min(72vh,820px)!important;min-height:420px!important;max-height:min(72vh,820px)!important;',
       'border:1px solid rgba(148,163,184,.35);border-radius:14px;overflow:hidden;',
       'background:rgba(15,23,42,.85);box-sizing:border-box}',
-      '@media (max-width:860px){.mobo-docs-pane{grid-template-columns:1fr;height:auto;max-height:none;min-height:520px}',
-      '.mobo-docs-side{max-height:36vh;border-right:none!important;border-bottom:1px solid rgba(148,163,184,.2)}',
-      '.mobo-docs-content{max-height:55vh}}',
+      '@media (max-width:860px){.mobo-docs-pane{grid-template-columns:1fr;',
+      'height:min(78vh,900px)!important;max-height:min(78vh,900px)!important;min-height:480px!important}',
+      '.mobo-docs-side{max-height:34vh;border-right:none!important;border-bottom:1px solid rgba(148,163,184,.2)}}',
       '.mobo-docs-side{overflow:auto;padding:12px 10px 20px;border-right:1px solid rgba(148,163,184,.2);',
       'background:rgba(2,6,23,.55);min-height:0}',
       '.mobo-docs-group{margin-bottom:14px}',
@@ -45,7 +48,6 @@
       '.mobo-docs-boot{border:1px dashed rgba(148,163,184,.35);border-radius:12px;padding:20px;color:#94a3b8;',
       'font-size:13px;line-height:1.6;background:rgba(2,6,23,.4)}'
     ].join('');
-    document.head.appendChild(style);
   }
 
   function encodePath(path) {
@@ -80,9 +82,8 @@
     var catalog = null;
     var activeId = null;
 
-    var heightStyle = opts.height
-      ? (' style="height:' + escapeHtml(opts.height) + ';max-height:' + escapeHtml(opts.height) + ';min-height:420px"')
-      : '';
+    var h = opts.height || 'min(72vh, 820px)';
+    var heightStyle = ' style="height:' + escapeHtml(h) + ';max-height:' + escapeHtml(h) + ';min-height:420px"';
     root.innerHTML =
       '<div class="mobo-docs-pane"' + heightStyle + '>' +
       '  <aside class="mobo-docs-side" data-role="side"><div class="mobo-docs-muted" style="padding:8px">加载目录…</div></aside>' +
