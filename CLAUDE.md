@@ -7,19 +7,16 @@
 
 ## 1. 系统顶层定位与双站拓扑
 
+> 全文战略定位、本期不做与 OSS 路由见总册 **§1**；下文为智能体开工摘要。
+
 本系统在单台 **阿里云 2 核 4GB ECS（Ubuntu 24.04 LTS）** 上通过容器化硬限流与单实例双库隔离，承载两个主权站点：
 
-1. **网站 A：莫伯资本（`MoBoCapital.com`）— 职业纵深、投研智库与对冲基金孵化平台**
-   - 业务：全球宏观推演（ITPM）、策略手册（Playbooks）、实战期权与多空交易复盘（Greeks & R-Multiples）、基金三阶段孵化蓝图、《MoBo's Memo》"1+3" 多平台自媒体矩阵。
-   - 数据底座：`db_mobobrain`（`intel` 采集域 + `capital` 投研域 + `n8n` 自动化域）。
-   - 前端：`sites/mobocapital/index.html`（机构级深海蓝金单页门户），由 CLI 预生成 `data/public-data.json` 与 `internal/internal-data.json` 驱动，服务端 0 额外内存。
-
-2. **网站 B：莫伯之家（`MoBoHome.com`）— 个人成长叙事与 Wolfram 式生命数字档案馆**
-   - 业务：人生四篇章（深圳 → 北京 → 上海 → 湖北归航）、影像画廊、跨学科藏书馆、每日跑步与力量训练自律看板、周期复盘。
-   - 数据底座：`db_archive`（`archive` Schema）。
-   - 前端：`sites/mobohome/index.html`（温润人文风单页门户），由 CLI 预生成 `data/public-home-data.json` 与 `internal/internal-home-data.json` 驱动。
+1. **网站 A：莫伯资本（`MoBoCapital.com`）** — `db_mobobrain`（`intel` + `capital` + `n8n`）；前端 `sites/mobocapital/` + 预生成公私 JSON。
+2. **网站 B：莫伯之家（`MoBoHome.com`）** — `db_archive`（`archive`）；前端 `sites/mobohome/` + 预生成公私 JSON。
 
 ## 2. 宿主机标准目录树（`/opt/mobo-stack`）
+
+> 与总册 §7.1 同源；冲突时以本树 + 仓库实树为准。
 
 ```text
 /opt/mobo-stack/
