@@ -27,6 +27,7 @@ services/console/data/credentials.local.json
 
 # --- 静态站点：公域 data 入库（Pages 可打开）；内域 JSON 不入库 --------------
 sites/*/internal/*.json
+server-sync-data/**/internal/
 
 # --- 运行时数据卷 -----------------------------------------------------------
 deploy/volumes/*
