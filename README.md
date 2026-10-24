@@ -37,11 +37,21 @@
 
 ## 3. 在线打开三个前端
 
-各站 `index.html` 位于子目录根，资源为相对路径，可在静态托管下直接打开。
+各站 `index.html` 在子目录根，资源用相对路径。
 
-### GitHub Pages（推荐）
+### 为何会出现截图里的报错？
 
-仓库已含根目录入口、`.nojekyll` 与 [Pages workflow](.github/workflows/pages.yml)。在仓库 **Settings → Pages → Source** 选择 **GitHub Actions** 后可用：
+| 现象 | 原因 |
+| --- | --- |
+| `github.io` 显示 **404 There isn't a GitHub Pages site here** | 仓库还没开启 Pages（只推了代码不等于已发布站点） |
+| jsDelivr 打开变成 **HTML 源码 / text** | jsDelivr 对 `.html` 固定返回 `Content-Type: text/plain`，浏览器不会当网页渲染 |
+
+### 一步开启 GitHub Pages（之后 github.io 才可用）
+
+1. 打开：[Pages 设置](https://github.com/henrry179/mobo-capital-and-mobo-home/settings/pages)（需登录仓库所有者账号）
+2. **Build and deployment → Source** 选 **Deploy from a branch**
+3. Branch 选 **`main`**，文件夹选 **`/` (root)**，保存
+4. 等 1–2 分钟，再访问下表（不要再用 jsDelivr 看 HTML）
 
 | 站点 | URL |
 | --- | --- |
@@ -50,16 +60,21 @@
 | 莫伯之家 | https://henrry179.github.io/mobo-capital-and-mobo-home/sites/mobohome/ |
 | 控制台 | https://henrry179.github.io/mobo-capital-and-mobo-home/services/console/ |
 
-### 即时预览（无需开启 Pages）
+仓库已含根目录 `index.html`、`.nojekyll`；也可用 [Actions 工作流](.github/workflows/pages.yml)（Source 改选 GitHub Actions 即可）。
 
-| 站点 | jsDelivr |
+### 本机已可打开（推荐先看效果）
+
+全栈起来后（`bash tools/wsl/wsl-up.sh`）：
+
+| 站点 | 地址 |
 | --- | --- |
-| 入口 | https://cdn.jsdelivr.net/gh/henrry179/mobo-capital-and-mobo-home@main/index.html |
-| 莫伯资本 | https://cdn.jsdelivr.net/gh/henrry179/mobo-capital-and-mobo-home@main/sites/mobocapital/index.html |
-| 莫伯之家 | https://cdn.jsdelivr.net/gh/henrry179/mobo-capital-and-mobo-home@main/sites/mobohome/index.html |
-| 控制台 | https://cdn.jsdelivr.net/gh/henrry179/mobo-capital-and-mobo-home@main/services/console/index.html |
+| 莫伯资本 | http://localhost/ |
+| 莫伯之家 | http://mobohome.localhost/ |
+| 控制台 | http://admin.localhost/ |
 
-> 控制台在 `github.io` / CDN 下用相对路径读取公域 JSON；本机 Caddy 仍走 `/api/...` 同源路径。内域 JSON 与金库媒体**不**随公开仓分发。
+或零依赖：`node tools/local-preview/start.js` → `8080` / `8081` / `8082`。
+
+> 控制台在 `github.io` 下用相对路径读公域 JSON；本机 Caddy 仍走 `/api/...`。内域 JSON 与金库媒体不随公开仓分发。
 
 ---
 
