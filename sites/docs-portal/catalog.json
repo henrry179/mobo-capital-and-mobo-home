@@ -1,0 +1,74 @@
+{
+  "repo": "henrry179/mobo-capital-and-mobo-home",
+  "branch": "main",
+  "groups": [
+    {
+      "id": "overview",
+      "title": "总纲",
+      "items": [
+        { "id": "readme", "title": "README", "path": "README.md", "type": "md" },
+        { "id": "claude", "title": "架构宪章 CLAUDE", "path": "CLAUDE.md", "type": "md" },
+        { "id": "task", "title": "TASK_STATE 账本", "path": "TASK_STATE.md", "type": "md" },
+        { "id": "zongce", "title": "全栈总册 v2.1", "path": "docs/00-总册/莫伯双站系统全栈架构与部署总册-v2.1.md", "type": "md" },
+        { "id": "overview-ia", "title": "双站规划文档整合总览", "path": "docs/00-总册/双站规划文档整合总览.md", "type": "md" },
+        { "id": "appendix", "title": "生产级落地附录 v2.1", "path": "docs/00-总册/生产级落地附录-v2.1.md", "type": "md" }
+      ]
+    },
+    {
+      "id": "governance",
+      "title": "治理与 ADR",
+      "items": [
+        { "id": "timeline", "title": "开发部署任务执行时间线", "path": "docs/01-项目治理/开发部署任务执行时间线.md", "type": "md" },
+        { "id": "adr-index", "title": "ADR 索引", "path": "docs/01-项目治理/决策记录/README.md", "type": "md" },
+        { "id": "adr-0001", "title": "ADR-0001 单机双库", "path": "docs/01-项目治理/决策记录/ADR-0001-单机双库与Schema隔离.md", "type": "md" },
+        { "id": "adr-0002", "title": "ADR-0002 域名拓扑（已 supersede）", "path": "docs/01-项目治理/决策记录/ADR-0002-域名拓扑与公开静态站.md", "type": "md" },
+        { "id": "adr-0003", "title": "ADR-0003 n8n Schema", "path": "docs/01-项目治理/决策记录/ADR-0003-n8n子域与数据Schema.md", "type": "md" },
+        { "id": "adr-0004", "title": "ADR-0004 备份与灾备", "path": "docs/01-项目治理/决策记录/ADR-0004-备份与灾备.md", "type": "md" },
+        { "id": "adr-0005", "title": "ADR-0005 中文检索", "path": "docs/01-项目治理/决策记录/ADR-0005-中文检索与向量维度.md", "type": "md" },
+        { "id": "adr-0006", "title": "ADR-0006 安全鉴权", "path": "docs/01-项目治理/决策记录/ADR-0006-安全与鉴权基线.md", "type": "md" },
+        { "id": "adr-0007", "title": "ADR-0007 双主域", "path": "docs/01-项目治理/决策记录/ADR-0007-双主域拓扑与静态门户三级可见性.md", "type": "md" },
+        { "id": "adr-0008", "title": "ADR-0008 capital Schema", "path": "docs/01-项目治理/决策记录/ADR-0008-db_mobobrain增设capital-schema.md", "type": "md" },
+        { "id": "adr-0009", "title": "ADR-0009 HITL", "path": "docs/01-项目治理/决策记录/ADR-0009-公私域物理脱敏与HITL发布闸门.md", "type": "md" },
+        { "id": "adr-0010", "title": "ADR-0010 本地优先", "path": "docs/01-项目治理/决策记录/ADR-0010-本地优先开发暂不进入公网部署.md", "type": "md" },
+        { "id": "adr-0011", "title": "ADR-0011 WSL2", "path": "docs/01-项目治理/决策记录/ADR-0011-WSL2作为本地开发运行时.md", "type": "md" }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "架构设计",
+      "items": [
+        { "id": "arch-overall", "title": "总体架构", "path": "docs/03-架构设计/总体架构.md", "type": "md" },
+        { "id": "arch-deploy", "title": "部署架构", "path": "docs/03-架构设计/部署架构.md", "type": "md" },
+        { "id": "arch-data", "title": "数据架构", "path": "docs/03-架构设计/数据架构.md", "type": "md" },
+        { "id": "arch-net", "title": "网络与安全架构", "path": "docs/03-架构设计/网络与安全架构.md", "type": "md" }
+      ]
+    },
+    {
+      "id": "content",
+      "title": "内容金库与执行",
+      "items": [
+        { "id": "v5", "title": "原件保全方案 v5", "path": "docs/07-原始资料/莫伯双站原件保全与双站同步方案-v5.md", "type": "md" },
+        { "id": "v5-report", "title": "V5 执行报告", "path": "docs/07-原始资料/莫伯双站V5执行报告-2026-10-23.md", "type": "md" },
+        { "id": "exec-readme", "title": "执行记录索引 10-24", "path": "docs/07-原始资料/执行记录-2026-10-24/README.md", "type": "md" },
+        { "id": "exec-narrative", "title": "公域叙事与编委", "path": "docs/07-原始资料/执行记录-2026-10-24/公域叙事与编委执行记录-2026-10-24.md", "type": "md" },
+        { "id": "exec-gallery", "title": "公域图库书单", "path": "docs/07-原始资料/执行记录-2026-10-24/公域图库书单执行记录-2026-10-24.md", "type": "md" },
+        { "id": "exec-ready", "title": "公网就绪包清单", "path": "docs/07-原始资料/执行记录-2026-10-24/公网就绪包清单-2026-10-24.md", "type": "md" },
+        { "id": "exec-local", "title": "本地收口记录", "path": "docs/07-原始资料/执行记录-2026-10-24/本地收口执行记录-2026-10-24.md", "type": "md" },
+        { "id": "exec-non8n", "title": "非 n8n 收口", "path": "docs/07-原始资料/执行记录-2026-10-24/非n8n收口记录-2026-10-24.md", "type": "md" },
+        { "id": "exec-plan", "title": "后续执行方案", "path": "docs/07-原始资料/执行记录-2026-10-24/后续执行方案-2026-10-24.md", "type": "md" },
+        { "id": "exec-log", "title": "后续执行记录", "path": "docs/07-原始资料/执行记录-2026-10-24/后续执行记录-2026-10-24.md", "type": "md" },
+        { "id": "raw-readme", "title": "原始方案 Word 归档说明", "path": "docs/07-原始资料/原始方案/README.md", "type": "md" }
+      ]
+    },
+    {
+      "id": "archive-docx",
+      "title": "Word 归档预览",
+      "items": [
+        { "id": "docx-zongce", "title": "总册.docx（v1.0 ARCHIVE）", "path": "docs/07-原始资料/原始方案/莫伯双站系统全栈架构与部署总册.docx", "type": "docx", "badge": "ARCHIVE" },
+        { "id": "docx-mobo", "title": "MoBoBrain 双网站建设方案.docx", "path": "docs/07-原始资料/原始方案/MoBoBrain双网站建设方案.docx", "type": "docx", "badge": "ARCHIVE" },
+        { "id": "docx-8c8g", "title": "8C8G 多智能体方案.docx", "path": "docs/07-原始资料/原始方案/阿里云云端多智能体网站平台_部署与运营整合方案.docx", "type": "docx", "badge": "ARCHIVE" },
+        { "id": "docx-v2", "title": "内容原料整合 v2.docx", "path": "docs/07-原始资料/《莫伯双站-内容原料深度整合与整理方案-v2》.docx", "type": "docx", "badge": "ARCHIVE" }
+      ]
+    }
+  ]
+}

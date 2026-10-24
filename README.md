@@ -59,6 +59,7 @@
 | 莫伯资本 | https://henrry179.github.io/mobo-capital-and-mobo-home/sites/mobocapital/ |
 | 莫伯之家 | https://henrry179.github.io/mobo-capital-and-mobo-home/sites/mobohome/ |
 | 控制台 | https://henrry179.github.io/mobo-capital-and-mobo-home/services/console/ |
+| 工程文档站 | https://henrry179.github.io/mobo-capital-and-mobo-home/sites/docs-portal/ |
 
 仓库已含根目录 `index.html`、`.nojekyll`；也可用 [Actions 工作流](.github/workflows/pages.yml)（Source 改选 GitHub Actions 即可）。
 
