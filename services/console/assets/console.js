@@ -481,9 +481,57 @@
     });
   }
 
+  function openRepoDoc(title, path, type) {
+    if (!window.MoBoDocViewer) return;
+    MoBoDocViewer.openFile({
+      title: title,
+      path: path,
+      type: type || (/\.docx$/i.test(path) ? 'docx' : 'md'),
+      url: '../../' + path.split('/').map(encodeURIComponent).join('/')
+    });
+  }
+
+  function renderDocsInline() {
+    var el = $('docs-inline');
+    if (!el) return;
+    fetch('../../sites/docs-portal/catalog.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('catalog')); })
+      .then(function (cat) {
+        var html = '';
+        (cat.groups || []).forEach(function (g) {
+          html += '<div class="docs-group"><div class="docs-group-title">' + esc(g.title) + '</div><div class="docs-links">';
+          (g.items || []).forEach(function (it) {
+            html += '<button type="button" class="doc-chip" data-path="' + esc(it.path) + '" data-type="' + esc(it.type || 'md') + '" data-title="' + esc(it.title) + '">' +
+              esc(it.title) + (it.badge ? ' · ' + esc(it.badge) : '') + '</button>';
+          });
+          html += '</div></div>';
+        });
+        el.innerHTML = html;
+        Array.prototype.forEach.call(el.querySelectorAll('.doc-chip'), function (btn) {
+          btn.addEventListener('click', function () {
+            openRepoDoc(btn.getAttribute('data-title'), btn.getAttribute('data-path'), btn.getAttribute('data-type'));
+          });
+        });
+      })
+      .catch(function () {
+        el.innerHTML = '<div class="empty">文档目录加载失败；仍可用页脚快捷打开总册 / 时间线。</div>';
+      });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     bindTop();
     renderActions();
+    renderDocsInline();
+    var tl = $('open-doc-timeline');
+    var zc = $('open-doc-zongce');
+    if (tl) tl.addEventListener('click', function (e) {
+      e.preventDefault();
+      openRepoDoc('开发部署任务执行时间线', 'docs/01-项目治理/开发部署任务执行时间线.md', 'md');
+    });
+    if (zc) zc.addEventListener('click', function (e) {
+      e.preventDefault();
+      openRepoDoc('全栈总册 v2.1', 'docs/00-总册/莫伯双站系统全栈架构与部署总册-v2.1.md', 'md');
+    });
     load();
     startAuto();
   });

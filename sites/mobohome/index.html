@@ -588,13 +588,13 @@
         const tagsHtml = (s.tags || []).map(t => `<span class="px-2 py-0.5 rounded bg-warm-900 text-amber-400 font-mono text-[11px]">#${t}</span>`).join('');
 
         return `
-          <div class="warm-card rounded-2xl p-6 sm:p-8 space-y-4">
+          <button type="button" class="warm-card rounded-2xl p-6 sm:p-8 space-y-4 text-left w-full hover:border-amber-500/40 transition-colors" onclick="openStoryDoc(${homeData.timeline_stories.indexOf(s)})">
             <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400 border-b border-warm-700 pb-3">
               <div class="flex items-center space-x-2">
                 <span class="px-2.5 py-0.5 rounded bg-amber-500/15 text-amber-400 font-semibold">${chapter}</span>
                 <span>📍 ${s.location_name || '中国'}</span>
               </div>
-              <span class="text-amber-400">${s.event_date} · 心情指数: ${s.mood_score}/10</span>
+              <span class="text-amber-400">${s.event_date} · 心情指数: ${s.mood_score}/10 · 点击阅读</span>
             </div>
             <h3 class="font-serif text-2xl font-bold text-white">${s.title}</h3>
             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed bg-warm-950/50 p-4 rounded-xl border border-warm-700/60 whitespace-pre-line">
@@ -605,7 +605,7 @@
               <div class="flex flex-wrap gap-1.5">${tagsHtml}</div>
               <span class="text-xs font-mono text-slate-500">重要度: ${'★'.repeat(s.importance)}</span>
             </div>
-          </div>
+          </button>
         `;
       }).join('');
     }
@@ -643,12 +643,12 @@
         ? homeData.reading_library
         : homeData.reading_library.filter(b => b.category === catFilter);
 
-      grid.innerHTML = books.map(b => `
-        <div class="warm-card rounded-xl p-5 space-y-3 flex flex-col justify-between">
+      grid.innerHTML = books.map((b, i) => `
+        <button type="button" class="warm-card rounded-xl p-5 space-y-3 flex flex-col justify-between text-left w-full hover:border-amber-500/40 transition-colors" onclick="openBookDoc('${b.id || i}')">
           <div class="space-y-1.5">
             <div class="flex items-center justify-between text-xs font-mono">
               <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400">${b.category}</span>
-              <span class="text-slate-400">${b.status === 'COMPLETED' ? '✓ 已读完' : '📖 阅读中'}</span>
+              <span class="text-slate-400">${b.status === 'COMPLETED' ? '✓ 已读完' : '📖 阅读中'} · 点击</span>
             </div>
             <h4 class="font-serif font-bold text-white text-lg">${b.title}</h4>
             <p class="text-xs text-slate-400 font-mono">作者: ${b.author}</p>
@@ -661,8 +661,30 @@
             <span>推荐评分</span>
             <span>${'★'.repeat(b.rating)}</span>
           </div>
-        </div>
+        </button>
       `).join('');
+    }
+
+    function openStoryDoc(idx) {
+      const s = homeData.timeline_stories[idx];
+      if (!s || !window.MoBoDocViewer) return;
+      const md = s.metadata?.content_markdown || s.summary || '';
+      MoBoDocViewer.openMarkdown({
+        title: s.title,
+        subtitle: (s.metadata?.life_chapter || '') + ' · ' + (s.event_date || ''),
+        markdown: '# ' + s.title + '\n\n' + md
+      });
+    }
+
+    function openBookDoc(id) {
+      const b = homeData.reading_library.find(x => String(x.id) === String(id)) || homeData.reading_library[Number(id)];
+      if (!b || !window.MoBoDocViewer) return;
+      const notes = b.notes_markdown || b.notes || '';
+      const md = '# ' + b.title + '\n\n**作者**：' + (b.author || '—') +
+        '\n\n**类别**：' + (b.category || '—') +
+        '\n\n## 核心洞察\n\n' + (b.core_takeaway || '—') +
+        (notes ? '\n\n## 笔记\n\n' + notes : '');
+      MoBoDocViewer.openMarkdown({ title: b.title, subtitle: '藏书馆 · ' + (b.category || ''), markdown: md });
     }
 
     function switchSection(sec) {
@@ -697,5 +719,6 @@
       loadHomeData();
     });
   </script>
+  <script src="../shared/doc-viewer.js"></script>
 </body>
 </html>

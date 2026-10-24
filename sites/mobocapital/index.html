@@ -380,7 +380,10 @@
           <button onclick="switchMediaPreview('xueqiu')" id="mp-xueqiu" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">3. 雪球投研帖</button>
           <button onclick="switchMediaPreview('x')" id="mp-x" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">4. X 英文串推</button>
         </div>
-        <pre id="media-preview-content" class="bg-navy-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-200 whitespace-pre-wrap overflow-x-auto"></pre>
+        <div class="flex justify-end mb-2">
+          <button type="button" onclick="openMediaDoc()" class="text-xs font-mono text-gold-400 border border-slate-700 hover:border-gold-500 px-3 py-1.5 rounded">页内打开 Markdown 全文 ↗</button>
+        </div>
+        <pre id="media-preview-content" class="bg-navy-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-200 whitespace-pre-wrap overflow-x-auto cursor-pointer" title="点击打开全文" onclick="openMediaDoc()"></pre>
       </div>
     </section>
   </main>
@@ -451,10 +454,11 @@
     ];
 
     const govDocsData = [
-      { type: 'INVESTOR_LETTER', title: '《致莫伯资本未来合伙人备忘录：为什么把“不亏大钱”置于首位》', ver: 'v2.1', vis: 'PUBLIC' },
-      { type: 'RISK_SOP', title: '《莫伯资本投委会风控章程：单笔止损与净值预警清盘制度》', ver: 'v1.4', vis: 'LP_PROSPECT' },
-      { type: 'NAV_ACCOUNTING', title: '《基金份额净值（NAV）会计核算与高水位法业绩报酬计提规范》', ver: 'v1.2', vis: 'LP_PROSPECT' }
+      { type: 'INVESTOR_LETTER', title: '《致莫伯资本未来合伙人备忘录：为什么把“不亏大钱”置于首位》', ver: 'v2.1', vis: 'PUBLIC', content: '# 致未来合伙人\n\n把「不亏大钱」置于首位：风险隔离先于收益叙事。' },
+      { type: 'RISK_SOP', title: '《莫伯资本投委会风控章程：单笔止损与净值预警清盘制度》', ver: 'v1.4', vis: 'LP_PROSPECT', content: '# 风控章程\n\n单笔止损、净值预警与清盘触发条件（LP 可见摘要）。' },
+      { type: 'NAV_ACCOUNTING', title: '《基金份额净值（NAV）会计核算与高水位法业绩报酬计提规范》', ver: 'v1.2', vis: 'LP_PROSPECT', content: '# NAV 与高水位法\n\n定义毛净值、净净值、高水位与回撤口径。' }
     ];
+    let currentMediaChannel = 'web';
 
     const mediaPreviews = {
       web: '# MoBo\'s Memo · 当前宏观周期定位（官网母本）\n\n核心命题：滞胀担忧升温 × 政策对冲空间受限。\n\n监测：FedWatch 全年降息次数、30 城地产成交同比、中美利差。\n\n纪律：研究日志视角；给出可证伪条件；禁止无信息量套话。\n\n状态：PENDING_REVIEW · 待 HITL 终审后发布。',
@@ -521,11 +525,11 @@
         </div>
       `).join('');
 
-      document.getElementById('governance-docs-list').innerHTML = govDocsData.map(d => `
-        <div class="inst-card rounded-xl p-4 space-y-1">
-          <div class="text-[11px] font-mono text-gold-400">${d.type} · ${d.ver} (${d.vis})</div>
+      document.getElementById('governance-docs-list').innerHTML = govDocsData.map((d, i) => `
+        <button type="button" class="inst-card rounded-xl p-4 space-y-1 text-left w-full hover:border-gold-500/50 transition-colors" onclick="openGovDoc(${i})">
+          <div class="text-[11px] font-mono text-gold-400">${d.type} · ${d.ver} (${d.vis}) · 点击阅读</div>
           <div class="font-serif font-bold text-white text-sm">${d.title}</div>
-        </div>
+        </button>
       `).join('');
 
       document.getElementById('terminal-exposure-box').innerHTML = showPerf
@@ -581,7 +585,25 @@
       loadLiveCapitalData(lvl);
     }
 
+    function openGovDoc(i) {
+      const d = govDocsData[i];
+      if (!d || !window.MoBoDocViewer) return;
+      const md = d.content || ('# ' + d.title + '\n\n' + (d.summary || '（暂无正文）'));
+      MoBoDocViewer.openMarkdown({ title: d.title, subtitle: d.type + ' · ' + d.ver, markdown: md });
+    }
+
+    function openMediaDoc() {
+      if (!window.MoBoDocViewer) return;
+      const labels = { web: '官网主权母本', wechat: '微信公众号', xueqiu: '雪球投研帖', x: 'X 英文串推' };
+      MoBoDocViewer.openMarkdown({
+        title: "MoBo's Memo · " + (labels[currentMediaChannel] || currentMediaChannel),
+        subtitle: 'capital_publications · ' + currentMediaChannel,
+        markdown: mediaPreviews[currentMediaChannel] || ''
+      });
+    }
+
     function switchMediaPreview(ch) {
+      currentMediaChannel = ch;
       document.getElementById('media-preview-content').textContent = mediaPreviews[ch];
       ['web', 'wechat', 'xueqiu', 'x'].forEach(id => {
         const el = document.getElementById('mp-' + id);
@@ -690,7 +712,9 @@
               type: d.doc_type,
               title: d.title,
               ver: d.version || 'v1.0',
-              vis: d.visibility || 'PUBLIC'
+              vis: d.visibility || 'PUBLIC',
+              summary: d.summary || '',
+              content: d.content_md || d.summary || ''
             });
           });
           dirty = true;
@@ -756,5 +780,6 @@
       loadTerminalSnapshot();
     });
   </script>
+  <script src="../shared/doc-viewer.js"></script>
 </body>
 </html>
