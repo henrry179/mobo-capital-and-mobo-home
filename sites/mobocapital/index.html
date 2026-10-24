@@ -404,7 +404,7 @@
         <h2 class="font-serif text-3xl font-bold text-white mt-1">工程文档 · 总册 / ADR / Word 归档</h2>
         <p class="text-sm text-slate-400 mt-2">左侧目录点选，右侧页内阅读 Markdown 与 Word；与业务公域 JSON 分轨，同源自仓库 docs/。</p>
       </div>
-      <div id="docs-pane-root"></div>
+      <div id="docs-pane-root" class="mobo-docs-boot" style="border:1px dashed rgba(148,163,184,.35);border-radius:12px;padding:20px;color:#94a3b8;font-size:13px;line-height:1.6;background:rgba(2,6,23,.4)">正在准备文档目录…若长时间空白请强制刷新（Ctrl+F5）。</div>
     </section>
   </main>
 
@@ -422,6 +422,8 @@
     </div>
   </footer>
 
+  <script src="../shared/doc-viewer.js"></script>
+  <script src="../shared/docs-pane.js"></script>
   <script>
     let currentClearance = 'PUBLIC';
 
@@ -572,15 +574,26 @@
     }
 
     let docsPaneMounted = false;
+    let docsPaneTries = 0;
     function ensureDocsPane() {
-      if (docsPaneMounted || !window.MoBoDocsPane) return;
       const root = document.getElementById('docs-pane-root');
-      if (!root) return;
+      if (!root || docsPaneMounted) return;
+      if (!window.MoBoDocsPane) {
+        docsPaneTries += 1;
+        root.innerHTML = '<div style="border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.08);color:#fecaca;padding:12px;border-radius:10px;line-height:1.5">文档组件尚未加载（docs-pane.js）。正在重试 ' + docsPaneTries + '/20…</div>';
+        if (docsPaneTries < 20) setTimeout(ensureDocsPane, 200);
+        return;
+      }
       docsPaneMounted = true;
+      root.className = '';
+      root.removeAttribute('style');
       MoBoDocsPane.mount(root, {
         catalogUrl: '../docs-portal/catalog.json',
         repoBase: '../../',
         defaultId: 'zongce'
+      }).catch(function (e) {
+        docsPaneMounted = false;
+        root.innerHTML = '<div style="border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.08);color:#fecaca;padding:12px;border-radius:10px">挂载失败：' + String(e && e.message || e) + '</div>';
       });
     }
 
@@ -596,8 +609,16 @@
           nav.className = 'nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white';
         }
       });
-      if (sec === 'docs') ensureDocsPane();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (sec === 'docs') {
+        docsPaneTries = 0;
+        ensureDocsPane();
+        requestAnimationFrame(function () {
+          const secEl = document.getElementById('sec-docs');
+          if (secEl) secEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
 
     function setAccessLevel(lvl) {
@@ -813,9 +834,8 @@
       loadEditorialData();
       loadLiveCapitalData('PUBLIC');
       loadTerminalSnapshot();
+      if (location.hash === '#docs') switchSection('docs');
     });
   </script>
-  <script src="../shared/doc-viewer.js"></script>
-  <script src="../shared/docs-pane.js"></script>
 </body>
 </html>
