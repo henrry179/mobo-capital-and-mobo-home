@@ -64,6 +64,31 @@
 	file_server
 }
 
+# 工程文档阅读器：共享脚本 / catalog / 仓库 docs（域名根部署时 ../shared 会落到 /shared）
+(docs_assets) {
+	handle_path /shared/* {
+		root * /srv/sites/shared
+		header Cache-Control "public, max-age=300"
+		file_server
+	}
+	handle_path /docs-portal/* {
+		root * /srv/sites/docs-portal
+		header Cache-Control "public, max-age=60"
+		file_server
+	}
+	handle /docs/* {
+		root * /srv/repo
+		header Cache-Control "public, max-age=60"
+		file_server
+	}
+	@repo_root_md path /README.md /CLAUDE.md /TASK_STATE.md
+	handle @repo_root_md {
+		root * /srv/repo
+		header Cache-Control "public, max-age=60"
+		file_server
+	}
+}
+
 # ---------------------------------------------------------------------------
 # 网站 A：莫伯资本 MoBoCapital（华尔街机构级投研门户）
 # ---------------------------------------------------------------------------
@@ -73,7 +98,7 @@
 	import security_headers
 	header {
 		X-Robots-Tag "index, follow"
-		Content-Security-Policy "default-src 'self'; img-src 'self' data: https://*.aliyuncs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+		Content-Security-Policy "default-src 'self'; img-src 'self' data: https://*.aliyuncs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
 	}
 
 	# 1. 内网驾驶舱：全量数据包 + 私有交割单签名链接，强制 BasicAuth
@@ -88,6 +113,9 @@
 	handle @public_data {
 		import public_json
 	}
+
+	# 2.5 工程文档资产（必须在 SPA try_files 之前）
+	import docs_assets
 
 	# 3. 单页应用入口
 	handle {
@@ -105,7 +133,7 @@
 	import security_headers
 	header {
 		X-Robots-Tag "index, follow"
-		Content-Security-Policy "default-src 'self'; img-src 'self' data: https://*.aliyuncs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+		Content-Security-Policy "default-src 'self'; img-src 'self' data: https://*.aliyuncs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
 	}
 
 	# 1. 内网私密档案（含家庭影像签名链接）
@@ -126,6 +154,9 @@
 	handle @lab {
 		redir https://{$DOMAIN_LAB}{uri} 302
 	}
+
+	# 3.5 工程文档资产（必须在 SPA try_files 之前）
+	import docs_assets
 
 	# 4. 单页应用入口
 	handle {

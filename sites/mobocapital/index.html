@@ -422,8 +422,17 @@
     </div>
   </footer>
 
-  <script src="../shared/doc-viewer.js?v=b045068b"></script>
-  <script src="../shared/docs-pane.js?v=b045068b"></script>
+  <script>
+    window.MoBoDocsPaths = (function () {
+      var p = location.pathname || '/';
+      if (/\/sites\/mobo(capital|home)(\/|$)/.test(p)) {
+        return { sharedBase: '../shared/', catalogUrl: '../docs-portal/catalog.json', repoBase: '../../' };
+      }
+      return { sharedBase: '/shared/', catalogUrl: '/docs-portal/catalog.json', repoBase: '/' };
+    })();
+    document.write('<script src="' + MoBoDocsPaths.sharedBase + 'doc-viewer.js?v=70cb209c"><\/script>');
+    document.write('<script src="' + MoBoDocsPaths.sharedBase + 'docs-pane.js?v=70cb209c"><\/script>');
+  </script>
   <script>
     let currentClearance = 'PUBLIC';
 
@@ -588,8 +597,8 @@
       root.className = '';
       root.removeAttribute('style');
       MoBoDocsPane.mount(root, {
-        catalogUrl: '../docs-portal/catalog.json',
-        repoBase: '../../',
+        catalogUrl: (window.MoBoDocsPaths && MoBoDocsPaths.catalogUrl) || '../docs-portal/catalog.json',
+        repoBase: (window.MoBoDocsPaths && MoBoDocsPaths.repoBase) || '../../',
         defaultId: 'zongce'
       }).catch(function (e) {
         docsPaneMounted = false;

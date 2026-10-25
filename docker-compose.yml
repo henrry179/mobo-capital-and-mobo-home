@@ -52,6 +52,13 @@ services:
       # 双站静态门户（只读分发，服务端 0 额外内存）
       - ./sites/mobocapital:/srv/sites/mobocapital:ro
       - ./sites/mobohome:/srv/sites/mobohome:ro
+      # 工程文档阅读器资产（域名根部署时 /shared /docs-portal /docs）
+      - ./sites/shared:/srv/sites/shared:ro
+      - ./sites/docs-portal:/srv/sites/docs-portal:ro
+      - ./docs:/srv/repo/docs:ro
+      - ./README.md:/srv/repo/README.md:ro
+      - ./CLAUDE.md:/srv/repo/CLAUDE.md:ro
+      - ./TASK_STATE.md:/srv/repo/TASK_STATE.md:ro
       # 静态操作台
       - ./services/console:/srv/console:ro
     networks:
