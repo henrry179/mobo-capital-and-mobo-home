@@ -66,6 +66,68 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C5A059; }
     @keyframes pulse-subtle { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
     .live-dot { animation: pulse-subtle 2.2s infinite ease-in-out; }
+    /* 草稿预览 · 各端壳层 */
+    .mp-phone {
+      width: min(100%, 380px);
+      margin: 0 auto;
+      border-radius: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: #0b1220;
+      box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.75);
+      overflow: hidden;
+    }
+    .mp-phone-notch {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.55);
+      background: rgba(0, 0, 0, 0.35);
+    }
+    .mp-scroll { max-height: 520px; overflow: auto; }
+    .mp-web-sheet {
+      max-width: 720px;
+      margin: 0 auto;
+      border: 1px solid rgba(197, 160, 89, 0.28);
+      background: linear-gradient(180deg, rgba(13, 24, 46, 0.95), rgba(7, 14, 28, 0.98));
+      border-radius: 12px;
+      padding: 28px 32px;
+    }
+    .mp-x-thread { max-width: 560px; margin: 0 auto; }
+    .mp-x-card {
+      border: 1px solid #2f3336;
+      background: #000;
+      border-radius: 16px;
+      padding: 14px 16px;
+      color: #e7e9ea;
+    }
+    .mp-weibo-card {
+      border: 1px solid #3d3d3d;
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #f5f5f5;
+    }
+    .mp-xhs-card {
+      background: #fff;
+      color: #111;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .mp-xhs-cover {
+      height: 160px;
+      background:
+        linear-gradient(135deg, rgba(255, 36, 66, 0.85), rgba(255, 140, 90, 0.7)),
+        repeating-linear-gradient(-12deg, transparent, transparent 12px, rgba(255,255,255,0.08) 12px, rgba(255,255,255,0.08) 24px);
+      display: flex;
+      align-items: flex-end;
+      padding: 14px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-gold-500 selection:text-navy-950 grid-bg">
@@ -445,18 +507,24 @@
         <p class="text-[11px] text-slate-500">账号合计只抄平台窗口上印出的数字。单篇行不相加。半年和一年六端都留空，以后按日账自建。截图日 2026-10-26。</p>
       </div>
 
-      <div id="ops-panel-draft" class="hidden inst-card rounded-xl p-5 space-y-4">
-        <div class="flex flex-wrap gap-2 text-xs font-mono">
-          <button type="button" onclick="switchMediaPreview('web')" id="mp-web" class="media-tab px-3 py-1.5 rounded bg-gold-500 text-navy-950 font-semibold">官网母本</button>
-          <button type="button" onclick="switchMediaPreview('wechat')" id="mp-wechat" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">微信</button>
-          <button type="button" onclick="switchMediaPreview('xueqiu')" id="mp-xueqiu" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">雪球</button>
-          <button type="button" onclick="switchMediaPreview('x')" id="mp-x" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">X 草稿</button>
+      <div id="ops-panel-draft" class="hidden space-y-4">
+        <div class="inst-card rounded-xl p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap gap-2 text-xs font-mono" id="mp-tabs">
+              <button type="button" onclick="switchMediaPreview('web')" id="mp-web" class="media-tab px-3 py-1.5 rounded bg-gold-500 text-navy-950 font-semibold">官网母本</button>
+              <button type="button" onclick="switchMediaPreview('wechat')" id="mp-wechat" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">微信</button>
+              <button type="button" onclick="switchMediaPreview('toutiao')" id="mp-toutiao" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">头条</button>
+              <button type="button" onclick="switchMediaPreview('weibo')" id="mp-weibo" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">微博</button>
+              <button type="button" onclick="switchMediaPreview('xueqiu')" id="mp-xueqiu" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">雪球</button>
+              <button type="button" onclick="switchMediaPreview('xhs')" id="mp-xhs" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">小红书</button>
+              <button type="button" onclick="switchMediaPreview('x')" id="mp-x" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">X</button>
+            </div>
+            <button type="button" onclick="openMediaDoc()" class="text-xs font-mono text-gold-400 border border-slate-700 hover:border-gold-500 px-3 py-1.5 rounded shrink-0">页内打开全文</button>
+          </div>
+          <p id="mp-channel-hint" class="text-[11px] text-slate-500 leading-relaxed"></p>
         </div>
-        <div class="flex justify-end">
-          <button type="button" onclick="openMediaDoc()" class="text-xs font-mono text-gold-400 border border-slate-700 hover:border-gold-500 px-3 py-1.5 rounded">页内打开全文</button>
-        </div>
-        <pre id="media-preview-content" class="bg-navy-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-200 whitespace-pre-wrap overflow-x-auto cursor-pointer" onclick="openMediaDoc()"></pre>
-        <p class="text-[11px] text-slate-500">草稿仍停在人工终审之前。境内微信、雪球版本继续脱敏具体买卖点位并带免责声明。</p>
+        <div id="media-preview-stage" class="cursor-pointer" onclick="openMediaDoc()" role="button" tabindex="0" aria-label="打开全文草稿"></div>
+        <p class="text-[11px] text-slate-500">各端 UI 仅供人工终审对照，不自动发布。境内微信 / 头条 / 微博 / 雪球 / 小红书继续脱敏买卖点位并带免责声明；X 发英文母稿译稿。</p>
       </div>
 
       <div id="ops-panel-queue" class="hidden space-y-4">
@@ -558,13 +626,202 @@
       { type: 'NAV_ACCOUNTING', title: '《基金份额净值（NAV）会计核算与高水位法业绩报酬计提规范》', ver: 'v1.2', vis: 'LP_PROSPECT', content: '# NAV 与高水位法\n\n定义毛净值、净净值、高水位与回撤口径。' }
     ];
     let currentMediaChannel = 'web';
+    const MEDIA_CHANNELS = ['web', 'wechat', 'toutiao', 'weibo', 'xueqiu', 'xhs', 'x'];
+    const MEDIA_META = {
+      web: { label: '官网主权母本', hint: '宽版 Memo 排版 · 研究母本，供各端改写前终审。' },
+      wechat: { label: '微信公众号', hint: '公众号图文壳 · 绿顶栏 · 免责声明置顶 · 境内脱敏。' },
+      toutiao: { label: '今日头条', hint: '头条信息流稿 · 红标「首发」提醒 · 72 小时内勿同步他端。' },
+      weibo: { label: '新浪微博', hint: '微博短帖壳 · 可参与偶尔同日重复（仅微信/雪球/微博）。' },
+      xueqiu: { label: '雪球', hint: '雪球投研帖 · $标的$ 语境提及 · 非荐股。' },
+      xhs: { label: '小红书', hint: '小红书笔记壳 · 原创优先 · 不参与偶尔同日重复。' },
+      x: { label: 'X 英文串推', hint: 'X thread · 英文主发 · 译自深度精读中文母稿 · 当天不与他端同母稿。' }
+    };
 
     const mediaPreviews = {
       web: '# MoBo\'s Memo · 当前宏观周期定位（官网母本）\n\n核心命题：滞胀担忧升温 × 政策对冲空间受限。\n\n监测：FedWatch 全年降息次数、30 城地产成交同比、中美利差。\n\n纪律：研究日志视角；给出可证伪条件；禁止无信息量套话。\n\n状态：PENDING_REVIEW · 待 HITL 终审后发布。',
-      wechat: '【免责声明】本文仅供研究交流，不构成投资建议。\n\n财务报表是后视镜，库存周转与采购先行指标才是挡风玻璃。本周只讨论周期定位与监测阈值，不涉及具体买卖点位。（境内合规脱敏已注入）',
-      xueqiu: '【研究笔记】周期定位：弱复苏 + 政策托底，外生变量看美联储路径。\n关注社融脉冲、PMI 订单-库存差、地产高频——机制先于方向。\n$沪深300$ $恒生科技$ 仅作市场语境提及，非荐股。',
-      x: '1/4 Regime note: sticky inflation + soft manufacturing = policy optionality is narrower than consensus hopes.\n2/4 China: weak recovery, PPI still soft — watch credit impulse & property high-freq.\n3/4 Process > prediction: falsifiers first, then scenarios.\n4/4 Full memo (HITL): mobocapital.com/memo'
+      wechat: '标题：滞胀阴影下的政策抉择｜宏观周期定位\n\n【免责声明】本文仅供研究交流，不构成投资建议。\n\n财务报表是后视镜，库存周转与采购先行指标才是挡风玻璃。本周只讨论周期定位与监测指标，不涉及具体买卖点位。（境内合规脱敏已注入）',
+      toutiao: '标题：滞胀阴影下的政策抉择｜宏观周期定位\n\n【免责声明】仅供研究交流，不构成投资建议。\n\n弱复苏叠加外生利率路径不确定，先看社融脉冲与 PMI 订单-库存差，再谈风险偏好。本稿勾选头条首发时，72 小时内不出现在其他五端。',
+      weibo: '【研究分享｜非投资建议】周期定位：滞胀担忧升温，政策对冲空间收窄。关注信用脉冲与地产高频，不谈具体点位。#宏观 #波动率',
+      xueqiu: '标题：周期定位：弱复苏与政策托底\n\n【研究笔记】外生变量看美联储路径。关注社融脉冲、PMI 订单-库存差、地产高频——机制先于方向。\n$沪深300$ $恒生科技$ 仅作市场语境提及，非荐股。',
+      xhs: '标题：宏观周期怎么读｜机制先于方向\n\n把财务报表当后视镜，把库存周转与采购当挡风玻璃。本周只写监测指标，不写买卖点。\n\n#财经干货 #宏观研究 #投资笔记\n（声明原创 · 约 4 天保护间隔）',
+      x: '1/4 Regime note: sticky inflation + soft manufacturing = policy optionality is narrower than consensus hopes.\n2/4 China: weak recovery, PPI still soft — watch credit impulse & property high-freq.\n3/4 Process > prediction: falsifiers first, then scenarios.\n4/4 Not investment advice. Full memo (HITL): mobocapital.com/memo'
     };
+
+    function mediaPlain(text) {
+      const s = String(text == null ? '' : text);
+      if (/<[a-z][\s\S]*>/i.test(s)) {
+        const d = document.createElement('div');
+        d.innerHTML = s;
+        return (d.textContent || d.innerText || '').trim();
+      }
+      return s.trim();
+    }
+
+    function mediaBodyLines(text) {
+      const lines = mediaPlain(text).split(/\n+/).map(l => l.trim()).filter(Boolean);
+      if (!lines.length) return [];
+      if (/^标题[：:]/.test(lines[0])) lines.shift();
+      else if (/^#\s+/.test(lines[0])) lines.shift();
+      return lines;
+    }
+
+    function mediaParas(text, pClass) {
+      const lines = mediaBodyLines(text);
+      if (!lines.length) return '<p class="' + pClass + '">（暂无草稿）</p>';
+      return lines.map(line =>
+        '<p class="' + pClass + '">' + opsEsc(line) + '</p>'
+      ).join('');
+    }
+
+    function mediaTitleFrom(text, fallback) {
+      const lines = mediaPlain(text).split(/\n+/).map(l => l.trim()).filter(Boolean);
+      const titled = lines.find(l => /^标题[：:]/.test(l));
+      if (titled) return titled.replace(/^标题[：:]\s*/, '').trim() || fallback;
+      const first = lines.find(l => !/^【/.test(l) && !/免责声明/.test(l)) || lines[0] || fallback;
+      return String(first).replace(/^#\s*/, '').replace(/^【[^】]*】\s*/, '').trim() || fallback;
+    }
+
+    function renderMediaPreviewShell(ch) {
+      const stage = document.getElementById('media-preview-stage');
+      const hint = document.getElementById('mp-channel-hint');
+      if (!stage) return;
+      const raw = mediaPreviews[ch] || '';
+      const meta = MEDIA_META[ch] || { label: ch, hint: '' };
+      if (hint) hint.textContent = meta.hint;
+      const body = mediaPlain(raw);
+      const title = mediaTitleFrom(raw, "MoBo's Memo");
+
+      if (ch === 'web') {
+        stage.innerHTML = `
+          <div class="mp-web-sheet space-y-4">
+            <div class="text-[10px] font-mono text-gold-400 tracking-widest">MO BO CAPITAL · MEMO</div>
+            <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white leading-snug">${opsEsc(title)}</h3>
+            <div class="h-px bg-gradient-to-r from-gold-500/60 to-transparent"></div>
+            <div class="space-y-3 text-sm text-slate-300 leading-relaxed">${mediaParas(raw, 'text-sm text-slate-300 leading-relaxed')}</div>
+            <div class="pt-2 text-[11px] font-mono text-amber-200/90">STATUS · PENDING_REVIEW · HITL</div>
+          </div>`;
+        return;
+      }
+
+      if (ch === 'wechat') {
+        stage.innerHTML = `
+          <div class="mp-phone">
+            <div class="mp-phone-notch" style="background:#07C160;color:#fff;">微信 · 公众号</div>
+            <div class="mp-scroll bg-white text-slate-900">
+              <div class="px-4 pt-4 pb-2 border-b border-slate-100">
+                <div class="text-[11px] text-slate-400">莫伯资本</div>
+                <h3 class="text-lg font-bold leading-snug mt-1">${opsEsc(title)}</h3>
+                <div class="mt-2 inline-block text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">原创 · 研究交流</div>
+              </div>
+              <div class="px-4 py-3 space-y-3 text-[13px] leading-relaxed text-slate-700">${mediaParas(raw, 'text-[13px] leading-relaxed text-slate-700')}</div>
+              <div class="px-4 pb-5 text-[11px] text-slate-400">阅读 · 点赞 · 在看 · 留言（发布后可见）</div>
+            </div>
+          </div>`;
+        return;
+      }
+
+      if (ch === 'toutiao') {
+        stage.innerHTML = `
+          <div class="mp-phone">
+            <div class="mp-phone-notch" style="background:#F04142;color:#fff;">今日头条</div>
+            <div class="mp-scroll bg-[#f7f7f7] text-slate-900">
+              <div class="bg-white px-4 py-4 space-y-2">
+                <div class="flex items-center gap-2 text-[11px]">
+                  <span class="px-1.5 py-0.5 rounded bg-red-600 text-white font-semibold">首发</span>
+                  <span class="text-slate-400">72h 内勿同步他端</span>
+                </div>
+                <h3 class="text-xl font-bold leading-snug">${opsEsc(title)}</h3>
+                <div class="flex items-center gap-2 text-[11px] text-slate-500">
+                  <span class="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-[10px] font-bold">莫</span>
+                  <span>莫伯资本</span><span>·</span><span>刚刚</span>
+                </div>
+              </div>
+              <div class="bg-white mt-2 px-4 py-4 space-y-3 text-[14px] leading-relaxed text-slate-800">${mediaParas(raw, 'text-[14px] leading-relaxed text-slate-800')}</div>
+            </div>
+          </div>`;
+        return;
+      }
+
+      if (ch === 'weibo') {
+        stage.innerHTML = `
+          <div class="max-w-lg mx-auto mp-weibo-card space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-orange-500/90 text-white flex items-center justify-center font-bold text-sm">莫</div>
+              <div>
+                <div class="font-semibold text-sm">莫伯资本</div>
+                <div class="text-[11px] text-slate-400">微博 · 刚刚</div>
+              </div>
+              <div class="ml-auto text-[#ff8200] text-xs font-mono">关注</div>
+            </div>
+            <div class="text-[14px] leading-relaxed whitespace-pre-wrap">${opsEsc(body)}</div>
+            <div class="flex gap-6 text-[12px] text-slate-400 pt-1 border-t border-slate-700/80">
+              <span>转发</span><span>评论</span><span>赞</span>
+            </div>
+          </div>`;
+        return;
+      }
+
+      if (ch === 'xueqiu') {
+        const html = opsEsc(body).replace(/\$([^$\n]+)\$/g, '<span class="text-sky-400 font-medium">$$$1$$</span>');
+        stage.innerHTML = `
+          <div class="max-w-lg mx-auto rounded-xl overflow-hidden border border-sky-500/30 bg-[#0b1a2e]">
+            <div class="px-4 py-2 bg-[#1b66ff] text-white text-xs font-mono flex justify-between">
+              <span>雪球 · 讨论</span><span>原创专栏</span>
+            </div>
+            <div class="p-4 space-y-3">
+              <div class="flex items-center gap-2 text-xs text-slate-400">
+                <span class="w-8 h-8 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs font-bold">莫</span>
+                <span class="text-slate-200 font-medium">莫伯资本</span>
+              </div>
+              <h3 class="font-serif text-lg font-bold text-white">${opsEsc(title)}</h3>
+              <div class="text-[13px] text-slate-300 leading-relaxed whitespace-pre-wrap">${html}</div>
+              <div class="text-[11px] text-slate-500 font-mono">阅读 · 点赞 · 讨论 · 转发 · 收藏</div>
+            </div>
+          </div>`;
+        return;
+      }
+
+      if (ch === 'xhs') {
+        stage.innerHTML = `
+          <div class="mp-phone" style="background:#f5f5f5;">
+            <div class="mp-phone-notch" style="background:#FF2442;color:#fff;">小红书</div>
+            <div class="mp-scroll p-3">
+              <div class="mp-xhs-card shadow-lg">
+                <div class="mp-xhs-cover">${opsEsc(title.slice(0, 28))}</div>
+                <div class="p-4 space-y-3">
+                  <div class="flex items-center gap-2 text-[12px] text-slate-600">
+                    <span class="w-7 h-7 rounded-full bg-[#FF2442] text-white flex items-center justify-center text-[10px] font-bold">莫</span>
+                    <span class="font-medium text-slate-800">莫伯资本</span>
+                    <span class="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-red-50 text-[#FF2442] border border-red-100">已声明原创</span>
+                  </div>
+                  <div class="text-[13px] text-slate-700 leading-relaxed space-y-2">${mediaParas(raw, 'text-[13px] text-slate-700 leading-relaxed')}</div>
+                  <div class="flex gap-4 text-[12px] text-slate-400 pt-1"><span>赞</span><span>藏</span><span>评</span><span>转</span></div>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        return;
+      }
+
+      if (ch === 'x') {
+        const parts = body.split(/\n+/).filter(Boolean);
+        const cards = (parts.length ? parts : ['(empty thread)']).map((line, i) => `
+          <div class="mp-x-card space-y-2">
+            <div class="flex items-center gap-2 text-[13px]">
+              <span class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">MB</span>
+              <div>
+                <div class="font-semibold">MoBo Capital <span class="text-slate-500 font-normal">@MoBoCapital</span></div>
+                <div class="text-[11px] text-slate-500">${i + 1}/${parts.length || 1}</div>
+              </div>
+            </div>
+            <div class="text-[15px] leading-relaxed whitespace-pre-wrap">${opsEsc(line)}</div>
+          </div>`).join('<div class="w-px h-3 bg-[#2f3336] ml-8"></div>');
+        stage.innerHTML = `<div class="mp-x-thread space-y-0">${cards}</div>`;
+        return;
+      }
+
+      stage.innerHTML = `<pre class="bg-navy-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-200 whitespace-pre-wrap">${opsEsc(body)}</pre>`;
+    }
 
     function renderAll() {
       const showPerf = currentClearance !== 'PUBLIC';
@@ -727,21 +984,21 @@
 
     function openMediaDoc() {
       if (!window.MoBoDocViewer) return;
-      const labels = { web: '官网主权母本', wechat: '微信公众号', xueqiu: '雪球投研帖', x: 'X 英文串推' };
+      const meta = MEDIA_META[currentMediaChannel] || { label: currentMediaChannel };
       MoBoDocViewer.openMarkdown({
-        title: "MoBo's Memo · " + (labels[currentMediaChannel] || currentMediaChannel),
-        subtitle: 'capital_publications · ' + currentMediaChannel,
-        markdown: mediaPreviews[currentMediaChannel] || ''
+        title: "MoBo's Memo · " + meta.label,
+        subtitle: 'capital_publications · ' + currentMediaChannel + ' · 草稿预览',
+        markdown: mediaPlain(mediaPreviews[currentMediaChannel] || '')
       });
     }
 
     function switchMediaPreview(ch) {
-      currentMediaChannel = ch;
-      document.getElementById('media-preview-content').textContent = mediaPreviews[ch];
-      ['web', 'wechat', 'xueqiu', 'x'].forEach(id => {
+      currentMediaChannel = MEDIA_CHANNELS.indexOf(ch) >= 0 ? ch : 'web';
+      renderMediaPreviewShell(currentMediaChannel);
+      MEDIA_CHANNELS.forEach(id => {
         const el = document.getElementById('mp-' + id);
         if (!el) return;
-        el.className = id === ch
+        el.className = id === currentMediaChannel
           ? 'media-tab px-3 py-1.5 rounded bg-gold-500 text-navy-950 font-semibold'
           : 'media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300';
       });
@@ -818,9 +1075,12 @@
             : (typeof prefer.x_thread_json === 'string' ? prefer.x_thread_json : '');
           mediaPreviews.web = prefer.web_markdown || mediaPreviews.web;
           mediaPreviews.wechat = prefer.wechat_html || prefer.summary || mediaPreviews.wechat;
+          mediaPreviews.toutiao = prefer.toutiao_markdown || prefer.summary || mediaPreviews.toutiao;
+          mediaPreviews.weibo = prefer.weibo_markdown || prefer.summary || mediaPreviews.weibo;
           mediaPreviews.xueqiu = prefer.xueqiu_markdown || mediaPreviews.xueqiu;
+          mediaPreviews.xhs = prefer.xhs_markdown || prefer.summary || mediaPreviews.xhs;
           mediaPreviews.x = thread || mediaPreviews.x;
-          switchMediaPreview('web');
+          switchMediaPreview(currentMediaChannel || 'web');
           dirty = true;
         }
 
@@ -1250,6 +1510,7 @@
       });
       if (name === 'ledger') renderOpsLedger();
       if (name === 'analytics') renderOpsAnalytics(currentOpsPlatform);
+      if (name === 'draft') switchMediaPreview(currentMediaChannel || 'web');
       if (name === 'queue') renderOpsQueue();
     }
 
