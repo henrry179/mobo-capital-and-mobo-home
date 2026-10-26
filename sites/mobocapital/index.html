@@ -117,7 +117,7 @@
         <button onclick="switchSection('strategies')" id="nav-strategies" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">2. 策略与复盘 <span class="font-mono text-xs text-slate-500">/strategies</span></button>
         <button onclick="switchSection('incubation')" id="nav-incubation" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">3. 基金孵化蓝图 <span class="font-mono text-xs text-slate-500">/incubation</span></button>
         <button onclick="switchSection('terminal')" id="nav-terminal" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">4. 量化终端 <span class="font-mono text-xs text-slate-500">/terminal</span></button>
-        <button onclick="switchSection('media')" id="nav-media" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">5. 运营总控台 <span class="font-mono text-xs text-slate-500">/media-ops</span></button>
+        <button onclick="switchSection('media')" id="nav-media" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">5. 财经自媒体运营 <span class="font-mono text-xs text-slate-500">/media-ops</span></button>
         <button onclick="switchSection('docs')" id="nav-docs" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">6. 工程文档 <span class="font-mono text-xs text-slate-500">/docs</span></button>
       </nav>
 
@@ -131,7 +131,7 @@
       <button type="button" onclick="switchSection('strategies')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">策略复盘</button>
       <button type="button" onclick="switchSection('incubation')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">孵化蓝图</button>
       <button type="button" onclick="switchSection('terminal')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">量化终端</button>
-      <button type="button" onclick="switchSection('media')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">总控台</button>
+      <button type="button" onclick="switchSection('media')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">财经自媒体运营</button>
       <button type="button" onclick="switchSection('docs')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">工程文档</button>
     </div>
   </header>
@@ -366,7 +366,7 @@
     <section id="sec-media" class="hidden space-y-6">
       <div class="border-b border-slate-800 pb-4">
         <span class="text-xs font-mono text-gold-400">COLUMN 05 · /media-ops · 六端错峰 · 人工终审</span>
-        <h2 class="font-serif text-3xl font-bold text-white mt-1">财经自媒体运营总控台</h2>
+        <h2 class="font-serif text-3xl font-bold text-white mt-1">财经自媒体运营</h2>
         <p class="text-sm text-slate-400 mt-2">微信公众号、今日头条、新浪微博、雪球、小红书、X。每天六篇不同母稿，换平台至少隔 3 天、目标约 4 天。台账在本机浏览器，导出为 Excel 可打开的 CSV。不自动发布。</p>
       </div>
       <div class="rounded-lg border border-rose-500/40 bg-rose-950/30 px-4 py-3 text-xs text-rose-100 leading-relaxed">
@@ -383,6 +383,7 @@
         <button type="button" id="ops-tab-ledger" onclick="switchOpsPanel('ledger')" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">发布台账</button>
         <button type="button" id="ops-tab-analytics" onclick="switchOpsPanel('analytics')" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">数据模板</button>
         <button type="button" id="ops-tab-draft" onclick="switchOpsPanel('draft')" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">草稿预览</button>
+        <button type="button" id="ops-tab-queue" onclick="switchOpsPanel('queue')" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">发布预览</button>
       </div>
 
       <div id="ops-panel-cadence" class="space-y-4">
@@ -420,7 +421,8 @@
           </label>
           <label class="space-y-1"><span class="text-slate-500">发布时间</span><input id="ops-time" type="time" required class="w-full bg-navy-950 border border-slate-700 rounded px-2 py-1.5 text-slate-100"></label>
           <label class="space-y-1 flex items-end"><button type="submit" class="w-full bg-gold-500 text-navy-950 font-semibold rounded px-3 py-1.5">入账</button></label>
-          <label id="ops-en-wrap" class="hidden md:col-span-6 space-y-1"><span class="text-slate-500">英文标题（仅 X）</span><input id="ops-en" class="w-full bg-navy-950 border border-slate-700 rounded px-2 py-1.5 text-slate-100" placeholder="国际金融交易译风的英文题"></label>
+          <label class="space-y-1 md:col-span-3"><span class="text-slate-500">选中书</span><input id="ops-book" class="w-full bg-navy-950 border border-slate-700 rounded px-2 py-1.5 text-slate-100" placeholder="来源书或精读册"></label>
+          <label id="ops-en-wrap" class="hidden md:col-span-3 space-y-1"><span class="text-slate-500">英文标题（仅 X）</span><input id="ops-en" class="w-full bg-navy-950 border border-slate-700 rounded px-2 py-1.5 text-slate-100" placeholder="国际金融交易译风的英文题"></label>
         </form>
         <div class="flex flex-wrap gap-2 text-xs font-mono">
           <button type="button" onclick="exportOpsLedger()" class="px-3 py-1.5 rounded border border-gold-500/40 text-gold-400">导出 CSV</button>
@@ -430,7 +432,7 @@
         <div id="ops-ledger-notes" class="text-xs text-amber-200/90 space-y-1"></div>
         <div class="inst-card rounded-xl p-4 overflow-x-auto">
           <table class="w-full text-xs text-left">
-            <thead class="text-slate-500 font-mono"><tr><th class="py-2 pr-2">序号</th><th class="py-2 pr-2">日期</th><th class="py-2 pr-2">文章标题</th><th class="py-2 pr-2">平台</th><th class="py-2 pr-2">发布时间</th><th class="py-2 pr-2">英文标题</th><th class="py-2"></th></tr></thead>
+            <thead class="text-slate-500 font-mono"><tr><th class="py-2 pr-2">序号</th><th class="py-2 pr-2">日期</th><th class="py-2 pr-2">文章标题</th><th class="py-2 pr-2">平台</th><th class="py-2 pr-2">发布时间</th><th class="py-2 pr-2">选中书</th><th class="py-2 pr-2">英文标题</th><th class="py-2"></th></tr></thead>
             <tbody id="ops-ledger-body" class="text-slate-200"></tbody>
           </table>
         </div>
@@ -455,6 +457,11 @@
         </div>
         <pre id="media-preview-content" class="bg-navy-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-200 whitespace-pre-wrap overflow-x-auto cursor-pointer" onclick="openMediaDoc()"></pre>
         <p class="text-[11px] text-slate-500">草稿仍停在人工终审之前。境内微信、雪球版本继续脱敏具体买卖点位并带免责声明。</p>
+      </div>
+
+      <div id="ops-panel-queue" class="hidden space-y-4">
+        <div id="ops-queue-body" class="space-y-4"></div>
+        <p class="text-[11px] text-slate-500">按文章标题分组，只读展示发布台账里的排期。日、年、月日、平台、选中书各成一行标题样式。不自动发布。</p>
       </div>
     </section>
 
@@ -1034,6 +1041,32 @@
       return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
     }
 
+    function opsPlatformLabel(p) {
+      const map = {
+        '微信公众号': '微信平台',
+        '今日头条': '今日头条平台',
+        '新浪微博': '新浪微博平台',
+        '雪球': '雪球平台',
+        '小红书': '小红书平台',
+        'X': 'X平台'
+      };
+      return map[p] || (String(p || '') + '平台');
+    }
+
+    function opsDateParts(dateStr) {
+      const m = String(dateStr || '').match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (!m) return { day: '—', year: '—', monthDay: '—' };
+      return {
+        day: String(Number(m[3])).padStart(2, '0'),
+        year: m[1],
+        monthDay: Number(m[2]) + '月' + Number(m[3])
+      };
+    }
+
+    function opsTitleLine(value) {
+      return '<div class="font-serif text-base sm:text-lg font-bold text-white leading-snug">' + opsEsc(value) + '</div>';
+    }
+
     function renderOpsLedger() {
       const body = document.getElementById('ops-ledger-body');
       if (!body) return;
@@ -1046,12 +1079,42 @@
           <td class="py-2 pr-2">${opsEsc(r.title)}</td>
           <td class="py-2 pr-2">${opsEsc(r.platform)}</td>
           <td class="py-2 pr-2 font-mono">${opsEsc(r.time)}</td>
+          <td class="py-2 pr-2">${opsEsc(r.book || '')}</td>
           <td class="py-2 pr-2">${opsEsc(r.enTitle || '')}</td>
           <td class="py-2 text-right"><button type="button" class="text-rose-300" onclick="removeOpsLedgerRow(${i})">删除</button></td>
         </tr>
-      `).join('') || '<tr><td class="py-3 text-slate-500" colspan="7">从截图抄入。同一母稿跨端都用中文标题。</td></tr>';
+      `).join('') || '<tr><td class="py-3 text-slate-500" colspan="8">从截图抄入。同一母稿跨端都用中文标题。</td></tr>';
       const notes = auditOpsLedger(rows);
       document.getElementById('ops-ledger-notes').innerHTML = notes.map(n => '<div>' + opsEsc(n) + '</div>').join('');
+    }
+
+    function renderOpsQueue() {
+      const body = document.getElementById('ops-queue-body');
+      if (!body) return;
+      const rows = opsLoadLedger().slice().sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+      if (!rows.length) {
+        body.innerHTML = '<div class="inst-card rounded-xl p-5 text-xs text-slate-500">还没有排期。先在「发布台账」入账，再到这里按标题查看。</div>';
+        return;
+      }
+      const order = [];
+      const groups = {};
+      rows.forEach(r => {
+        const key = r.title || '（无标题）';
+        if (!groups[key]) {
+          groups[key] = [];
+          order.push(key);
+        }
+        groups[key].push(r);
+      });
+      body.innerHTML = order.map(title => {
+        const entries = groups[title].map(r => {
+          const parts = opsDateParts(r.date);
+          const book = (r.book && String(r.book).trim()) ? r.book : '选中书';
+          const show = [parts.day, parts.year, parts.monthDay, opsPlatformLabel(r.platform), book];
+          return '<div class="border-t border-slate-800 pt-3 space-y-2">' + show.map(opsTitleLine).join('') + '</div>';
+        }).join('');
+        return '<div class="inst-card rounded-xl p-5 space-y-3"><h3 class="font-serif text-xl font-bold text-gold-400">' + opsEsc(title) + '</h3>' + entries + '</div>';
+      }).join('');
     }
 
     function toggleOpsEnglish() {
@@ -1071,11 +1134,13 @@
         title: document.getElementById('ops-title').value.trim(),
         platform: platform,
         time: document.getElementById('ops-time').value,
+        book: document.getElementById('ops-book').value.trim(),
         enTitle: platform === 'X' ? enTitle : ''
       });
       rows.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
       opsSaveLedger(rows);
       document.getElementById('ops-title').value = '';
+      document.getElementById('ops-book').value = '';
       document.getElementById('ops-en').value = '';
       renderOpsLedger();
       return false;
@@ -1095,7 +1160,7 @@
 
     function exportOpsLedger() {
       const rows = opsLoadLedger();
-      const lines = [['序号', '日期', '文章标题', '平台', '发布时间', '英文标题']].concat(rows.map((r, i) => [i + 1, r.date, r.title, r.platform, r.time, r.enTitle || '']));
+      const lines = [['序号', '日期', '文章标题', '平台', '发布时间', '选中书', '英文标题']].concat(rows.map((r, i) => [i + 1, r.date, r.title, r.platform, r.time, r.book || '', r.enTitle || '']));
       const blob = new Blob(['\uFEFF' + lines.map(line => line.map(csvCell).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -1140,9 +1205,17 @@
           const title = start ? r[idx('文章标题')] : r[2];
           const platform = start ? r[idx('平台')] : r[3];
           const time = start ? r[idx('发布时间')] : r[4];
-          const en = start ? (idx('英文标题') >= 0 ? r[idx('英文标题')] : '') : (r[5] || '');
+          const book = start ? (idx('选中书') >= 0 ? r[idx('选中书')] : '') : (r.length >= 7 ? (r[5] || '') : '');
+          const en = start ? (idx('英文标题') >= 0 ? r[idx('英文标题')] : '') : (r.length >= 7 ? (r[6] || '') : (r[5] || ''));
           if (!date || !title || !platform) continue;
-          rows.push({ date: String(date).trim(), title: String(title).trim(), platform: String(platform).trim(), time: String(time || '').trim(), enTitle: String(en || '').trim() });
+          rows.push({
+            date: String(date).trim(),
+            title: String(title).trim(),
+            platform: String(platform).trim(),
+            time: String(time || '').trim(),
+            book: String(book || '').trim(),
+            enTitle: String(en || '').trim()
+          });
         }
         opsSaveLedger(rows);
         renderOpsLedger();
@@ -1166,7 +1239,7 @@
     }
 
     function switchOpsPanel(name) {
-      ['cadence', 'ledger', 'analytics', 'draft'].forEach(id => {
+      ['cadence', 'ledger', 'analytics', 'draft', 'queue'].forEach(id => {
         const panel = document.getElementById('ops-panel-' + id);
         if (panel) panel.classList.toggle('hidden', id !== name);
         const btn = document.getElementById('ops-tab-' + id);
@@ -1177,6 +1250,7 @@
       });
       if (name === 'ledger') renderOpsLedger();
       if (name === 'analytics') renderOpsAnalytics(currentOpsPlatform);
+      if (name === 'queue') renderOpsQueue();
     }
 
     window.addEventListener('DOMContentLoaded', () => {

@@ -1,10 +1,11 @@
 # 莫伯双站系统（MoBoCapital.com & MoBoHome.com）
 
-> **莫伯资本**：全球宏观投研智库 · 对冲基金孵化蓝图 ·《MoBo's Memo》财经自媒体「1+3」矩阵  
+> **莫伯资本**：全球宏观投研智库 · 对冲基金孵化蓝图 · 财经自媒体运营（六端错峰）  
 > **莫伯之家**：个人主权数字档案馆 · Wolfram 式生命体征看板  
 > 工程源库 · 架构基线 · 本地全栈 · 运维与合规交付物
 
-**公开仓库**：[github.com/henrry179/mobo-capital-and-mobo-home](https://github.com/henrry179/mobo-capital-and-mobo-home)
+**公开仓库**：[github.com/henrry179/mobo-capital-and-mobo-home](https://github.com/henrry179/mobo-capital-and-mobo-home)  
+**GitHub Pages**：[henrry179.github.io/mobo-capital-and-mobo-home](https://henrry179.github.io/mobo-capital-and-mobo-home/)（`main` / root，已启用）
 
 ---
 
@@ -14,24 +15,39 @@
 
 | 站点 | 定位 | 数据底座 | 访问策略 |
 | --- | --- | --- | --- |
-| **网站 A：莫伯资本** | 投研智库、策略手册、实盘复盘与 NAV 风控、基金孵化蓝图、四端自媒体 | `db_mobobrain`（`intel` + `capital`） | 主站公开；`/internal/*` 强认证 |
+| **网站 A：莫伯资本** | 投研智库、策略手册、实盘复盘与 NAV 风控、基金孵化蓝图、财经自媒体运营 | `db_mobobrain`（`intel` + `capital`） | 主站公开；`/internal/*` 强认证 |
 | **网站 B：莫伯之家** | 人生叙事、影像画廊、藏书馆、阅读/运动/复盘与体征看板 | `db_archive`（`archive`） | 公开栏目 + `/internal/*` 强认证 |
 
 统一基础设施：Caddy 2 双主域网关、PostgreSQL 16（pgvector）单实例双库、阿里云 OSS 双 Bucket 冷热分层、Restic 每日加密备份。当前阶段按 **本地优先（ADR-0010）** 在 WSL2 跑通，公网域名与 ICP 未启动。
 
 ---
 
-## 2. 当前状态（2026-10-24）
+## 2. 当前状态（2026-10-26）
 
 | 项 | 说明 |
 | --- | --- |
 | **模式** | 本地优先 —— 不买云、不备案也能开发与验收 |
 | **本地阶段** | **L0–L2、L4 完成**；L3（n8n/LLM）部分完成；L5 质量门部分通过；L6 公网就绪包材料已整理 |
 | **门户** | 资本公域 JSON + `editorial.json`；之家公域叙事 / 图库 / 书单已恢复，无沙盒泄漏 |
-| **GitHub** | 工程、文档、公域前端已推送（≪3GB）；金库大媒体仓外，不入库 |
+| **GitHub Pages** | 仓库已公开；Pages 从 `main` `/` 部署；资本 / 之家 / 控制台 / 文档站可打开 |
+| **资本第 5 栏** | **财经自媒体运营**（`/media-ops`）：六端错峰台账 + 数据模板 + 草稿预览 + 发布预览；本机浏览器台账，导出 CSV；**不自动发布** |
 | **生产可用性** | **尚未达到**；密钥均为占位符，公网前须按部署手册替换并验收 |
 
 **下一步入口**：[开发部署任务执行时间线](docs/01-项目治理/开发部署任务执行时间线.md) · [本地开发与部署](docs/05-运维与灾备/本地开发与部署.md) · [本地自检清单](docs/05-运维与灾备/本地阶段自检清单.md) · [任务账本](TASK_STATE.md) · [WSL2 运行时](tools/wsl/README.md)
+
+### 2.1 财经自媒体运营（资本第 5 栏，2026-10-26）
+
+莫伯资本门户 `sites/mobocapital/index.html` 第 5 栏由「自媒体引擎」改为 **财经自媒体运营**，路径仍为 `/media-ops`（`#media-ops`）。
+
+| 块 | 作用 |
+| --- | --- |
+| **发布节奏** | 每天六端各一篇不同母稿；换平台 ≥3 天、目标约 4 天；头条 72h 首发与小红书原创优先；偶尔重复只留给微信 / 雪球 / 微博 |
+| **发布台账** | 序号 / 日期 / 文章标题 / 平台 / 发布时间 / 选中书 /（X）英文标题；存本机 `localStorage`，可导入导出 CSV |
+| **数据模板** | 微信、头条、微博、雪球、小红书、X 五档时间窗；账号合计只抄平台窗口数字，单篇不相加 |
+| **草稿预览** | 官网 / 微信 / 雪球 / X 草稿；仍经 HITL 人工终审 |
+| **发布预览** | 按文章标题分组，只读展示日 / 年 / 月日 / 平台 / 选中书 |
+
+六端：微信公众号、今日头条、新浪微博、雪球、小红书、X（现阶段英文主发，母稿来自深度精读中文）。不写扫描脚本、不把台账做成仓库 JSON、不自动发帖。
 
 ---
 
@@ -39,29 +55,20 @@
 
 各站 `index.html` 在子目录根，资源用相对路径。
 
-### 为何会出现截图里的报错？
+### GitHub Pages（已启用）
 
-| 现象 | 原因 |
-| --- | --- |
-| `github.io` 显示 **404 There isn't a GitHub Pages site here** | 仓库还没开启 Pages（只推了代码不等于已发布站点） |
-| jsDelivr 打开变成 **HTML 源码 / text** | jsDelivr 对 `.html` 固定返回 `Content-Type: text/plain`，浏览器不会当网页渲染 |
-
-### 一步开启 GitHub Pages（之后 github.io 才可用）
-
-1. 打开：[Pages 设置](https://github.com/henrry179/mobo-capital-and-mobo-home/settings/pages)（需登录仓库所有者账号）
-2. **Build and deployment → Source** 选 **Deploy from a branch**
-3. Branch 选 **`main`**，文件夹选 **`/` (root)**，保存
-4. 等 1–2 分钟，再访问下表（不要再用 jsDelivr 看 HTML）
+当前 Source：**Deploy from a branch** · `main` · `/` (root)。推送 `main` 后约 1–2 分钟重建。
 
 | 站点 | URL |
 | --- | --- |
 | 入口 | https://henrry179.github.io/mobo-capital-and-mobo-home/ |
 | 莫伯资本 | https://henrry179.github.io/mobo-capital-and-mobo-home/sites/mobocapital/ |
+| 资本 · 财经自媒体运营 | https://henrry179.github.io/mobo-capital-and-mobo-home/sites/mobocapital/#media-ops |
 | 莫伯之家 | https://henrry179.github.io/mobo-capital-and-mobo-home/sites/mobohome/ |
 | 控制台 | https://henrry179.github.io/mobo-capital-and-mobo-home/services/console/ |
 | 工程文档站 | https://henrry179.github.io/mobo-capital-and-mobo-home/sites/docs-portal/ |
 
-仓库已含根目录 `index.html`、`.nojekyll`；也可用 [Actions 工作流](.github/workflows/pages.yml)（Source 改选 GitHub Actions 即可）。
+仓库已含根目录 `index.html`、`.nojekyll`。不要用 jsDelivr 打开 `.html`（会变成 `text/plain`）。若 Pages 被关掉，到 [Pages 设置](https://github.com/henrry179/mobo-capital-and-mobo-home/settings/pages) 按上表 Source 重新打开即可。
 
 ### 本机已可打开（推荐先看效果）
 
@@ -94,8 +101,10 @@
 │  ├─ mobo-cli/                    # 投研录入 + 公私域脱敏导出
 │  └─ archive-dashboard/           # Streamlit 生命体征实验室
 ├─ sites/
-│  ├─ mobocapital/                 # 资本门户 + data/*.json（公域）
-│  └─ mobohome/                    # 之家门户 + data/*.json（公域）
+│  ├─ mobocapital/                 # 资本门户 + data/*.json；第 5 栏财经自媒体运营
+│  ├─ mobohome/                    # 之家门户 + data/*.json（公域）
+│  ├─ shared/                      # 页内文档查看器 / 分栏 docs-pane
+│  └─ docs-portal/                 # 工程文档站入口 + catalog.json
 ├─ workflows/                      # n8n 模板（阶段二发布默认禁用）
 ├─ migrations/ seeds/ tests/
 ├─ server-sync-data/               # 小体积公域同步样例（非金库原件）
@@ -124,7 +133,7 @@ flowchart TB
   C -->|admin + BasicAuth| CON[静态操作台]
 
   N8N -->|评分达标写入母本| SY
-  N8N -->|四端 JSON| CAPDB[(capital.capital_publications)]
+  N8N -->|多端 JSON 草稿| CAPDB[(capital.capital_publications)]
   N8N -->|采集入库| INTL[(intel.articles_vault)]
 
   CLI[mobo-cli] -->|读写| PG[(PostgreSQL 16<br/>db_mobobrain / db_archive)]
@@ -247,5 +256,6 @@ mobo-cli capital nav                     # NAV 与回撤熔断状态
 | **v2.1** | 双主域 + 投研/自媒体/量化终端（当前基线） |
 | v2.1.1 | Local-First：WSL2 全栈、公域门户、GitHub 公开工程仓与 Pages 入口 |
 | v2.1.2 | 自金库恢复总册/ADR/docs03/CLAUDE/v5/整合总览；07 执行记录与 Word 归档说明 |
+| v2.1.3 | 资本第 5 栏改为财经自媒体运营（六端错峰台账 / 数据模板 / 发布预览）；Pages 已部署 |
 
 维护约定：文档与代码同仓；架构级变更先记 ADR；数据库变更走 `migrations/`；**Compose / Caddy / initdb / n8n 正文为冻结基线，非明确需求勿改。**
