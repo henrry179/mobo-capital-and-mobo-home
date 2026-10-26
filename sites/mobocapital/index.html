@@ -117,7 +117,7 @@
         <button onclick="switchSection('strategies')" id="nav-strategies" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">2. 策略与复盘 <span class="font-mono text-xs text-slate-500">/strategies</span></button>
         <button onclick="switchSection('incubation')" id="nav-incubation" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">3. 基金孵化蓝图 <span class="font-mono text-xs text-slate-500">/incubation</span></button>
         <button onclick="switchSection('terminal')" id="nav-terminal" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">4. 量化终端 <span class="font-mono text-xs text-slate-500">/terminal</span></button>
-        <button onclick="switchSection('media')" id="nav-media" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">5. 自媒体引擎 <span class="font-mono text-xs text-slate-500">/media-ops</span></button>
+        <button onclick="switchSection('media')" id="nav-media" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">5. 运营总控台 <span class="font-mono text-xs text-slate-500">/media-ops</span></button>
         <button onclick="switchSection('docs')" id="nav-docs" class="nav-tab px-3.5 py-2 rounded-md text-slate-300 hover:text-white">6. 工程文档 <span class="font-mono text-xs text-slate-500">/docs</span></button>
       </nav>
 
@@ -131,7 +131,7 @@
       <button type="button" onclick="switchSection('strategies')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">策略复盘</button>
       <button type="button" onclick="switchSection('incubation')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">孵化蓝图</button>
       <button type="button" onclick="switchSection('terminal')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">量化终端</button>
-      <button type="button" onclick="switchSection('media')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">自媒体</button>
+      <button type="button" onclick="switchSection('media')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">总控台</button>
       <button type="button" onclick="switchSection('docs')" class="shrink-0 px-3 py-1.5 rounded text-slate-300">工程文档</button>
     </div>
   </header>
@@ -363,37 +363,98 @@
     </section>
 
     <!-- SECTION 5: /media-ops -->
-    <section id="sec-media" class="hidden space-y-8">
+    <section id="sec-media" class="hidden space-y-6">
       <div class="border-b border-slate-800 pb-4">
-        <span class="text-xs font-mono text-gold-400">COLUMN 05 · /media-ops · n8n Workflow #2 + capital_publications</span>
-        <h2 class="font-serif text-3xl font-bold text-white mt-1">Media Engine · 《MoBo's Memo》1+3 同源合成</h2>
-        <p class="text-sm text-slate-400 mt-2">官网主权母本 + 微信 / 雪球 / X。境内版自动脱敏具体买卖点位并强制免责声明；发布节点默认关闭，仅产出 PENDING_REVIEW 草稿。</p>
+        <span class="text-xs font-mono text-gold-400">COLUMN 05 · /media-ops · 六端错峰 · 人工终审</span>
+        <h2 class="font-serif text-3xl font-bold text-white mt-1">财经自媒体运营总控台</h2>
+        <p class="text-sm text-slate-400 mt-2">微信公众号、今日头条、新浪微博、雪球、小红书、X。每天六篇不同母稿，换平台至少隔 3 天、目标约 4 天。台账在本机浏览器，导出为 Excel 可打开的 CSV。不自动发布。</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="inst-card rounded-xl p-4 space-y-2">
-          <div class="font-mono text-gold-400">L1 · 每周宏观</div>
-          <p class="text-slate-300">周期定位、政策落地、美联储议息解读</p>
+      <div class="rounded-lg border border-rose-500/40 bg-rose-950/30 px-4 py-3 text-xs text-rose-100 leading-relaxed">
+        2026 年 10 月上旬，同一篇同时出现在头条、微信和雪球，头条判定重复并封号。头条与小红书的原创优先保住。勾了头条首发，72 小时内其余各端都不发这一篇。
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+        <div class="inst-card rounded-xl p-4"><div class="font-mono text-gold-400 text-lg">6 篇</div><div class="text-slate-400 mt-1">每天六端各一篇</div></div>
+        <div class="inst-card rounded-xl p-4"><div class="font-mono text-gold-400 text-lg">≥3 天</div><div class="text-slate-400 mt-1">换平台最短间隔</div></div>
+        <div class="inst-card rounded-xl p-4"><div class="font-mono text-gold-400 text-lg">约 4 天</div><div class="text-slate-400 mt-1">目标间隔，盖过 72 小时</div></div>
+        <div class="inst-card rounded-xl p-4"><div class="font-mono text-gold-400 text-lg">先保两头</div><div class="text-slate-400 mt-1">头条 · 小红书</div></div>
+      </div>
+      <div class="flex flex-wrap gap-2 text-xs font-mono">
+        <button type="button" id="ops-tab-cadence" onclick="switchOpsPanel('cadence')" class="px-3 py-1.5 rounded bg-gold-500 text-navy-950 font-semibold">发布节奏</button>
+        <button type="button" id="ops-tab-ledger" onclick="switchOpsPanel('ledger')" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">发布台账</button>
+        <button type="button" id="ops-tab-analytics" onclick="switchOpsPanel('analytics')" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">数据模板</button>
+        <button type="button" id="ops-tab-draft" onclick="switchOpsPanel('draft')" class="px-3 py-1.5 rounded bg-navy-900 text-slate-300">草稿预览</button>
+      </div>
+
+      <div id="ops-panel-cadence" class="space-y-4">
+        <div class="inst-card rounded-xl p-5 overflow-x-auto">
+          <table class="w-full text-xs text-left">
+            <thead class="text-slate-500 font-mono"><tr><th class="py-2 pr-3">规则</th><th class="py-2">怎么排</th></tr></thead>
+            <tbody class="text-slate-200">
+              <tr class="border-t border-slate-800"><td class="py-2 pr-3 text-gold-400">当天六篇不同</td><td class="py-2">六端各一篇，中文母稿标题互不相同</td></tr>
+              <tr class="border-t border-slate-800"><td class="py-2 pr-3 text-gold-400">至少隔 3 天</td><td class="py-2">同一母稿换端，日期差至少 3 天，目标约 4 天</td></tr>
+              <tr class="border-t border-slate-800"><td class="py-2 pr-3 text-gold-400">偶尔一天</td><td class="py-2">只允许微信、雪球、微博之间重复一次。头条、小红书、X 当天仍用别的母稿</td></tr>
+              <tr class="border-t border-slate-800"><td class="py-2 pr-3 text-gold-400">X 英文</td><td class="py-2">现阶段只发英文，译自深度精读中文母稿。中文版以后再上 X，不另占一篇</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="inst-card rounded-xl p-4 space-y-2">
-          <div class="font-mono text-gold-400">L2 · 双周个股/主题</div>
-          <p class="text-slate-300">算力、高股息、国产替代等主题深度（无买卖指令）</p>
-        </div>
-        <div class="inst-card rounded-xl p-4 space-y-2">
-          <div class="font-mono text-gold-400">L3 · 月度方法论</div>
-          <p class="text-slate-300">个人宏观框架、仓位纪律、风险管理体系</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="inst-card rounded-xl p-4 space-y-2">
+            <div class="font-mono text-rose-300">先保</div>
+            <p class="text-slate-300">今日头条：首发 72 小时。小红书：声明原创，检测较严，按约 4 天保护。</p>
+          </div>
+          <div class="inst-card rounded-xl p-4 space-y-2">
+            <div class="font-mono text-slate-400">靠后</div>
+            <p class="text-slate-300">微信号内原创、雪球、微博、X 没有跨平台小时窗。X 当天仍然不与其他端重复同一母稿。</p>
+          </div>
         </div>
       </div>
-      <div class="inst-card rounded-xl p-5 space-y-4">
+
+      <div id="ops-panel-ledger" class="hidden space-y-4">
+        <form id="ops-ledger-form" class="inst-card rounded-xl p-4 grid grid-cols-1 md:grid-cols-6 gap-3 text-xs" onsubmit="return addOpsLedgerRow(event)">
+          <label class="space-y-1"><span class="text-slate-500">日期</span><input id="ops-date" type="date" required class="w-full bg-navy-950 border border-slate-700 rounded px-2 py-1.5 text-slate-100"></label>
+          <label class="space-y-1 md:col-span-2"><span class="text-slate-500">中文母稿标题</span><input id="ops-title" required class="w-full bg-navy-950 border border-slate-700 rounded px-2 py-1.5 text-slate-100" placeholder="与深度精读标题一致"></label>
+          <label class="space-y-1"><span class="text-slate-500">平台</span>
+            <select id="ops-platform" onchange="toggleOpsEnglish()" class="w-full bg-navy-950 border border-slate-700 rounded px-2 py-1.5 text-slate-100">
+              <option>微信公众号</option><option>今日头条</option><option>新浪微博</option><option>雪球</option><option>小红书</option><option>X</option>
+            </select>
+          </label>
+          <label class="space-y-1"><span class="text-slate-500">发布时间</span><input id="ops-time" type="time" required class="w-full bg-navy-950 border border-slate-700 rounded px-2 py-1.5 text-slate-100"></label>
+          <label class="space-y-1 flex items-end"><button type="submit" class="w-full bg-gold-500 text-navy-950 font-semibold rounded px-3 py-1.5">入账</button></label>
+          <label id="ops-en-wrap" class="hidden md:col-span-6 space-y-1"><span class="text-slate-500">英文标题（仅 X）</span><input id="ops-en" class="w-full bg-navy-950 border border-slate-700 rounded px-2 py-1.5 text-slate-100" placeholder="国际金融交易译风的英文题"></label>
+        </form>
         <div class="flex flex-wrap gap-2 text-xs font-mono">
-          <button onclick="switchMediaPreview('web')" id="mp-web" class="media-tab px-3 py-1.5 rounded bg-gold-500 text-navy-950 font-semibold">1. 官网主权母本</button>
-          <button onclick="switchMediaPreview('wechat')" id="mp-wechat" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">2. 微信公众号</button>
-          <button onclick="switchMediaPreview('xueqiu')" id="mp-xueqiu" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">3. 雪球投研帖</button>
-          <button onclick="switchMediaPreview('x')" id="mp-x" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">4. X 英文串推</button>
+          <button type="button" onclick="exportOpsLedger()" class="px-3 py-1.5 rounded border border-gold-500/40 text-gold-400">导出 CSV</button>
+          <label class="px-3 py-1.5 rounded border border-slate-700 text-slate-300 cursor-pointer">导入 CSV<input id="ops-import" type="file" accept=".csv,text/csv" class="hidden" onchange="importOpsLedger(event)"></label>
+          <span id="ops-ledger-count" class="text-slate-500 self-center"></span>
         </div>
-        <div class="flex justify-end mb-2">
-          <button type="button" onclick="openMediaDoc()" class="text-xs font-mono text-gold-400 border border-slate-700 hover:border-gold-500 px-3 py-1.5 rounded">页内打开 Markdown 全文 ↗</button>
+        <div id="ops-ledger-notes" class="text-xs text-amber-200/90 space-y-1"></div>
+        <div class="inst-card rounded-xl p-4 overflow-x-auto">
+          <table class="w-full text-xs text-left">
+            <thead class="text-slate-500 font-mono"><tr><th class="py-2 pr-2">序号</th><th class="py-2 pr-2">日期</th><th class="py-2 pr-2">文章标题</th><th class="py-2 pr-2">平台</th><th class="py-2 pr-2">发布时间</th><th class="py-2 pr-2">英文标题</th><th class="py-2"></th></tr></thead>
+            <tbody id="ops-ledger-body" class="text-slate-200"></tbody>
+          </table>
         </div>
-        <pre id="media-preview-content" class="bg-navy-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-200 whitespace-pre-wrap overflow-x-auto cursor-pointer" title="点击打开全文" onclick="openMediaDoc()"></pre>
+        <p class="text-[11px] text-slate-500">核对提示不阻止入账，历史截图也可以先记下来。导出的 CSV 用 Excel 打开。数据留在这台浏览器，不写入站点文件。</p>
+      </div>
+
+      <div id="ops-panel-analytics" class="hidden space-y-4">
+        <div id="ops-analytics-tabs" class="flex flex-wrap gap-2 text-xs font-mono"></div>
+        <div id="ops-analytics-body" class="space-y-3"></div>
+        <p class="text-[11px] text-slate-500">账号合计只抄平台窗口上印出的数字。单篇行不相加。半年和一年六端都留空，以后按日账自建。截图日 2026-10-26。</p>
+      </div>
+
+      <div id="ops-panel-draft" class="hidden inst-card rounded-xl p-5 space-y-4">
+        <div class="flex flex-wrap gap-2 text-xs font-mono">
+          <button type="button" onclick="switchMediaPreview('web')" id="mp-web" class="media-tab px-3 py-1.5 rounded bg-gold-500 text-navy-950 font-semibold">官网母本</button>
+          <button type="button" onclick="switchMediaPreview('wechat')" id="mp-wechat" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">微信</button>
+          <button type="button" onclick="switchMediaPreview('xueqiu')" id="mp-xueqiu" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">雪球</button>
+          <button type="button" onclick="switchMediaPreview('x')" id="mp-x" class="media-tab px-3 py-1.5 rounded bg-navy-900 text-slate-300">X 草稿</button>
+        </div>
+        <div class="flex justify-end">
+          <button type="button" onclick="openMediaDoc()" class="text-xs font-mono text-gold-400 border border-slate-700 hover:border-gold-500 px-3 py-1.5 rounded">页内打开全文</button>
+        </div>
+        <pre id="media-preview-content" class="bg-navy-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-200 whitespace-pre-wrap overflow-x-auto cursor-pointer" onclick="openMediaDoc()"></pre>
+        <p class="text-[11px] text-slate-500">草稿仍停在人工终审之前。境内微信、雪球版本继续脱敏具体买卖点位并带免责声明。</p>
       </div>
     </section>
 
@@ -837,13 +898,297 @@
       } catch (e) {}
     }
 
+    const OPS_LEDGER_KEY = 'mobo-media-ops-ledger-v1';
+    const OPS_LOW_REPEAT = { '微信公众号': 1, '雪球': 1, '新浪微博': 1 };
+    let currentOpsPlatform = '微信公众号';
+
+    const opsAnalytics = {
+      '微信公众号': {
+        note: '阅读是阅读人数。渠道可以大于全部：搜一搜 66、消息 46、推荐 35、主页 24、其它 9，相加 180，全部是 175。挂到标题的阅读加总 158。爱心 1 在截图，Excel 微信收藏是 2。昨天和 7 天这次没导出。',
+        headers: ['时间范围', '阅读人数', '点赞', '分享', '爱心', '留言', '状态'],
+        rows: [
+          ['昨天', '—', '—', '—', '—', '—', '后台有，这次没导出'],
+          ['最近 7 天', '—', '—', '—', '—', '—', '后台有，这次没导出'],
+          ['最近 30 天', '175', '3', '9', '1', '0', '09-26 至 10-25'],
+          ['最近 6 个月', '—', '—', '—', '—', '—', '需自建'],
+          ['最近一年', '—', '—', '—', '—', '—', '需自建']
+        ]
+      },
+      '今日头条': {
+        note: '没有转发。昨天是唯一印出的账号合计。30 天图已开（09-26 至 10-25）但没有合计。每天 14:00 前更新前一日。作品管理的阅读是累计，不能填进昨天。受众：男性 82.11%，50 岁以上 45.26%。',
+        headers: ['时间范围', '展现', '阅读', '点赞', '评论', '状态'],
+        rows: [
+          ['昨天', '1614', '5', '0', '0', '粉丝展现 0，粉丝阅读 0'],
+          ['最近 7 天', '—', '—', '—', '—', '有按钮，没点开'],
+          ['最近 30 天', '—', '—', '—', '—', '有曲线，无合计'],
+          ['最近 6 个月', '—', '—', '—', '—', '需自建'],
+          ['最近一年', '—', '—', '—', '—', '需自建']
+        ]
+      },
+      '新浪微博': {
+        note: '账号层是转评赞，不拆转发、评论、点赞。双年洞察纵轴到 15 万的线是高级版演示数据，作废。近 7 天正式阅读是 80。',
+        headers: ['时间范围', '阅读', '转评赞', '发博', '状态'],
+        rows: [
+          ['昨天', '11', '0', '1', '净增粉 0'],
+          ['最近 7 天', '80', '0', '7', '10-19 至 10-25，原创 7'],
+          ['最近 30 天', '—', '—', '—', '有按钮，没点开'],
+          ['最近 6 个月', '—', '—', '—', '需自建'],
+          ['最近一年', '—', '—', '—', '近 2 年是演示数据']
+        ]
+      },
+      '雪球': {
+        note: '没有账号总览。数字是单篇累计：阅读、点赞、讨论、转发、收藏。讨论就是评论。露出 11 篇未完，不能加总。可见最高是 10-14《隐含波动率实战计算》阅读 35146。',
+        headers: ['时间范围', '阅读', '点赞', '讨论', '转发', '收藏', '状态'],
+        rows: [
+          ['昨天', '—', '—', '—', '—', '—', '需自建'],
+          ['最近 7 天', '—', '—', '—', '—', '—', '需自建'],
+          ['最近 30 天', '—', '—', '—', '—', '—', '列表未截全'],
+          ['最近 6 个月', '—', '—', '—', '—', '—', '需自建'],
+          ['最近一年', '—', '—', '—', '—', '—', '需自建']
+        ]
+      },
+      '小红书': {
+        note: '阅读叫观看。近 7 日 10-19 至 10-25，近 30 日 09-26 至 10-25。点赞 16、评论 0、分享 4 两档相同。另有近 7 日曝光 2357、收藏 14；近 30 日曝光 2788、收藏 16。',
+        headers: ['时间范围', '观看', '点赞', '收藏', '评论', '分享', '状态'],
+        rows: [
+          ['昨天', '—', '—', '—', '—', '—', '无此档'],
+          ['最近 7 天', '190', '16', '14', '0', '4', '10-19 至 10-25'],
+          ['最近 30 天', '226', '16', '16', '0', '4', '09-26 至 10-25'],
+          ['最近 6 个月', '—', '—', '—', '—', '—', '需自建'],
+          ['最近一年', '—', '—', '—', '—', '—', '需自建']
+        ]
+      },
+      'X': {
+        note: '还没有截图。展现是次数，不是人数。账号总览要 Premium。免费只能看单帖。按钮等下一张截图，这里不填数字。',
+        headers: ['时间范围', '展现', '互动', '点赞', '转发', '回复', '状态'],
+        rows: [
+          ['昨天', '—', '—', '—', '—', '—', '按钮未确认'],
+          ['最近 7 天', '—', '—', '—', '—', '—', '待截图'],
+          ['最近 30 天', '—', '—', '—', '—', '—', '待截图'],
+          ['最近 6 个月', '—', '—', '—', '—', '—', '需自建'],
+          ['最近一年', '—', '—', '—', '—', '—', '未核实']
+        ]
+      }
+    };
+
+    function opsLoadLedger() {
+      try {
+        const raw = localStorage.getItem(OPS_LEDGER_KEY);
+        const rows = raw ? JSON.parse(raw) : [];
+        return Array.isArray(rows) ? rows : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function opsSaveLedger(rows) {
+      localStorage.setItem(OPS_LEDGER_KEY, JSON.stringify(rows));
+    }
+
+    function opsDays(a, b) {
+      const da = new Date(a + 'T00:00:00');
+      const db = new Date(b + 'T00:00:00');
+      return Math.round((db - da) / 86400000);
+    }
+
+    function auditOpsLedger(rows) {
+      const notes = [];
+      const byDate = {};
+      rows.forEach(r => { (byDate[r.date] = byDate[r.date] || []).push(r); });
+      Object.keys(byDate).forEach(date => {
+        const list = byDate[date];
+        const byTitle = {};
+        list.forEach(r => { (byTitle[r.title] = byTitle[r.title] || []).push(r); });
+        Object.keys(byTitle).forEach(title => {
+          const group = byTitle[title];
+          if (group.length < 2) return;
+          const xOnly = group.every(g => g.platform === 'X');
+          if (xOnly) return;
+          const allowed = group.length === 2 && group.every(g => OPS_LOW_REPEAT[g.platform]);
+          notes.push(date + ' 「' + title + '」' + (allowed ? '使用了偶尔重复，两端都在微信、雪球、微博。' : '同一天重复，且不是仅落在微信、雪球、微博。'));
+        });
+        const count = {};
+        list.forEach(r => {
+          if (r.platform === 'X' && list.filter(x => x.platform === 'X' && x.title === r.title).length > 1) return;
+          count[r.platform] = (count[r.platform] || 0) + 1;
+        });
+        Object.keys(count).forEach(p => {
+          if (count[p] > 1) notes.push(date + ' ' + p + ' 超过一篇。');
+        });
+      });
+      const byTitle = {};
+      rows.forEach(r => { (byTitle[r.title] = byTitle[r.title] || []).push(r); });
+      Object.keys(byTitle).forEach(title => {
+        const sorted = byTitle[title].slice().sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+        for (let i = 1; i < sorted.length; i++) {
+          if (sorted[i].platform === sorted[i - 1].platform) continue;
+          const gap = Math.abs(opsDays(sorted[i - 1].date, sorted[i].date));
+          if (gap < 3) notes.push('「' + title + '」从' + sorted[i - 1].platform + '到' + sorted[i].platform + '隔了 ' + gap + ' 天，短于 3 天。');
+          else if (gap < 4) notes.push('「' + title + '」间隔 ' + gap + ' 天，已过最短线，目标约 4 天。');
+        }
+      });
+      return notes;
+    }
+
+    function opsEsc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    }
+
+    function renderOpsLedger() {
+      const body = document.getElementById('ops-ledger-body');
+      if (!body) return;
+      const rows = opsLoadLedger();
+      document.getElementById('ops-ledger-count').textContent = rows.length ? ('已记 ' + rows.length + ' 行') : '还没有记录';
+      body.innerHTML = rows.map((r, i) => `
+        <tr class="border-t border-slate-800">
+          <td class="py-2 pr-2 font-mono">${i + 1}</td>
+          <td class="py-2 pr-2">${opsEsc(r.date)}</td>
+          <td class="py-2 pr-2">${opsEsc(r.title)}</td>
+          <td class="py-2 pr-2">${opsEsc(r.platform)}</td>
+          <td class="py-2 pr-2 font-mono">${opsEsc(r.time)}</td>
+          <td class="py-2 pr-2">${opsEsc(r.enTitle || '')}</td>
+          <td class="py-2 text-right"><button type="button" class="text-rose-300" onclick="removeOpsLedgerRow(${i})">删除</button></td>
+        </tr>
+      `).join('') || '<tr><td class="py-3 text-slate-500" colspan="7">从截图抄入。同一母稿跨端都用中文标题。</td></tr>';
+      const notes = auditOpsLedger(rows);
+      document.getElementById('ops-ledger-notes').innerHTML = notes.map(n => '<div>' + opsEsc(n) + '</div>').join('');
+    }
+
+    function toggleOpsEnglish() {
+      const on = document.getElementById('ops-platform').value === 'X';
+      document.getElementById('ops-en-wrap').classList.toggle('hidden', !on);
+      document.getElementById('ops-en').required = on;
+    }
+
+    function addOpsLedgerRow(ev) {
+      ev.preventDefault();
+      const platform = document.getElementById('ops-platform').value;
+      const enTitle = document.getElementById('ops-en').value.trim();
+      if (platform === 'X' && !enTitle) return false;
+      const rows = opsLoadLedger();
+      rows.push({
+        date: document.getElementById('ops-date').value,
+        title: document.getElementById('ops-title').value.trim(),
+        platform: platform,
+        time: document.getElementById('ops-time').value,
+        enTitle: platform === 'X' ? enTitle : ''
+      });
+      rows.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+      opsSaveLedger(rows);
+      document.getElementById('ops-title').value = '';
+      document.getElementById('ops-en').value = '';
+      renderOpsLedger();
+      return false;
+    }
+
+    function removeOpsLedgerRow(i) {
+      const rows = opsLoadLedger();
+      rows.splice(i, 1);
+      opsSaveLedger(rows);
+      renderOpsLedger();
+    }
+
+    function csvCell(v) {
+      const s = String(v == null ? '' : v);
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+
+    function exportOpsLedger() {
+      const rows = opsLoadLedger();
+      const lines = [['序号', '日期', '文章标题', '平台', '发布时间', '英文标题']].concat(rows.map((r, i) => [i + 1, r.date, r.title, r.platform, r.time, r.enTitle || '']));
+      const blob = new Blob(['\uFEFF' + lines.map(line => line.map(csvCell).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'mobo-media-ops-ledger.csv';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function parseOpsCsv(text) {
+      const rows = [];
+      let row = [], cur = '', q = false;
+      const s = text.replace(/^\uFEFF/, '');
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        if (q) {
+          if (c === '"') { if (s[i + 1] === '"') { cur += '"'; i++; } else q = false; }
+          else cur += c;
+        } else if (c === '"') q = true;
+        else if (c === ',') { row.push(cur); cur = ''; }
+        else if (c === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
+        else if (c !== '\r') cur += c;
+      }
+      if (cur.length || row.length) { row.push(cur); rows.push(row); }
+      return rows.filter(r => r.some(x => String(x).trim()));
+    }
+
+    function importOpsLedger(ev) {
+      const file = ev.target.files && ev.target.files[0];
+      ev.target.value = '';
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function () {
+        const table = parseOpsCsv(String(reader.result || ''));
+        if (!table.length) return;
+        const head = table[0].map(h => String(h).trim());
+        const idx = name => head.indexOf(name);
+        const start = idx('日期') >= 0 ? 1 : 0;
+        const rows = [];
+        for (let i = start; i < table.length; i++) {
+          const r = table[i];
+          const date = start ? r[idx('日期')] : r[1];
+          const title = start ? r[idx('文章标题')] : r[2];
+          const platform = start ? r[idx('平台')] : r[3];
+          const time = start ? r[idx('发布时间')] : r[4];
+          const en = start ? (idx('英文标题') >= 0 ? r[idx('英文标题')] : '') : (r[5] || '');
+          if (!date || !title || !platform) continue;
+          rows.push({ date: String(date).trim(), title: String(title).trim(), platform: String(platform).trim(), time: String(time || '').trim(), enTitle: String(en || '').trim() });
+        }
+        opsSaveLedger(rows);
+        renderOpsLedger();
+      };
+      reader.readAsText(file, 'utf-8');
+    }
+
+    function renderOpsAnalytics(name) {
+      currentOpsPlatform = name;
+      const tabs = document.getElementById('ops-analytics-tabs');
+      const body = document.getElementById('ops-analytics-body');
+      if (!tabs || !body) return;
+      tabs.innerHTML = Object.keys(opsAnalytics).map(p =>
+        '<button type="button" class="px-3 py-1.5 rounded ' + (p === name ? 'bg-gold-500 text-navy-950 font-semibold' : 'bg-navy-900 text-slate-300') + '" onclick="renderOpsAnalytics(\'' + p + '\')">' + p + '</button>'
+      ).join('');
+      const pack = opsAnalytics[name];
+      body.innerHTML = '<p class="text-xs text-slate-400 leading-relaxed">' + pack.note + '</p><div class="inst-card rounded-xl p-4 overflow-x-auto"><table class="w-full text-xs text-left"><thead class="text-slate-500 font-mono"><tr>' +
+        pack.headers.map(h => '<th class="py-2 pr-3">' + h + '</th>').join('') + '</tr></thead><tbody class="text-slate-200">' +
+        pack.rows.map(r => '<tr class="border-t border-slate-800">' + r.map(c => '<td class="py-2 pr-3">' + c + '</td>').join('') + '</tr>').join('') +
+        '</tbody></table></div>';
+    }
+
+    function switchOpsPanel(name) {
+      ['cadence', 'ledger', 'analytics', 'draft'].forEach(id => {
+        const panel = document.getElementById('ops-panel-' + id);
+        if (panel) panel.classList.toggle('hidden', id !== name);
+        const btn = document.getElementById('ops-tab-' + id);
+        if (!btn) return;
+        btn.className = id === name
+          ? 'px-3 py-1.5 rounded bg-gold-500 text-navy-950 font-semibold'
+          : 'px-3 py-1.5 rounded bg-navy-900 text-slate-300';
+      });
+      if (name === 'ledger') renderOpsLedger();
+      if (name === 'analytics') renderOpsAnalytics(currentOpsPlatform);
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       renderAll();
       switchMediaPreview('web');
+      renderOpsLedger();
+      switchOpsPanel('cadence');
       loadEditorialData();
       loadLiveCapitalData('PUBLIC');
       loadTerminalSnapshot();
       if (location.hash === '#docs') switchSection('docs');
+      if (location.hash === '#media-ops' || location.hash === '#media') switchSection('media');
     });
   </script>
 </body>
